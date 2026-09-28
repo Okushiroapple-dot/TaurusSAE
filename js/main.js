@@ -122,7 +122,7 @@
   $$(".stats [data-count]").forEach(countUp);
 
   /* ---------- abas de provas ---------- */
-  var tabs = $$(".tab");
+  var tabs = $$("#competicao .tab");
   function selectTab(tab) {
     tabs.forEach(function (t) {
       var on = t === tab;
@@ -143,56 +143,6 @@
       }
     });
   });
-
-  /* ---------- carro ---------- */
-  var car = C.carro || {};
-  if (car.nome) $("#car-name").textContent = car.nome;
-  if (car.categoria) $("#car-cat").textContent = car.categoria;
-
-  // posição de cada ponto no desenho (% da largura, % da altura)
-  var HOTSPOTS = {
-    "Chassi": [45, 50],
-    "Suspensão": [70, 70],
-    "Motor": [34, 51],
-    "Transmissão": [22, 64],
-    "Freios": [76, 83],
-    "Aerodinâmica": [16, 26],
-  };
-  var ficha = car.ficha || [];
-  var hsWrap = $("#hotspots");
-  var hsButtons = [];
-  function showSpec(item, btn) {
-    $("#panel-title").textContent = item.rotulo;
-    $("#panel-value").textContent = item.valor || "";
-    $("#panel-text").textContent = item.texto || "";
-    hsButtons.forEach(function (b) { b.classList.toggle("is-active", b === btn); });
-  }
-  ficha.forEach(function (item) {
-    var pos = HOTSPOTS[item.rotulo];
-    if (!pos || !item.texto) return;
-    var b = el("button", { class: "hotspot", type: "button", "aria-label": item.rotulo, style: "left:" + pos[0] + "%;top:" + pos[1] + "%" }, [
-      el("span", { text: item.rotulo }),
-    ]);
-    b.addEventListener("click", function () { showSpec(item, b); });
-    b.addEventListener("mouseenter", function () { showSpec(item, b); });
-    hsWrap.appendChild(b);
-    hsButtons.push(b);
-  });
-  var firstWithHs = ficha.filter(function (f) { return HOTSPOTS[f.rotulo] && f.texto; })[0];
-  if (firstWithHs) showSpec(firstWithHs, hsButtons[0]);
-
-  var specs = $("#specs");
-  var withValue = ficha.filter(function (f) { return f.valor; });
-  if (withValue.length) {
-    ficha.forEach(function (f) {
-      specs.appendChild(el("div", {}, [
-        el("dt", { text: f.rotulo }),
-        el("dd", { text: f.valor || "Em definição", class: f.valor ? "" : "is-empty" }),
-      ]));
-    });
-  } else {
-    specs.hidden = true;
-  }
 
   /* ---------- linha do tempo ---------- */
   var tl = $("#timeline");

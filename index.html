@@ -2,9 +2,9 @@
 <html lang="pt-BR" class="no-js">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Taurus Racing · Fórmula SAE UFTM</title>
-  <meta name="description" content="Taurus Racing é a equipe de Fórmula SAE da UFTM, em Uberaba (MG). Estudantes de engenharia que projetam, constroem e correm com um carro tipo fórmula na Fórmula SAE Brasil." />
+  <meta name="description" content="Taurus Racing, a equipe de Fórmula SAE da UFTM em Uberaba (MG). Desmonte o carro nº 39 em 3D, rode simulações de volta, aceleração e suspensão e conheça a equipe." />
   <meta name="theme-color" content="#0b0b0d" />
   <meta name="color-scheme" content="dark" />
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml" />
@@ -12,11 +12,12 @@
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="pt_BR" />
   <meta property="og:title" content="Taurus Racing · Fórmula SAE UFTM" />
-  <meta property="og:description" content="A equipe de Fórmula SAE da Universidade Federal do Triângulo Mineiro. Carro nº 39." />
+  <meta property="og:description" content="Desmonte o carro nº 39 em 3D e simule uma volta de autocross. Equipe de Fórmula SAE da UFTM." />
   <meta property="og:image" content="assets/img/og-image.png" />
   <meta name="twitter:card" content="summary_large_image" />
 
   <link rel="preload" href="assets/fonts/barlow-condensed-latin-800-italic.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="modulepreload" href="vendor/three.bundle.min.js" />
   <link rel="stylesheet" href="css/style.css" />
 
   <script type="application/ld+json">
@@ -37,8 +38,25 @@
   </script>
 </head>
 <body>
-  <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+  <a class="skip" href="#equipe">Pular para o conteúdo</a>
   <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+
+  <!-- ===================== CARREGAMENTO ===================== -->
+  <div class="loader" id="loader" aria-hidden="true">
+    <div class="loader__inner">
+      <svg class="loader__gauge" viewBox="0 0 220 130">
+        <path d="M20 115 A90 90 0 0 1 200 115" class="loader__track" />
+        <path d="M20 115 A90 90 0 0 1 200 115" class="loader__fill" id="loader-fill" pathLength="100" />
+        <g class="loader__ticks">
+          <line x1="20" y1="115" x2="32" y2="115" /><line x1="46" y1="51" x2="54" y2="59" /><line x1="110" y1="25" x2="110" y2="37" /><line x1="174" y1="51" x2="166" y2="59" /><line x1="200" y1="115" x2="188" y2="115" />
+        </g>
+        <line x1="110" y1="115" x2="110" y2="42" class="loader__needle" id="loader-needle" />
+        <circle cx="110" cy="115" r="7" class="loader__hub" />
+      </svg>
+      <div class="loader__rpm"><span id="loader-rpm">0</span> rpm</div>
+      <div class="loader__brand">TAURUS<b>RACING</b></div>
+    </div>
+  </div>
 
   <!-- Símbolo do carro, reutilizado no hero e na seção do carro -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -125,10 +143,10 @@
       </a>
       <nav class="nav__links" id="nav-links" aria-label="Seções">
         <a href="#equipe">Equipe</a>
+        <a href="#garagem">Garagem 3D</a>
+        <a href="#laboratorio">Laboratório</a>
         <a href="#competicao">Competição</a>
-        <a href="#carro">O carro</a>
         <a href="#trajetoria">Trajetória</a>
-        <a href="#extensao">Extensão</a>
         <a href="#faca-parte">Faça parte</a>
         <a href="#contato">Contato</a>
         <a href="#patrocinio" class="btn btn--sm btn--primary">Patrocine</a>
@@ -140,41 +158,97 @@
   </header>
 
   <main id="conteudo">
-    <!-- ===================== HERO ===================== -->
-    <section class="hero" id="topo">
-      <div class="hero__grid" aria-hidden="true"></div>
-      <div class="hero__num" aria-hidden="true">39</div>
-      <div class="container hero__inner">
-        <p class="eyebrow"><span class="dot"></span> Fórmula SAE · UFTM · Uberaba/MG</p>
-        <h1 class="hero__title">
-          <span class="line">TAURUS</span>
-          <span class="line line--accent">RACING</span>
-        </h1>
-        <p class="hero__lead">
-          Somos a equipe de Fórmula SAE da Universidade Federal do Triângulo Mineiro.
-          Estudantes de engenharia que projetam, fabricam e levam para a pista um carro
-          tipo fórmula, do primeiro cálculo à última solda.
-        </p>
-        <div class="hero__cta">
-          <a href="#patrocinio" class="btn btn--primary">Patrocine a equipe</a>
-          <a href="#carro" class="btn btn--ghost">Conheça o carro</a>
+    <!-- ===================== ABERTURA 3D (rolagem guiada) ===================== -->
+    <section class="story" id="topo" aria-label="O carro nº 39 por dentro">
+      <div class="story__sticky">
+        <div class="stage stage--story" id="stage-story">
+          <div class="stage__fallback" aria-hidden="true">
+            <svg class="car" viewBox="0 0 1000 330"><use href="#car" /></svg>
+          </div>
         </div>
-      </div>
-
-      <div class="hero__car" aria-hidden="true">
-        <div class="speed">
-          <i></i><i></i><i></i><i></i><i></i><i></i>
+        <div class="story__shade" aria-hidden="true"></div>
+        <div class="story__tags" aria-hidden="true">
+          <span class="tag3d" data-tag-step="2" data-anchor="chassi">Treliça de aço</span>
+          <span class="tag3d" data-tag-step="3" data-anchor="suspensao">Bandejas + pushrod</span>
+          <span class="tag3d" data-tag-step="4" data-anchor="admissao">Restritor de 20 mm</span>
+          <span class="tag3d" data-tag-step="5" data-anchor="aero">Asa de 3 elementos</span>
         </div>
-        <svg class="car car--spin" viewBox="0 0 1000 330"><use href="#car" /></svg>
-      </div>
 
-      <div class="container">
-        <ul class="stats" aria-label="Números da equipe">
-          <li><strong data-count="2015" data-plain>2015</strong><span>ano de fundação</span></li>
-          <li><strong data-count="32">32</strong><span>membros</span></li>
-          <li><strong data-count="4">4</strong><span>cursos de engenharia</span></li>
-          <li><strong>#39</strong><span>número do carro</span></li>
-        </ul>
+        <div class="story__panels">
+          <div class="story__step story__step--hero" data-step="0">
+            <p class="eyebrow"><span class="dot"></span> Fórmula SAE · UFTM · Uberaba/MG</p>
+            <h1 class="hero__title" aria-label="Taurus Racing">
+              <span class="line" aria-hidden="true">TAURUS</span>
+              <span class="line line--accent" aria-hidden="true">RACING</span>
+            </h1>
+            <p class="hero__lead">
+              Somos a equipe de Fórmula SAE da Universidade Federal do Triângulo Mineiro.
+              Estudantes de engenharia que projetam, fabricam e levam para a pista um carro tipo fórmula.
+              Role a página e desmonte o carro com a gente.
+            </p>
+            <div class="hero__cta">
+              <a href="#garagem" class="btn btn--primary">Entrar na garagem 3D</a>
+              <a href="#patrocinio" class="btn btn--ghost">Patrocine a equipe</a>
+            </div>
+            <ul class="stats" aria-label="Números da equipe">
+              <li><strong data-count="2015" data-plain>2015</strong><span>fundação</span></li>
+              <li><strong data-count="32">32</strong><span>membros</span></li>
+              <li><strong data-count="4">4</strong><span>engenharias</span></li>
+              <li><strong>#39</strong><span>carro</span></li>
+            </ul>
+          </div>
+
+          <article class="story__step" data-step="1">
+            <p class="kicker">01 · Carro nº 39</p>
+            <h2 class="story__h">Um carro de corrida feito por alunos</h2>
+            <p>Um Fórmula SAE a combustão tem por volta de 3 metros de comprimento e costuma pesar entre 200 e 250 kg sem o piloto. Cada peça passa por projeto, cálculo e fabricação dentro da equipe ou com parceiros.</p>
+          </article>
+
+          <article class="story__step story__step--right" data-step="2">
+            <p class="kicker">02 · Chassi</p>
+            <h2 class="story__h">Treliça de tubos de aço</h2>
+            <p>Por baixo da carenagem fica uma estrutura de tubos soldados. Os arcos principal e frontal protegem o piloto numa capotagem e a estrutura lateral absorve impactos. O regulamento fixa diâmetro e espessura mínimos de cada tubo.</p>
+          </article>
+
+          <article class="story__step" data-step="3">
+            <p class="kicker">03 · Suspensão</p>
+            <h2 class="story__h">Duplo A com pushrod</h2>
+            <p>Duas bandejas em A seguram cada roda. O pushrod leva a carga até o balancim, que comprime mola e amortecedor dentro do chassi. A geometria das bandejas decide quanto a roda inclina nas curvas.</p>
+            <a class="link" href="#laboratorio" data-lab-open="suspensao">Mexa na geometria no laboratório ↓</a>
+          </article>
+
+          <article class="story__step story__step--right" data-step="4">
+            <p class="kicker">04 · Powertrain</p>
+            <h2 class="story__h">Motor de moto com restritor</h2>
+            <p>Motor de motocicleta de até 710 cm³ atrás do piloto. Todo o ar que ele respira passa por um restritor de 20 mm exigido pela regra. A força chega às rodas traseiras por corrente e diferencial.</p>
+          </article>
+
+          <article class="story__step" data-step="5">
+            <p class="kicker">05 · Aerodinâmica</p>
+            <h2 class="story__h">Asas que empurram o carro para baixo</h2>
+            <p>As asas funcionam como a de um avião de cabeça para baixo: desviam o ar para cima e o carro é empurrado contra o chão. Mais aderência nas curvas, mais arrasto nas retas.</p>
+            <p class="story__note">Visualização ilustrativa do fluxo de ar.</p>
+          </article>
+
+          <article class="story__step story__step--right" data-step="6">
+            <p class="kicker">06 · Vista explodida</p>
+            <h2 class="story__h">Cada conjunto tem um responsável</h2>
+            <p>Chassi, suspensão, powertrain, freios, eletrônica e aerodinâmica. Cada área da equipe cuida de um conjunto, e todos precisam caber no mesmo carro e no mesmo prazo.</p>
+            <a class="btn btn--primary" href="#garagem">Montar e desmontar na garagem</a>
+          </article>
+        </div>
+
+        <nav class="story__nav" aria-label="Capítulos do carro">
+          <button type="button" data-go="0"><span>Início</span></button>
+          <button type="button" data-go="1"><span>Carro 39</span></button>
+          <button type="button" data-go="2"><span>Chassi</span></button>
+          <button type="button" data-go="3"><span>Suspensão</span></button>
+          <button type="button" data-go="4"><span>Powertrain</span></button>
+          <button type="button" data-go="5"><span>Aerodinâmica</span></button>
+          <button type="button" data-go="6"><span>Explodida</span></button>
+        </nav>
+        <div class="story__rail" aria-hidden="true"><span id="story-bar"></span></div>
+        <div class="story__hint" aria-hidden="true"><span class="mouse"></span> Role para desmontar o carro</div>
       </div>
     </section>
 
@@ -213,97 +287,252 @@
           </p>
         </div>
       </div>
-
       <div class="container">
         <ol class="steps">
-          <li class="reveal">
-            <span class="steps__n">01</span>
-            <h3>Projetar</h3>
-            <p>CAD, simulação estrutural e cálculo de suspensão, tudo dentro do regulamento da SAE.</p>
-          </li>
-          <li class="reveal">
-            <span class="steps__n">02</span>
-            <h3>Fabricar</h3>
-            <p>Corte e solda dos tubos do chassi, usinagem de peças e montagem na oficina da UFTM.</p>
-          </li>
-          <li class="reveal">
-            <span class="steps__n">03</span>
-            <h3>Testar</h3>
-            <p>Horas de pista antes da competição para acertar o carro e encontrar o que quebra antes dos juízes.</p>
-          </li>
-          <li class="reveal">
-            <span class="steps__n">04</span>
-            <h3>Competir</h3>
-            <p>Provas estáticas e dinâmicas na Fórmula SAE Brasil, pontuadas uma a uma.</p>
-          </li>
+          <li class="reveal"><span class="steps__n">01</span><h3>Projetar</h3><p>CAD, simulação estrutural e cálculo de suspensão, tudo dentro do regulamento da SAE.</p></li>
+          <li class="reveal"><span class="steps__n">02</span><h3>Fabricar</h3><p>Corte e solda dos tubos do chassi, usinagem de peças e montagem na oficina da UFTM.</p></li>
+          <li class="reveal"><span class="steps__n">03</span><h3>Testar</h3><p>Horas de pista antes da competição para acertar o carro e achar o que quebra antes dos juízes.</p></li>
+          <li class="reveal"><span class="steps__n">04</span><h3>Competir</h3><p>Provas estáticas e dinâmicas na Fórmula SAE Brasil, pontuadas uma a uma.</p></li>
         </ol>
       </div>
     </section>
 
-    <!-- ===================== ÁREAS ===================== -->
-    <section class="section section--alt" id="areas">
+    <!-- ===================== GARAGEM 3D ===================== -->
+    <section class="section section--alt garage" id="garagem">
       <div class="container">
         <div class="section__head reveal">
-          <p class="kicker">02 · Áreas</p>
-          <h2 class="h2">Como a equipe se divide</h2>
-          <p class="section__sub">Cada área cuida de um pedaço do carro ou da operação. Todas respondem ao mesmo cronograma.</p>
+          <p class="kicker">02 · Garagem 3D</p>
+          <h2 class="h2">Abra o carro você mesmo</h2>
+          <p class="section__sub">Gire o carro, ligue o raio-X, separe as peças, esterce as rodas e dê a partida no motor. Os pontos laranja explicam cada sistema.</p>
+        </div>
+      </div>
+      <div class="container garage__wrap">
+        <div class="garage__stage stage" id="stage-garage">
+          <div class="garage__labels" id="garage-labels">
+            <button type="button" class="hot3d" data-anchor="chassi"><i></i><span>Chassi</span></button>
+            <button type="button" class="hot3d" data-anchor="suspensao"><i></i><span>Suspensão</span></button>
+            <button type="button" class="hot3d" data-anchor="freios"><i></i><span>Freios</span></button>
+            <button type="button" class="hot3d" data-anchor="powertrain"><i></i><span>Motor</span></button>
+            <button type="button" class="hot3d" data-anchor="admissao"><i></i><span>Admissão</span></button>
+            <button type="button" class="hot3d" data-anchor="escape"><i></i><span>Escape</span></button>
+            <button type="button" class="hot3d" data-anchor="transmissao"><i></i><span>Transmissão</span></button>
+            <button type="button" class="hot3d" data-anchor="aero"><i></i><span>Aerodinâmica</span></button>
+            <button type="button" class="hot3d" data-anchor="cockpit"><i></i><span>Cockpit</span></button>
+          </div>
+          <div class="garage__views" role="group" aria-label="Vistas">
+            <button type="button" data-view="34" class="is-active">3/4</button>
+            <button type="button" data-view="lado">Lado</button>
+            <button type="button" data-view="frente">Frente</button>
+            <button type="button" data-view="tras">Trás</button>
+            <button type="button" data-view="topo">Topo</button>
+          </div>
+          <div class="garage__zoom" role="group" aria-label="Zoom">
+            <button type="button" data-zoom="0.8" aria-label="Aproximar">+</button>
+            <button type="button" data-zoom="1.25" aria-label="Afastar">−</button>
+          </div>
+          <button type="button" class="garage__touch" id="g-touch" hidden>Girar o carro</button>
+          <aside class="garage__info" id="g-info" hidden aria-live="polite">
+            <button type="button" class="garage__close" id="g-info-close" aria-label="Fechar">×</button>
+            <p class="kicker">Sistema</p>
+            <h3 id="g-info-title"></h3>
+            <p class="garage__value" id="g-info-value" hidden></p>
+            <p id="g-info-text"></p>
+          </aside>
+          <div class="tach" id="tach" aria-hidden="true">
+            <div class="tach__leds" id="tach-leds"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            <svg viewBox="0 0 200 120">
+              <path d="M18 108 A84 84 0 0 1 182 108" class="tach__track" />
+              <path d="M18 108 A84 84 0 0 1 182 108" class="tach__fill" id="tach-fill" pathLength="100" />
+              <path d="M167 60 A84 84 0 0 1 182 108" class="tach__red" />
+              <line x1="100" y1="108" x2="100" y2="34" class="tach__needle" id="tach-needle" />
+              <circle cx="100" cy="108" r="6" class="tach__hub" />
+            </svg>
+            <div class="tach__read"><strong id="tach-rpm">0</strong><span>rpm</span></div>
+          </div>
+          <p class="garage__note">Modelo 3D ilustrativo de um Fórmula SAE a combustão, feito para este site.</p>
+          <div class="stage__fallback stage__fallback--msg"><p>Seu navegador não conseguiu abrir o 3D (WebGL). Tente pelo Chrome, Edge, Firefox ou Safari atualizados.</p></div>
         </div>
 
-        <div class="areas">
-          <article class="area reveal">
-            <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M6 36 L18 12 L30 36 L42 12" /><path d="M6 36 H42" /></svg>
-            <h3>Chassi e ergonomia</h3>
-            <p>Estrutura tubular, arcos de proteção, atenuador de impacto, banco e posição do piloto.</p>
-          </article>
-          <article class="area reveal">
-            <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="14" /><circle cx="24" cy="24" r="4" /><path d="M24 10 V4 M24 44 V38 M10 24 H4 M44 24 H38" /></svg>
-            <h3>Suspensão e direção</h3>
-            <p>Geometria, cinemática, amortecedores, cubos, mangas de eixo e caixa de direção.</p>
-          </article>
-          <article class="area reveal">
-            <svg viewBox="0 0 48 48" aria-hidden="true"><rect x="8" y="14" width="26" height="22" rx="2" /><path d="M34 20 H42 V30 H34 M16 14 V8 H26 V14" /></svg>
-            <h3>Powertrain</h3>
-            <p>Motor, admissão com restritor, escape, arrefecimento, combustível e transmissão.</p>
-          </article>
-          <article class="area reveal">
-            <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="16" /><circle cx="24" cy="24" r="7" /><path d="M36 13 A16 16 0 0 1 40 24" stroke-width="5" /></svg>
-            <h3>Freios</h3>
-            <p>Discos, pinças, cilindros mestres e o balanço de frenagem que o piloto ajusta.</p>
-          </article>
-          <article class="area reveal">
-            <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M26 4 L10 28 H24 L22 44 L38 20 H24 Z" /></svg>
-            <h3>Eletrônica e dados</h3>
-            <p>Chicote, painel, sensores e aquisição de dados para entender o carro em pista.</p>
-          </article>
-          <article class="area reveal">
-            <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M4 30 Q24 14 44 22" /><path d="M4 38 Q24 24 44 30" /><path d="M8 18 Q24 6 40 12" /></svg>
-            <h3>Aerodinâmica e carenagem</h3>
-            <p>Formas da carroceria e dos aerofólios, estudadas em CFD e fabricadas em compósito.</p>
-          </article>
-          <article class="area reveal">
-            <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 40 V26 M18 40 V18 M28 40 V22 M38 40 V10" /><path d="M4 40 H44" /></svg>
-            <h3>Gestão e custos</h3>
-            <p>Cronograma, compras, relatório de custos e o plano de negócios apresentado na competição.</p>
-          </article>
-          <article class="area reveal">
-            <svg viewBox="0 0 48 48" aria-hidden="true"><rect x="6" y="10" width="36" height="26" rx="3" /><circle cx="24" cy="23" r="7" /><path d="M16 10 L19 5 H29 L32 10" /></svg>
-            <h3>Marketing e patrocínio</h3>
-            <p>Redes sociais, identidade visual, relacionamento com empresas e captação de recursos.</p>
-          </article>
-        </div>
-
-        <div id="membros-wrap" hidden>
-          <h3 class="h3 reveal">Quem faz a Taurus</h3>
-          <div class="members" id="membros"></div>
+        <div class="garage__panel reveal">
+          <fieldset class="ctrl">
+            <legend>Visão</legend>
+            <div class="toggles">
+              <button type="button" class="toggle" data-toggle="xray" aria-pressed="false"><i></i>Raio-X</button>
+              <button type="button" class="toggle" data-toggle="air" aria-pressed="false"><i></i>Fluxo de ar</button>
+              <button type="button" class="toggle" data-toggle="driver" aria-pressed="true"><i></i>Piloto</button>
+            </div>
+          </fieldset>
+          <label class="ctrl range">
+            <span class="range__head"><span>Vista explodida</span><output id="o-explode">0%</output></span>
+            <input type="range" id="g-explode" min="0" max="100" value="0" />
+          </label>
+          <label class="ctrl range">
+            <span class="range__head"><span>Direção</span><output id="o-steer">0°</output></span>
+            <input type="range" id="g-steer" min="-100" max="100" value="0" />
+          </label>
+          <label class="ctrl range">
+            <span class="range__head"><span>Suspensão (curso)</span><output id="o-heave">0 mm</output></span>
+            <input type="range" id="g-heave" min="-100" max="100" value="0" />
+          </label>
+          <fieldset class="ctrl">
+            <legend>Pintura</legend>
+            <div class="swatches">
+              <button type="button" data-paint="papaya" class="is-active" style="--c:#ff8000" aria-label="Papaya"></button>
+              <button type="button" data-paint="preto" style="--c:#141418" aria-label="Preto"></button>
+              <button type="button" data-paint="branco" style="--c:#f2f2f2" aria-label="Branco"></button>
+              <button type="button" data-paint="carbono" style="--c:#2a2a31" aria-label="Carbono"></button>
+            </div>
+          </fieldset>
+          <fieldset class="ctrl ctrl--engine">
+            <legend>Motor</legend>
+            <div class="engine">
+              <button type="button" class="btn btn--primary btn--sm" id="g-engine">Dar partida</button>
+              <button type="button" class="btn btn--ghost btn--sm" id="g-throttle" disabled>Acelerar (segure)</button>
+              <button type="button" class="icon-btn" id="g-mute" aria-pressed="false" aria-label="Sem som">🔊</button>
+            </div>
+            <p class="ctrl__hint">No computador, segure a barra de espaço para acelerar. O som é gerado no navegador.</p>
+          </fieldset>
         </div>
       </div>
     </section>
 
-    <!-- ===================== COMPETIÇÃO ===================== -->
-    <section class="section" id="competicao">
+    <!-- ===================== LABORATÓRIO ===================== -->
+    <section class="section lab" id="laboratorio">
       <div class="container">
         <div class="section__head reveal">
-          <p class="kicker">03 · A competição</p>
+          <p class="kicker">03 · Laboratório</p>
+          <h2 class="h2">Simule como engenheiro da equipe</h2>
+          <p class="section__sub">
+            Mude peso, potência, pneu e asas e veja o tempo de volta mudar. São as contas que uma equipe faz
+            para decidir onde gastar cada quilo e cada real, numa versão simplificada.
+          </p>
+        </div>
+
+        <div class="lab__tabs" role="tablist" aria-label="Simulações">
+          <button type="button" role="tab" data-lab-tab="volta" class="is-active" aria-selected="true">Volta de autocross</button>
+          <button type="button" role="tab" data-lab-tab="aceleracao" aria-selected="false" tabindex="-1">Aceleração 75 m</button>
+          <button type="button" role="tab" data-lab-tab="skidpad" aria-selected="false" tabindex="-1">Skidpad</button>
+          <button type="button" role="tab" data-lab-tab="suspensao" aria-selected="false" tabindex="-1">Geometria de suspensão</button>
+        </div>
+
+        <div class="lab__grid">
+          <aside class="lab__setup">
+            <h3>Acerto do carro</h3>
+            <p class="lab__hint">A marca branca em cada barra é o carro de referência.</p>
+            <label class="ctrl range"><span class="range__head"><span>Massa (carro + piloto)</span><output data-out="mass"></output></span><span class="range__wrap"><input type="range" data-param="mass" min="220" max="340" step="5" /></span></label>
+            <label class="ctrl range"><span class="range__head"><span>Potência nas rodas</span><output data-out="power"></output></span><span class="range__wrap"><input type="range" data-param="power" min="30" max="70" step="1" /></span></label>
+            <label class="ctrl range"><span class="range__head"><span>Aderência do pneu (<span class="nocase">μ</span>)</span><output data-out="mu"></output></span><span class="range__wrap"><input type="range" data-param="mu" min="1.1" max="1.8" step="0.01" /></span></label>
+            <label class="ctrl range"><span class="range__head"><span>Downforce (Cl·A)</span><output data-out="cla"></output></span><span class="range__wrap"><input type="range" data-param="cla" min="0" max="4" step="0.1" /></span></label>
+            <label class="ctrl range"><span class="range__head"><span>Arrasto (Cd·A)</span><output data-out="cda"></output></span><span class="range__wrap"><input type="range" data-param="cda" min="0.6" max="2" step="0.05" /></span></label>
+            <div class="chips">
+              <button type="button" data-preset="referencia" class="is-active">Referência</button>
+              <button type="button" data-preset="sem-asas">Sem asas</button>
+              <button type="button" data-preset="leve">30 kg mais leve</button>
+              <button type="button" data-preset="pneu">Pneu mais macio</button>
+              <button type="button" data-preset="potencia">+12 kW</button>
+            </div>
+            <p class="lab__disclaimer">Modelo de massa pontual, sem transferência lateral de carga. Os valores iniciais são típicos de um Fórmula SAE a combustão, não os do carro da equipe.</p>
+          </aside>
+
+          <div class="lab__main">
+            <!-- volta -->
+            <div data-lab-panel="volta">
+              <div class="lab__map">
+                <canvas id="lab-track" aria-label="Mapa do traçado com o carro simulado"></canvas>
+                <div class="hud">
+                  <div><span>Tempo</span><strong id="hud-t">0,00 s</strong></div>
+                  <div><span>Velocidade</span><strong id="hud-v">0 km/h</strong></div>
+                  <div><span>G lateral</span><strong id="hud-gy">0,00 g</strong></div>
+                  <div><span>G longitudinal</span><strong id="hud-gx">0,00 g</strong></div>
+                </div>
+                <div class="lab__legend"><span class="lab__ramp"></span><span>lento</span><span>rápido</span><span class="ghost">◇ referência</span></div>
+                <div class="lab__play">
+                  <button type="button" id="lap-play" aria-pressed="false">Pausar</button>
+                  <button type="button" data-lap-speed="1">1×</button>
+                  <button type="button" data-lap-speed="2" class="is-active">2×</button>
+                  <button type="button" data-lap-speed="4">4×</button>
+                </div>
+              </div>
+              <div class="results">
+                <div class="result result--main"><span>Tempo de volta</span><strong id="r-lap">—</strong><em id="r-lap-d" class="delta"></em></div>
+                <div class="result"><span>Velocidade máxima</span><strong id="r-vmax">—</strong></div>
+                <div class="result"><span>Velocidade média</span><strong id="r-vavg">—</strong></div>
+                <div class="result"><span>G lateral máximo</span><strong id="r-gy">—</strong></div>
+              </div>
+              <div class="charts">
+                <figure><figcaption>Velocidade ao longo da volta</figcaption><canvas id="lab-speed"></canvas></figure>
+                <figure class="charts__gg"><figcaption>Diagrama g-g</figcaption><canvas id="lab-gg"></canvas></figure>
+              </div>
+            </div>
+
+            <!-- aceleração -->
+            <div data-lab-panel="aceleracao" hidden>
+              <div class="lab__map lab__map--accel">
+                <div class="lights" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+                <canvas id="lab-accel" aria-label="Pista de aceleração com dois carros"></canvas>
+                <button type="button" class="btn btn--primary accel__go" id="acc-go">Largar</button>
+              </div>
+              <div class="results">
+                <div class="result result--main"><span>Tempo nos 75 m</span><strong id="r-acc">—</strong><em id="r-acc-d" class="delta"></em></div>
+                <div class="result"><span>Velocidade na chegada</span><strong id="r-acc-v">—</strong></div>
+                <div class="result"><span>0 a 100 km/h</span><strong id="r-acc-100">—</strong></div>
+              </div>
+              <p class="lab__explain">Na largada o limite é a aderência dos pneus traseiros (parte do peso vai para trás quando o carro acelera). Depois de uns 70 km/h quem manda é a potência. Por isso tirar peso ajuda nas duas fases.</p>
+            </div>
+
+            <!-- skidpad -->
+            <div data-lab-panel="skidpad" hidden>
+              <div class="lab__map">
+                <canvas id="lab-skid" aria-label="Pista em forma de oito do skidpad"></canvas>
+              </div>
+              <div class="results">
+                <div class="result result--main"><span>Tempo por volta</span><strong id="r-skid">—</strong><em id="r-skid-d" class="delta"></em></div>
+                <div class="result"><span>Velocidade</span><strong id="r-skid-v">—</strong></div>
+                <div class="result"><span>Aceleração lateral</span><strong id="r-skid-g">—</strong></div>
+              </div>
+              <p class="lab__explain">O carro dá duas voltas em cada círculo do oito e só a segunda é cronometrada. Tudo depende de quanta força lateral os pneus aguentam: pneu melhor e mais downforce deixam o carro fazer a curva mais rápido.</p>
+            </div>
+
+            <!-- suspensão -->
+            <div data-lab-panel="suspensao" hidden>
+              <div class="susp">
+                <div class="lab__map lab__map--susp">
+                  <canvas id="lab-susp" aria-label="Vista frontal da suspensão duplo A"></canvas>
+                  <p class="susp__hint">Arraste os pontos laranja para mudar a geometria</p>
+                </div>
+                <div class="susp__side">
+                  <label class="ctrl range">
+                    <span class="range__head"><span>Curso da roda</span><output id="s-tr">0 mm</output></span>
+                    <input type="range" id="susp-travel" min="-40" max="40" value="0" />
+                  </label>
+                  <div class="chips">
+                    <button type="button" id="susp-anim" aria-pressed="false">Animar</button>
+                    <button type="button" data-susp="desiguais" class="is-active">Braços desiguais</button>
+                    <button type="button" data-susp="paralelas">Paralelos e iguais</button>
+                    <button type="button" data-susp="agressiva">Ganho alto</button>
+                  </div>
+                  <div class="results results--susp">
+                    <div class="result"><span>Cambagem</span><strong id="s-cam">—</strong></div>
+                    <div class="result"><span>Ganho de cambagem</span><strong id="s-gain">—</strong></div>
+                    <div class="result"><span>Centro de rolagem</span><strong id="s-rc">—</strong></div>
+                    <div class="result"><span>Variação de bitola</span><strong id="s-trk">—</strong></div>
+                  </div>
+                  <canvas id="lab-camber" class="susp__chart" aria-label="Gráfico de cambagem por curso"></canvas>
+                </div>
+              </div>
+              <p class="lab__explain">Numa curva o carro inclina e a roda de fora sobe. Se ela ganhar cambagem negativa ao subir, o pneu fica mais apoiado no chão e segura mais. Braços paralelos e iguais não dão esse ganho. O centro de rolagem define quanto o carro inclina.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ===================== COMPETIÇÃO ===================== -->
+    <section class="section section--alt" id="competicao">
+      <div class="container">
+        <div class="section__head reveal">
+          <p class="kicker">04 · A competição</p>
           <h2 class="h2">Como funciona a Fórmula SAE</h2>
           <p class="section__sub">
             A Fórmula SAE nasceu nos Estados Unidos e ganhou uma etapa brasileira em 2004,
@@ -375,32 +604,6 @@
       </div>
     </section>
 
-    <!-- ===================== O CARRO ===================== -->
-    <section class="section section--alt" id="carro">
-      <div class="container">
-        <div class="section__head reveal">
-          <p class="kicker">04 · O carro</p>
-          <h2 class="h2"><span id="car-name">Protótipo Taurus</span> <small id="car-cat">Fórmula SAE · Combustão</small></h2>
-          <p class="section__sub">Toque nos pontos para ver cada sistema.</p>
-        </div>
-
-        <div class="car-stage reveal">
-          <div class="car-stage__art">
-            <svg class="car" viewBox="0 0 1000 330" role="img" aria-label="Desenho lateral do carro de Fórmula SAE da Taurus Racing, número 39"><use href="#car" /></svg>
-            <div class="hotspots" id="hotspots"></div>
-          </div>
-          <aside class="car-stage__panel" id="car-panel" aria-live="polite">
-            <p class="kicker">Sistema</p>
-            <h3 id="panel-title">Chassi</h3>
-            <p id="panel-value" class="panel__value"></p>
-            <p id="panel-text"></p>
-          </aside>
-        </div>
-
-        <dl class="specs" id="specs"></dl>
-      </div>
-    </section>
-
     <!-- ===================== TRAJETÓRIA ===================== -->
     <section class="section" id="trajetoria">
       <div class="container">
@@ -412,11 +615,70 @@
       </div>
     </section>
 
+    <!-- ===================== ÁREAS ===================== -->
+    <section class="section section--alt" id="areas">
+      <div class="container">
+        <div class="section__head reveal">
+          <p class="kicker">06 · Áreas</p>
+          <h2 class="h2">Como a equipe se divide</h2>
+          <p class="section__sub">Cada área cuida de um pedaço do carro ou da operação. Todas respondem ao mesmo cronograma.</p>
+        </div>
+
+        <div class="areas">
+          <article class="area reveal">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M6 36 L18 12 L30 36 L42 12" /><path d="M6 36 H42" /></svg>
+            <h3>Chassi e ergonomia</h3>
+            <p>Estrutura tubular, arcos de proteção, atenuador de impacto, banco e posição do piloto.</p>
+          </article>
+          <article class="area reveal">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="14" /><circle cx="24" cy="24" r="4" /><path d="M24 10 V4 M24 44 V38 M10 24 H4 M44 24 H38" /></svg>
+            <h3>Suspensão e direção</h3>
+            <p>Geometria, cinemática, amortecedores, cubos, mangas de eixo e caixa de direção.</p>
+          </article>
+          <article class="area reveal">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><rect x="8" y="14" width="26" height="22" rx="2" /><path d="M34 20 H42 V30 H34 M16 14 V8 H26 V14" /></svg>
+            <h3>Powertrain</h3>
+            <p>Motor, admissão com restritor, escape, arrefecimento, combustível e transmissão.</p>
+          </article>
+          <article class="area reveal">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="16" /><circle cx="24" cy="24" r="7" /><path d="M36 13 A16 16 0 0 1 40 24" stroke-width="5" /></svg>
+            <h3>Freios</h3>
+            <p>Discos, pinças, cilindros mestres e o balanço de frenagem que o piloto ajusta.</p>
+          </article>
+          <article class="area reveal">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M26 4 L10 28 H24 L22 44 L38 20 H24 Z" /></svg>
+            <h3>Eletrônica e dados</h3>
+            <p>Chicote, painel, sensores e aquisição de dados para entender o carro em pista.</p>
+          </article>
+          <article class="area reveal">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M4 30 Q24 14 44 22" /><path d="M4 38 Q24 24 44 30" /><path d="M8 18 Q24 6 40 12" /></svg>
+            <h3>Aerodinâmica e carenagem</h3>
+            <p>Formas da carroceria e dos aerofólios, estudadas em CFD e fabricadas em compósito.</p>
+          </article>
+          <article class="area reveal">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 40 V26 M18 40 V18 M28 40 V22 M38 40 V10" /><path d="M4 40 H44" /></svg>
+            <h3>Gestão e custos</h3>
+            <p>Cronograma, compras, relatório de custos e o plano de negócios apresentado na competição.</p>
+          </article>
+          <article class="area reveal">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><rect x="6" y="10" width="36" height="26" rx="3" /><circle cx="24" cy="23" r="7" /><path d="M16 10 L19 5 H29 L32 10" /></svg>
+            <h3>Marketing e patrocínio</h3>
+            <p>Redes sociais, identidade visual, relacionamento com empresas e captação de recursos.</p>
+          </article>
+        </div>
+
+        <div id="membros-wrap" hidden>
+          <h3 class="h3 reveal">Quem faz a Taurus</h3>
+          <div class="members" id="membros"></div>
+        </div>
+      </div>
+    </section>
+
     <!-- ===================== EXTENSÃO ===================== -->
-    <section class="section section--alt" id="extensao">
+    <section class="section" id="extensao">
       <div class="container split">
         <div class="reveal">
-          <p class="kicker">06 · Extensão universitária</p>
+          <p class="kicker">07 · Extensão universitária</p>
           <h2 class="h2">O que sai da oficina além do carro</h2>
         </div>
         <div class="prose reveal">
@@ -453,7 +715,7 @@
     <section class="section section--sponsor" id="patrocinio">
       <div class="container">
         <div class="section__head reveal">
-          <p class="kicker">07 · Patrocínio</p>
+          <p class="kicker">08 · Patrocínio</p>
           <h2 class="h2">Coloque sua marca num carro de corrida</h2>
           <p class="section__sub">
             Um carro de Fórmula SAE sai caro: tubos de aço, motor, pneus, eletrônica, usinagem,
@@ -517,6 +779,23 @@
           </article>
         </div>
 
+
+        <div class="sp3d reveal">
+          <div class="sp3d__stage stage" id="stage-sponsor">
+            <div class="stage__fallback stage__fallback--msg"><p>A prévia 3D precisa de WebGL.</p></div>
+          </div>
+          <div class="sp3d__side">
+            <p class="kicker">Prévia ao vivo</p>
+            <h3>Veja sua marca no carro 39</h3>
+            <p>Escolha o logo da sua empresa (PNG, JPG ou SVG) e ele aparece no sidepod do carro em 3D. A imagem fica só no seu navegador, nada é enviado.</p>
+            <div class="sp3d__btns">
+              <label class="btn btn--primary file-btn">Escolher logo<input type="file" id="sp-file" accept="image/png,image/jpeg,image/svg+xml,image/webp" /></label>
+              <button type="button" class="btn btn--ghost" id="sp-reset" hidden>Remover</button>
+            </div>
+            <p class="sp3d__status" id="sp-status" role="status"></p>
+          </div>
+        </div>
+
         <div class="sponsors reveal" id="sponsors"></div>
 
         <div class="sponsor-cta reveal">
@@ -536,7 +815,7 @@
     <section class="section" id="galeria">
       <div class="container">
         <div class="section__head reveal">
-          <p class="kicker">08 · Galeria</p>
+          <p class="kicker">09 · Galeria</p>
           <h2 class="h2">Oficina, pista e competição</h2>
         </div>
         <div class="gallery" id="gallery"></div>
@@ -547,7 +826,7 @@
     <section class="section section--alt" id="faca-parte">
       <div class="container split">
         <div class="reveal">
-          <p class="kicker">09 · Faça parte</p>
+          <p class="kicker">10 · Faça parte</p>
           <h2 class="h2">Quer entrar na equipe?</h2>
           <p class="status" id="ps-status"></p>
           <p class="prose" id="ps-text"></p>
@@ -620,7 +899,7 @@
     <section class="section" id="contato">
       <div class="container">
         <div class="section__head reveal">
-          <p class="kicker">10 · Contato</p>
+          <p class="kicker">11 · Contato</p>
           <h2 class="h2">Fale com a Taurus</h2>
         </div>
 
@@ -656,5 +935,6 @@
 
   <script src="js/config.js"></script>
   <script src="js/main.js"></script>
+  <script type="module" src="js/app.js"></script>
 </body>
 </html>
