@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <path d="M14 6 H62 L50 58 H2 Z" fill="#e10600"/>
-  <path d="M12 16 C12 26 20 30 30 30 C40 30 48 26 50 16 C46 22 40 24 30 24 C20 24 15 22 12 16 Z" fill="#fff"/>
-  <text x="31" y="52" text-anchor="middle" font-family="Barlow Condensed, Arial Narrow, Impact, sans-serif" font-weight="800" font-style="italic" font-size="24" fill="#fff">TR</text>
+  <path d="M14 6 H62 L50 58 H2 Z" fill="#ff8000"/>
+  <path d="M12 16 C12 26 20 30 30 30 C40 30 48 26 50 16 C46 22 40 24 30 24 C20 24 15 22 12 16 Z" fill="#0b0b0d"/>
+  <text x="31" y="52" text-anchor="middle" font-family="Barlow Condensed, Arial Narrow, Impact, sans-serif" font-weight="800" font-style="italic" font-size="24" fill="#0b0b0d">TR</text>
 </svg>

@@ -37,7 +37,7 @@ Quase tudo fica em **`js/config.js`**. Não precisa mexer no HTML.
 ### Logo e cores
 
 - O logo em `assets/img/logo.svg` é provisório. Troque pelo logo oficial da equipe mantendo o mesmo nome de arquivo (e copie também para `favicon.svg`).
-- As cores ficam no topo de `css/style.css`, nas variáveis `--red`, `--amber` e `--bg`.
+- A paleta é preto, branco e laranja papaya (#FF8000), inspirada na McLaren. As cores ficam no topo de `css/style.css`, nas variáveis `--orange`, `--orange-2`, `--white` e `--bg`. Texto sobre laranja usa preto (`--on-orange`) para manter o contraste.
 - A imagem que aparece quando o link é compartilhado no WhatsApp/Instagram é `assets/img/og-image.png` (1200×630).
 
 ## Ver no computador

@@ -302,7 +302,7 @@
     el("div", {}, [
       el("h3", { text: "Os bastidores estão no Instagram" }),
       el("p", { text: "Solda do chassi, testes, viagens para a competição e o dia a dia da oficina. Tudo sai primeiro no " + (ct.instagramUser || "Instagram") + "." }),
-      el("a", { class: "btn btn--red", href: ct.instagram, target: "_blank", rel: "noopener", text: "Seguir " + (ct.instagramUser || "") }),
+      el("a", { class: "btn btn--primary", href: ct.instagram, target: "_blank", rel: "noopener", text: "Seguir " + (ct.instagramUser || "") }),
     ]),
     el("div", { class: "insta__tiles", "aria-hidden": "true", html: tiles }),
   ]));
