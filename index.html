@@ -1,0 +1,660 @@
+<!doctype html>
+<html lang="pt-BR" class="no-js">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Taurus Racing · Fórmula SAE UFTM</title>
+  <meta name="description" content="Taurus Racing é a equipe de Fórmula SAE da UFTM, em Uberaba (MG). Estudantes de engenharia que projetam, constroem e correm com um carro tipo fórmula na Fórmula SAE Brasil." />
+  <meta name="theme-color" content="#0b0b0d" />
+  <meta name="color-scheme" content="dark" />
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="pt_BR" />
+  <meta property="og:title" content="Taurus Racing · Fórmula SAE UFTM" />
+  <meta property="og:description" content="A equipe de Fórmula SAE da Universidade Federal do Triângulo Mineiro. Carro nº 39." />
+  <meta property="og:image" content="assets/img/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="preload" href="assets/fonts/barlow-condensed-latin-800-italic.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SportsTeam",
+    "name": "Taurus Racing Fórmula SAE UFTM",
+    "sport": "Fórmula SAE",
+    "foundingDate": "2015",
+    "memberOf": { "@type": "CollegeOrUniversity", "name": "Universidade Federal do Triângulo Mineiro" },
+    "location": { "@type": "Place", "address": { "@type": "PostalAddress", "addressLocality": "Uberaba", "addressRegion": "MG", "addressCountry": "BR" } },
+    "sameAs": [
+      "https://www.instagram.com/taurusracingfsae/",
+      "https://www.facebook.com/taurusracingfsae/",
+      "https://www.linkedin.com/company/taurus-racing-formula-sae-uftm"
+    ]
+  }
+  </script>
+</head>
+<body>
+  <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+  <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+
+  <!-- Símbolo do carro, reutilizado no hero e na seção do carro -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="g-body" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#ff2a1f" />
+        <stop offset="1" stop-color="#a80500" />
+      </linearGradient>
+      <linearGradient id="g-dark" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#2a2a31" />
+        <stop offset="1" stop-color="#101014" />
+      </linearGradient>
+      <radialGradient id="g-rim" cx=".5" cy=".5" r=".5">
+        <stop offset="0" stop-color="#d9d9e0" />
+        <stop offset=".7" stop-color="#8c8c96" />
+        <stop offset="1" stop-color="#55555e" />
+      </radialGradient>
+      <symbol id="car" viewBox="0 0 1000 330">
+        <!-- sombra -->
+        <ellipse cx="540" cy="312" rx="440" ry="12" fill="#000" opacity=".55" />
+        <!-- asa traseira -->
+        <g class="car-wing">
+          <path d="M205 212 L182 128" stroke="#2b2b33" stroke-width="7" stroke-linecap="round" />
+          <path d="M240 208 L200 128" stroke="#2b2b33" stroke-width="5" stroke-linecap="round" />
+          <rect x="112" y="58" width="16" height="104" rx="3" fill="url(#g-dark)" />
+          <path d="M122 76 Q170 60 222 70 L220 82 Q170 76 122 90 Z" fill="#e10600" />
+          <path d="M122 100 Q175 88 232 98 L230 110 Q175 104 122 116 Z" fill="#1c1c22" />
+          <path d="M122 124 Q175 114 236 124 L234 134 Q175 130 122 140 Z" fill="#1c1c22" />
+        </g>
+        <!-- arco principal -->
+        <path d="M468 182 L458 104 Q456 92 444 92 L432 92" fill="none" stroke="#3a3a44" stroke-width="10" stroke-linecap="round" />
+        <!-- corpo -->
+        <path d="M968 246 C930 228 862 210 742 203 L622 192 Q602 190 592 176 L476 176 L446 148 L400 148 C334 148 292 172 250 194 L172 206 L166 252 L300 264 L700 264 L968 256 Z" fill="url(#g-body)" />
+        <!-- faixa preta superior -->
+        <path d="M742 203 L622 192 Q602 190 592 176 L476 176 L446 148 L400 148 C360 148 330 156 300 168 L306 178 C336 168 366 162 400 162 L444 162 L470 190 L596 190 Q610 204 628 206 L742 215 C850 222 920 236 960 250 L968 246 C930 228 862 210 742 203 Z" fill="#141418" opacity=".85" />
+        <!-- sidepod -->
+        <path d="M568 214 L338 214 C316 214 304 236 308 260 L568 260 Z" fill="url(#g-dark)" />
+        <path d="M568 214 L556 214 L556 260 L568 260 Z" fill="#000" opacity=".5" />
+        <text x="440" y="252" text-anchor="middle" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="800" font-style="italic" font-size="44" fill="#fff">39</text>
+        <!-- piloto -->
+        <circle cx="524" cy="150" r="24" fill="#f3f3f5" />
+        <path d="M530 138 Q552 140 548 158 L532 158 Z" fill="#101014" />
+        <path d="M502 150 Q506 128 526 126" fill="none" stroke="#e10600" stroke-width="5" />
+        <!-- volante / arco frontal -->
+        <path d="M598 180 L592 160" stroke="#3a3a44" stroke-width="7" stroke-linecap="round" />
+        <!-- asa dianteira -->
+        <path d="M858 272 L992 268 L996 282 L858 286 Z" fill="#1c1c22" />
+        <rect x="978" y="248" width="12" height="38" rx="3" fill="#e10600" />
+        <!-- suspensão -->
+        <g stroke="#55555e" stroke-width="4" stroke-linecap="round">
+          <path d="M760 250 L690 222 M760 250 L690 256" />
+          <path d="M238 250 L310 224 M238 250 L310 258" />
+        </g>
+        <!-- rodas -->
+        <g class="wheel">
+          <circle cx="238" cy="252" r="58" fill="#121216" />
+          <circle cx="238" cy="252" r="56" fill="none" stroke="#26262d" stroke-width="3" />
+          <g class="rim" style="transform-origin:238px 252px">
+            <circle cx="238" cy="252" r="32" fill="url(#g-rim)" />
+            <path d="M238 222 L238 282 M208 252 L268 252 M217 231 L259 273 M259 231 L217 273" stroke="#3a3a44" stroke-width="5" />
+            <circle cx="238" cy="252" r="8" fill="#e10600" />
+          </g>
+        </g>
+        <g class="wheel">
+          <circle cx="760" cy="252" r="58" fill="#121216" />
+          <circle cx="760" cy="252" r="56" fill="none" stroke="#26262d" stroke-width="3" />
+          <g class="rim" style="transform-origin:760px 252px">
+            <circle cx="760" cy="252" r="32" fill="url(#g-rim)" />
+            <path d="M760 222 L760 282 M730 252 L790 252 M739 231 L781 273 M781 231 L739 273" stroke="#3a3a44" stroke-width="5" />
+            <circle cx="760" cy="252" r="8" fill="#e10600" />
+          </g>
+          <circle cx="760" cy="252" r="40" fill="none" stroke="#e10600" stroke-width="4" stroke-dasharray="30 222" class="caliper" />
+        </g>
+      </symbol>
+    </defs>
+  </svg>
+
+  <!-- ===================== NAV ===================== -->
+  <header class="nav" id="nav">
+    <div class="container nav__inner">
+      <a href="#topo" class="brand" aria-label="Taurus Racing, início">
+        <img src="assets/img/logo.svg" alt="" width="40" height="40" />
+        <span class="brand__text">TAURUS<b>RACING</b></span>
+      </a>
+      <nav class="nav__links" id="nav-links" aria-label="Seções">
+        <a href="#equipe">Equipe</a>
+        <a href="#competicao">Competição</a>
+        <a href="#carro">O carro</a>
+        <a href="#trajetoria">Trajetória</a>
+        <a href="#extensao">Extensão</a>
+        <a href="#faca-parte">Faça parte</a>
+        <a href="#contato">Contato</a>
+        <a href="#patrocinio" class="btn btn--sm btn--red">Patrocine</a>
+      </nav>
+      <button class="nav__toggle" id="nav-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav-links">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="conteudo">
+    <!-- ===================== HERO ===================== -->
+    <section class="hero" id="topo">
+      <div class="hero__grid" aria-hidden="true"></div>
+      <div class="hero__num" aria-hidden="true">39</div>
+      <div class="container hero__inner">
+        <p class="eyebrow"><span class="dot"></span> Fórmula SAE · UFTM · Uberaba/MG</p>
+        <h1 class="hero__title">
+          <span class="line">TAURUS</span>
+          <span class="line line--red">RACING</span>
+        </h1>
+        <p class="hero__lead">
+          Somos a equipe de Fórmula SAE da Universidade Federal do Triângulo Mineiro.
+          Estudantes de engenharia que projetam, fabricam e levam para a pista um carro
+          tipo fórmula, do primeiro cálculo à última solda.
+        </p>
+        <div class="hero__cta">
+          <a href="#patrocinio" class="btn btn--red">Patrocine a equipe</a>
+          <a href="#carro" class="btn btn--ghost">Conheça o carro</a>
+        </div>
+      </div>
+
+      <div class="hero__car" aria-hidden="true">
+        <div class="speed">
+          <i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
+        <svg class="car car--spin" viewBox="0 0 1000 330"><use href="#car" /></svg>
+      </div>
+
+      <div class="container">
+        <ul class="stats" aria-label="Números da equipe">
+          <li><strong data-count="2015" data-plain>2015</strong><span>ano de fundação</span></li>
+          <li><strong data-count="32">32</strong><span>membros</span></li>
+          <li><strong data-count="4">4</strong><span>cursos de engenharia</span></li>
+          <li><strong>#39</strong><span>número do carro</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===================== MARQUEE ===================== -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee__track">
+        <span>PROJETAR</span><span>FABRICAR</span><span>TESTAR</span><span>COMPETIR</span><span>UBERABA · MG</span><span>CARRO Nº 39</span>
+        <span>PROJETAR</span><span>FABRICAR</span><span>TESTAR</span><span>COMPETIR</span><span>UBERABA · MG</span><span>CARRO Nº 39</span>
+      </div>
+    </div>
+
+    <!-- ===================== EQUIPE ===================== -->
+    <section class="section" id="equipe">
+      <div class="container split">
+        <div class="reveal">
+          <p class="kicker">01 · A equipe</p>
+          <h2 class="h2">Engenharia com prazo, orçamento e <em>jurado</em></h2>
+        </div>
+        <div class="prose reveal">
+          <p>
+            A Taurus Racing é um projeto de extensão da UFTM criado em 2015. Todo ano a equipe
+            leva um carro inteiro para a Fórmula SAE Brasil, onde ele passa por inspeção de
+            segurança, é avaliado por engenheiros da indústria e corre contra dezenas de
+            universidades do país.
+          </p>
+          <p>
+            Para chegar lá, os membros fazem o trabalho de uma equipe de engenharia de verdade:
+            dimensionam peças, cotam fornecedores, fabricam, testam, defendem o projeto diante
+            dos jurados e fecham a conta com patrocinadores. Hoje são 32 alunos de Engenharia
+            Mecânica, Elétrica, de Produção e Civil.
+          </p>
+          <p class="goal">
+            <span>Objetivo</span>
+            Brigar pelas primeiras posições da categoria combustão no Brasil e, com isso,
+            conquistar uma vaga numa etapa internacional da Fórmula SAE.
+          </p>
+        </div>
+      </div>
+
+      <div class="container">
+        <ol class="steps">
+          <li class="reveal">
+            <span class="steps__n">01</span>
+            <h3>Projetar</h3>
+            <p>CAD, simulação estrutural e cálculo de suspensão, tudo dentro do regulamento da SAE.</p>
+          </li>
+          <li class="reveal">
+            <span class="steps__n">02</span>
+            <h3>Fabricar</h3>
+            <p>Corte e solda dos tubos do chassi, usinagem de peças e montagem na oficina da UFTM.</p>
+          </li>
+          <li class="reveal">
+            <span class="steps__n">03</span>
+            <h3>Testar</h3>
+            <p>Horas de pista antes da competição para acertar o carro e encontrar o que quebra antes dos juízes.</p>
+          </li>
+          <li class="reveal">
+            <span class="steps__n">04</span>
+            <h3>Competir</h3>
+            <p>Provas estáticas e dinâmicas na Fórmula SAE Brasil, pontuadas uma a uma.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ===================== ÁREAS ===================== -->
+    <section class="section section--alt" id="areas">
+      <div class="container">
+        <div class="section__head reveal">
+          <p class="kicker">02 · Áreas</p>
+          <h2 class="h2">Como a equipe se divide</h2>
+          <p class="section__sub">Cada área cuida de um pedaço do carro ou da operação. Todas respondem ao mesmo cronograma.</p>
+        </div>
+
+        <div class="areas">
+          <article class="area reveal">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M6 36 L18 12 L30 36 L42 12" /><path d="M6 36 H42" /></svg>
+            <h3>Chassi e ergonomia</h3>
+            <p>Estrutura tubular, arcos de proteção, atenuador de impacto, banco e posição do piloto.</p>
+          </article>
+          <article class="area reveal">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="14" /><circle cx="24" cy="24" r="4" /><path d="M24 10 V4 M24 44 V38 M10 24 H4 M44 24 H38" /></svg>
+            <h3>Suspensão e direção</h3>
+            <p>Geometria, cinemática, amortecedores, cubos, mangas de eixo e caixa de direção.</p>
+          </article>
+          <article class="area reveal">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><rect x="8" y="14" width="26" height="22" rx="2" /><path d="M34 20 H42 V30 H34 M16 14 V8 H26 V14" /></svg>
+            <h3>Powertrain</h3>
+            <p>Motor, admissão com restritor, escape, arrefecimento, combustível e transmissão.</p>
+          </article>
+          <article class="area reveal">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="16" /><circle cx="24" cy="24" r="7" /><path d="M36 13 A16 16 0 0 1 40 24" stroke-width="5" /></svg>
+            <h3>Freios</h3>
+            <p>Discos, pinças, cilindros mestres e o balanço de frenagem que o piloto ajusta.</p>
+          </article>
+          <article class="area reveal">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M26 4 L10 28 H24 L22 44 L38 20 H24 Z" /></svg>
+            <h3>Eletrônica e dados</h3>
+            <p>Chicote, painel, sensores e aquisição de dados para entender o carro em pista.</p>
+          </article>
+          <article class="area reveal">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M4 30 Q24 14 44 22" /><path d="M4 38 Q24 24 44 30" /><path d="M8 18 Q24 6 40 12" /></svg>
+            <h3>Aerodinâmica e carenagem</h3>
+            <p>Formas da carroceria e dos aerofólios, estudadas em CFD e fabricadas em compósito.</p>
+          </article>
+          <article class="area reveal">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 40 V26 M18 40 V18 M28 40 V22 M38 40 V10" /><path d="M4 40 H44" /></svg>
+            <h3>Gestão e custos</h3>
+            <p>Cronograma, compras, relatório de custos e o plano de negócios apresentado na competição.</p>
+          </article>
+          <article class="area reveal">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><rect x="6" y="10" width="36" height="26" rx="3" /><circle cx="24" cy="23" r="7" /><path d="M16 10 L19 5 H29 L32 10" /></svg>
+            <h3>Marketing e patrocínio</h3>
+            <p>Redes sociais, identidade visual, relacionamento com empresas e captação de recursos.</p>
+          </article>
+        </div>
+
+        <div id="membros-wrap" hidden>
+          <h3 class="h3 reveal">Quem faz a Taurus</h3>
+          <div class="members" id="membros"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== COMPETIÇÃO ===================== -->
+    <section class="section" id="competicao">
+      <div class="container">
+        <div class="section__head reveal">
+          <p class="kicker">03 · A competição</p>
+          <h2 class="h2">Como funciona a Fórmula SAE</h2>
+          <p class="section__sub">
+            A Fórmula SAE nasceu nos Estados Unidos e ganhou uma etapa brasileira em 2004,
+            organizada pela SAE Brasil. A edição de 2026 reuniu 66 equipes e mais de 1.300
+            estudantes, pela primeira vez na pista de testes da Ford em Tatuí (SP). Em anos
+            anteriores, como 2024, a sede foi o ECPA, em Piracicaba.
+          </p>
+        </div>
+
+        <div class="tabs reveal" role="tablist" aria-label="Tipos de prova">
+          <button class="tab is-active" role="tab" aria-selected="true" aria-controls="tab-estaticas" id="t-estaticas">Provas estáticas</button>
+          <button class="tab" role="tab" aria-selected="false" aria-controls="tab-dinamicas" id="t-dinamicas" tabindex="-1">Provas dinâmicas</button>
+        </div>
+
+        <div class="tabpanel is-active" id="tab-estaticas" role="tabpanel" aria-labelledby="t-estaticas">
+          <div class="events">
+            <article class="event">
+              <span class="event__tag">Obrigatória</span>
+              <h3>Inspeção técnica</h3>
+              <p>Antes de ir para a pista, o carro é revisado item por item: estrutura, cintos, extintor, inclinação sem vazamento, ruído e teste de frenagem com as quatro rodas travando.</p>
+            </article>
+            <article class="event">
+              <span class="event__tag">Engenharia</span>
+              <h3>Design</h3>
+              <p>Jurados vindos da indústria perguntam por que cada solução foi escolhida. Vale mais a justificativa com dados do que a peça mais cara.</p>
+            </article>
+            <article class="event">
+              <span class="event__tag">Engenharia</span>
+              <h3>Custos</h3>
+              <p>Relatório com o custo de fabricação de cada peça do carro, conferido pelos juízes com o carro na frente deles.</p>
+            </article>
+            <article class="event">
+              <span class="event__tag">Negócios</span>
+              <h3>Apresentação de negócios</h3>
+              <p>A equipe apresenta um plano de negócios em torno do carro para uma banca que faz o papel de investidor.</p>
+            </article>
+          </div>
+        </div>
+
+        <div class="tabpanel" id="tab-dinamicas" role="tabpanel" aria-labelledby="t-dinamicas" hidden>
+          <div class="events">
+            <article class="event">
+              <span class="event__tag">Tração</span>
+              <h3>Aceleração</h3>
+              <p>Reta de 75 metros com largada parada. Motor, câmbio e piloto no limite em poucos segundos.</p>
+            </article>
+            <article class="event">
+              <span class="event__tag">Aderência</span>
+              <h3>Skidpad</h3>
+              <p>Duas voltas em cada círculo de uma pista em forma de oito. Mede quanto o carro aguenta de força lateral.</p>
+            </article>
+            <article class="event">
+              <span class="event__tag">Dirigibilidade</span>
+              <h3>Autocross</h3>
+              <p>Uma volta lançada num circuito travado demarcado por cones. Cone derrubado vira segundo de punição.</p>
+            </article>
+            <article class="event">
+              <span class="event__tag">Confiabilidade</span>
+              <h3>Enduro</h3>
+              <p>Cerca de 22 km com troca de piloto no meio e sem mecânico por perto. É a prova que mais vale e a que mais quebra carro.</p>
+            </article>
+            <article class="event">
+              <span class="event__tag">Consumo</span>
+              <h3>Eficiência</h3>
+              <p>O combustível gasto durante o enduro é medido e comparado ao tempo de volta.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== O CARRO ===================== -->
+    <section class="section section--alt" id="carro">
+      <div class="container">
+        <div class="section__head reveal">
+          <p class="kicker">04 · O carro</p>
+          <h2 class="h2"><span id="car-name">Protótipo Taurus</span> <small id="car-cat">Fórmula SAE · Combustão</small></h2>
+          <p class="section__sub">Toque nos pontos para ver cada sistema.</p>
+        </div>
+
+        <div class="car-stage reveal">
+          <div class="car-stage__art">
+            <svg class="car" viewBox="0 0 1000 330" role="img" aria-label="Desenho lateral do carro de Fórmula SAE da Taurus Racing, número 39"><use href="#car" /></svg>
+            <div class="hotspots" id="hotspots"></div>
+          </div>
+          <aside class="car-stage__panel" id="car-panel" aria-live="polite">
+            <p class="kicker">Sistema</p>
+            <h3 id="panel-title">Chassi</h3>
+            <p id="panel-value" class="panel__value"></p>
+            <p id="panel-text"></p>
+          </aside>
+        </div>
+
+        <dl class="specs" id="specs"></dl>
+      </div>
+    </section>
+
+    <!-- ===================== TRAJETÓRIA ===================== -->
+    <section class="section" id="trajetoria">
+      <div class="container">
+        <div class="section__head reveal">
+          <p class="kicker">05 · Trajetória</p>
+          <h2 class="h2">De 2015 até aqui</h2>
+        </div>
+        <ol class="timeline" id="timeline"></ol>
+      </div>
+    </section>
+
+    <!-- ===================== EXTENSÃO ===================== -->
+    <section class="section section--alt" id="extensao">
+      <div class="container split">
+        <div class="reveal">
+          <p class="kicker">06 · Extensão universitária</p>
+          <h2 class="h2">O que sai da oficina além do carro</h2>
+        </div>
+        <div class="prose reveal">
+          <p>
+            Quem passa pela Taurus sai da UFTM tendo soldado, usinado, desenhado em CAD,
+            lido o regulamento da SAE de ponta a ponta e defendido um projeto diante de
+            engenheiros. É o tipo de experiência que aparece na entrevista de estágio.
+          </p>
+          <p>
+            A equipe aceita alunos de qualquer período e de vários cursos. A maioria entra
+            sem nunca ter pegado numa ferramenta e aprende com os veteranos.
+          </p>
+          <p>
+            A equipe também pode levar o protótipo a escolas, feiras e eventos de Uberaba e
+            região para conversar com estudantes do ensino médio sobre engenharia.
+            <a href="#contato" class="link">Chame a gente</a>.
+          </p>
+        </div>
+      </div>
+      <div class="container">
+        <div class="neighbors reveal">
+          <p>A Taurus divide o Departamento de Engenharia Mecânica da UFTM com outros projetos de competição:</p>
+          <ul>
+            <li>Zebu Baja <small>Baja SAE</small></li>
+            <li>Triângulo Aero <small>AeroDesign SAE</small></li>
+            <li>Gaia <small>Eletroquad SAE</small></li>
+            <li>Triângulo Verde <small>Shell Eco-marathon</small></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== PATROCÍNIO ===================== -->
+    <section class="section section--sponsor" id="patrocinio">
+      <div class="container">
+        <div class="section__head reveal">
+          <p class="kicker">07 · Patrocínio</p>
+          <h2 class="h2">Coloque sua marca num carro de corrida</h2>
+          <p class="section__sub">
+            Um carro de Fórmula SAE sai caro: tubos de aço, motor, pneus, eletrônica, usinagem,
+            viagem e inscrição. Todo real que entra vira peça, teste ou quilômetro de pista,
+            e a sua empresa aparece em cada um deles.
+          </p>
+        </div>
+
+        <div class="why">
+          <div class="why__item reveal">
+            <h3>Visibilidade</h3>
+            <p>Logo no carro, no macacão, no uniforme da equipe, no site e nas redes sociais, na oficina e na competição nacional.</p>
+          </div>
+          <div class="why__item reveal">
+            <h3>Talentos</h3>
+            <p>Contato direto com estudantes de engenharia que já sabem trabalhar em equipe e com prazo. Boa fonte de estagiários.</p>
+          </div>
+          <div class="why__item reveal">
+            <h3>Qualquer formato</h3>
+            <p>Dinheiro, material, usinagem, corte a laser, pintura, transporte ou licença de software. Tudo ajuda a pôr o carro na pista.</p>
+          </div>
+        </div>
+
+        <div class="tiers">
+          <article class="tier tier--diamante reveal">
+            <header><span class="tier__gem"></span><h3>Diamante</h3></header>
+            <ul>
+              <li>Maior logo no carro, na lateral e no bico</li>
+              <li>Logo em destaque no macacão e no uniforme</li>
+              <li>Topo da seção de patrocinadores do site</li>
+              <li>Posts dedicados nas redes sociais</li>
+              <li>Visita à oficina e test drive com a equipe</li>
+              <li>Acesso ao banco de currículos da equipe</li>
+            </ul>
+          </article>
+          <article class="tier tier--ouro reveal">
+            <header><span class="tier__gem"></span><h3>Ouro</h3></header>
+            <ul>
+              <li>Logo médio no carro</li>
+              <li>Logo no uniforme da equipe</li>
+              <li>Logo no site com link</li>
+              <li>Menções nas redes sociais</li>
+              <li>Visita à oficina</li>
+            </ul>
+          </article>
+          <article class="tier tier--prata reveal">
+            <header><span class="tier__gem"></span><h3>Prata</h3></header>
+            <ul>
+              <li>Logo pequeno no carro</li>
+              <li>Logo no site com link</li>
+              <li>Menção nas redes sociais</li>
+            </ul>
+          </article>
+          <article class="tier tier--apoio reveal">
+            <header><span class="tier__gem"></span><h3>Apoiador</h3></header>
+            <ul>
+              <li>Logo no site</li>
+              <li>Agradecimento nas redes sociais</li>
+              <li>Ideal para apoio em material ou serviço</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="sponsors reveal" id="sponsors"></div>
+
+        <div class="sponsor-cta reveal">
+          <div>
+            <h3>Quer ver sua marca no carro 39?</h3>
+            <p>Mandamos a proposta completa com cotas, espaços no carro e contrapartidas.</p>
+          </div>
+          <div class="sponsor-cta__btns">
+            <a class="btn btn--red" id="cta-sponsor" href="#contato">Pedir proposta</a>
+            <a class="btn btn--ghost" id="cta-kit" href="#" hidden download>Baixar mídia kit</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== GALERIA ===================== -->
+    <section class="section" id="galeria">
+      <div class="container">
+        <div class="section__head reveal">
+          <p class="kicker">08 · Galeria</p>
+          <h2 class="h2">Oficina, pista e competição</h2>
+        </div>
+        <div class="gallery" id="gallery"></div>
+      </div>
+    </section>
+
+    <!-- ===================== FAÇA PARTE ===================== -->
+    <section class="section section--alt" id="faca-parte">
+      <div class="container split">
+        <div class="reveal">
+          <p class="kicker">09 · Faça parte</p>
+          <h2 class="h2">Quer entrar na equipe?</h2>
+          <p class="status" id="ps-status"></p>
+          <p class="prose" id="ps-text"></p>
+          <ul class="checklist">
+            <li>Aluno de graduação da UFTM</li>
+            <li>Qualquer período</li>
+            <li>Engenharias e outros cursos (gestão, marketing e design também contam)</li>
+            <li>Vontade de aprender vale mais do que experiência</li>
+          </ul>
+        </div>
+
+        <form class="form reveal" id="join-form" novalidate>
+          <div class="field">
+            <label for="f-nome">Nome</label>
+            <input id="f-nome" name="nome" type="text" autocomplete="name" required />
+          </div>
+          <div class="field">
+            <label for="f-email">E-mail</label>
+            <input id="f-email" name="email" type="email" autocomplete="email" required />
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="f-curso">Curso</label>
+              <select id="f-curso" name="curso" required>
+                <option value="">Selecione</option>
+                <option>Engenharia Mecânica</option>
+                <option>Engenharia Elétrica</option>
+                <option>Engenharia de Produção</option>
+                <option>Engenharia Civil</option>
+                <option>Engenharia Química</option>
+                <option>Engenharia de Alimentos</option>
+                <option>Engenharia Ambiental</option>
+                <option>Outro curso</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="f-periodo">Período</label>
+              <select id="f-periodo" name="periodo">
+                <option value="">Selecione</option>
+                <option>1º</option><option>2º</option><option>3º</option><option>4º</option><option>5º</option>
+                <option>6º</option><option>7º</option><option>8º</option><option>9º</option><option>10º</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label for="f-area">Área que mais te interessa</label>
+            <select id="f-area" name="area">
+              <option>Ainda não sei</option>
+              <option>Chassi e ergonomia</option>
+              <option>Suspensão e direção</option>
+              <option>Powertrain</option>
+              <option>Freios</option>
+              <option>Eletrônica e dados</option>
+              <option>Aerodinâmica e carenagem</option>
+              <option>Gestão e custos</option>
+              <option>Marketing e patrocínio</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="f-msg">Por que você quer entrar? <small>(opcional)</small></label>
+            <textarea id="f-msg" name="mensagem" rows="4"></textarea>
+          </div>
+          <button class="btn btn--red btn--block" type="submit">Enviar</button>
+          <p class="form__note" id="form-note" role="status"></p>
+        </form>
+      </div>
+    </section>
+
+    <!-- ===================== CONTATO ===================== -->
+    <section class="section" id="contato">
+      <div class="container">
+        <div class="section__head reveal">
+          <p class="kicker">10 · Contato</p>
+          <h2 class="h2">Fale com a Taurus</h2>
+        </div>
+
+        <div class="contact">
+          <div class="contact__cards" id="contact-cards"></div>
+          <div class="contact__map reveal">
+            <iframe title="Mapa do ICTE/UFTM em Uberaba" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+              src="https://www.google.com/maps?q=ICTE+UFTM+Av.+Dr.+Randolfo+Borges+J%C3%BAnior+1400+Uberaba&output=embed"></iframe>
+            <p id="address"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <img src="assets/img/logo.svg" alt="" width="56" height="56" />
+        <div>
+          <strong>Taurus Racing</strong>
+          <span>Fórmula SAE · Universidade Federal do Triângulo Mineiro</span>
+        </div>
+      </div>
+      <nav class="footer__social" id="footer-social" aria-label="Redes sociais"></nav>
+    </div>
+    <div class="container footer__legal">
+      <p>© <span id="year"></span> Taurus Racing · Projeto de extensão da UFTM · Uberaba/MG</p>
+      <a href="#topo" class="link">Voltar ao topo ↑</a>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
