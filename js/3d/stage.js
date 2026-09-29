@@ -358,10 +358,11 @@ export function createStage(opts = {}) {
     spinRate = mix("spin");
     const roll = mix("roll");
     if (roll > 0.01) {
-      // a textura cobre 4 m; desloca na velocidade da roda
-      const d = (spinRate * 0.255 * dt * roll) / 4;
-      floorT.map.offset.x -= d;
-      floorT.roughnessMap.offset.x -= d;
+      // a textura cobre 4 m e anda na velocidade da roda. O carro aponta para +x,
+      // então o piso corre para -x: somar ao offset move o desenho para trás
+      const d = (spinRate * 0.28 * dt * roll) / 4;
+      floorT.map.offset.x += d;
+      floorT.roughnessMap.offset.x += d;
     }
     for (const k in hlTarget) hlTarget[k] = 0;
     for (const [k, v] of Object.entries(A.st.hl || {})) hlTarget[k] = (hlTarget[k] || 0) + v * (1 - t);
