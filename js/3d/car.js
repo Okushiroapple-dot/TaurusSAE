@@ -266,6 +266,8 @@ export function buildCar({ carNumber = "38", carName = "TR-04" } = {}) {
   const discMap = discTexture();
   const fabric = fabricNormal(24);
   const camo = camoTexture({ repeat: [1.6, 1.6] });
+  // elementos finos da asa dianteira: repete mais ao longo da envergadura para as manchas não esticarem
+  const camoSpan = camoTexture({ repeat: [3.6, 1], seed: 7 });
   const wingPanels = wingPanelTextures();
   const base = {
     // pintura: a base muda com a pintura escolhida (setPaint)
@@ -279,6 +281,7 @@ export function buildCar({ carNumber = "38", carName = "TR-04" } = {}) {
     }),
     // asa com adesivo camuflado (vinil fosco)
     camo: () => new THREE.MeshStandardMaterial({ color: "#ffffff", map: camo, roughness: 0.62, metalness: 0.05 }),
+    camoSpan: () => new THREE.MeshStandardMaterial({ color: "#ffffff", map: camoSpan, roughness: 0.62, metalness: 0.05 }),
     wingFront: () => new THREE.MeshStandardMaterial({ color: "#ffffff", map: wingPanels.front, roughness: 0.6, metalness: 0.05 }),
     wingBack: () => new THREE.MeshStandardMaterial({ color: "#ffffff", map: wingPanels.back, roughness: 0.6, metalness: 0.05 }),
     steel: () => new THREE.MeshStandardMaterial({ color: "#cfd2d8", metalness: 1, roughness: 0.2 }),
@@ -705,6 +708,37 @@ export function buildCar({ carNumber = "38", carName = "TR-04" } = {}) {
     aeroRear.add(plate([[-0.3, 0.96], [-0.62, 0.99], [-0.36, 0.75]], 0.006, 0.23 * s, blackA));
   }
   aeroRear.userData.explode.set(-0.85, 0.55, 0);
+
+  /* ================= AERODINÂMICA: asa dianteira de 3 elementos ================= */
+  // (não aparece nas fotos porque estava fora do carro para ajustes)
+  const aeroFront = G("asaDianteira");
+  const FSPAN = 1.4;
+  const frontElement = (center, chord, thick, aoaDeg, span, zc) => {
+    const pivot = new THREE.Group();
+    pivot.position.set(center.x, center.y, zc);
+    pivot.rotation.z = -aoaDeg * DEG; // bordo de fuga (para trás) mais alto que o de ataque
+    const m = new THREE.Mesh(new THREE.BoxGeometry(span, thick, chord), [blackA, blackA, M("aero", "camoSpan"), blackA, blackA, blackA]);
+    m.rotation.y = Math.PI / 2;
+    m.castShadow = true;
+    pivot.add(m);
+    return pivot;
+  };
+  // plano principal inteiro, passando por baixo do bico
+  aeroFront.add(frontElement(V(1.38, 0.058), 0.38, 0.03, 3, FSPAN, 0));
+  // flaps só por fora do bico, um par de cada lado
+  const FIN = 0.2, FOUT = FSPAN / 2;
+  for (const s of [1, -1]) {
+    const zc = ((FIN + FOUT) / 2) * s, span = FOUT - FIN;
+    aeroFront.add(frontElement(V(1.24, 0.125), 0.2, 0.024, 24, span, zc));
+    aeroFront.add(frontElement(V(1.155, 0.205), 0.12, 0.02, 44, span, zc));
+    // placa lateral
+    aeroFront.add(plate([[1.13, 0.03], [1.62, 0.03], [1.64, 0.07], [1.5, 0.15], [1.28, 0.29], [1.13, 0.29]], 0.01, (FOUT + 0.005) * s, camoMat));
+    // pilones entre o plano principal e o bico
+    aeroFront.add(plate([[1.2, 0.07], [1.34, 0.07], [1.27, 0.14], [1.2, 0.12]], 0.008, 0.08 * s, blackA));
+    // pequena chapa (gurney) no fim do último flap
+    aeroFront.add(tube(V(1.11, 0.25, FIN * s), V(1.11, 0.25, FOUT * s), 0.004, blackA));
+  }
+  aeroFront.userData.explode.set(0.5, 0.12, 0);
 
   /* ================= SUSPENSÃO, RODAS E FREIOS ================= */
   const R = 0.28; // pneu de rua 175/65 R14

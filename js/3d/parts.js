@@ -46,8 +46,8 @@ export const PARTS = {
     estado: { xray: 0.8 },
   },
   aero: {
-    nome: "Asa traseira",
-    texto: "Asa traseira de dois elementos: plano principal e flap bem inclinado. Ela gera força para baixo e aumenta a aderência nas curvas, com o custo de mais arrasto nas retas.",
+    nome: "Pacote aerodinâmico",
+    texto: "Asa dianteira de três elementos e asa traseira de dois (plano principal e flap bem inclinado). Elas geram força para baixo e aumentam a aderência nas curvas, com o custo de mais arrasto nas retas.",
     cam: { pos: [-3.0, 1.75, 2.5], tgt: [-0.9, 0.95, 0] },
     estado: { air: 1 },
   },

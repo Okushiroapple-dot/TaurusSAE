@@ -30,6 +30,8 @@ export function createAirflow(bodyStations, count = 900) {
       const dx = x - xc;
       if (az > 0.5 && az < 0.72 && Math.abs(dx) < R) h = Math.max(h, R + Math.sqrt(R * R - dx * dx));
     }
+    // asa dianteira
+    if (x > 1.1 && x < 1.66 && az < 0.72) h = Math.max(h, 0.29);
     return h;
   }
   function streamY(x, z, h0) {

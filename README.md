@@ -8,7 +8,7 @@ HTML, CSS e JavaScript puros, sem etapa de build. O 3D usa [Three.js](https://th
 
 | Seção | O que faz |
 | --- | --- |
-| Abertura 3D | O TR-04, carro nº 38, em 3D. Conforme a pessoa rola a página, a câmera passa pela carenagem, pelo chassi em raio-X, pela suspensão se mexendo, pelo motor com o escape aquecido, pelo fluxo de ar na asa traseira e termina na vista explodida |
+| Abertura 3D | O TR-04, carro nº 38, em 3D. Conforme a pessoa rola a página, a câmera passa pela carenagem, pelo chassi em raio-X, pela suspensão se mexendo, pelo motor com o escape aquecido, pelo fluxo de ar nas asas e termina na vista explodida |
 | Equipe | O que é a Taurus e o ciclo projetar → fabricar → testar → competir |
 | Garagem 3D | O carro para girar à vontade: raio-X, fluxo de ar, vista explodida, direção, curso da suspensão, pintura, pontos clicáveis por sistema, partida no motor com conta-giros e som gerado no navegador, e modo foto com traçado de raios (salva a imagem em PNG) |
 | Laboratório | Simulações: volta de autocross com mapa animado e diagrama g-g, aceleração de 75 m com semáforo de largada, skidpad e geometria de suspensão duplo A com pontos arrastáveis |
@@ -99,7 +99,7 @@ Para atualizar o Three.js e o path tracer: `bash tools/build-vendor.sh` (precisa
 ## Gráficos
 
 - Iluminação de estúdio gerada em código (softboxes e faixas de luz que desenham os reflexos longos na pintura).
-- Materiais físicos: preto fosco da carenagem, camuflado laranja e cinza da asa com os patrocinadores, fibra de carbono em sarja com relevo, alumínio usinado, alumínio fundido, pneu de rua com banda de rodagem e letreiro no flanco, escape com a coloração do calor e disco de freio furado. Todas as texturas são desenhadas em canvas (`js/3d/textures.js`).
+- Materiais físicos: preto fosco da carenagem, camuflado laranja e cinza das asas com os patrocinadores, fibra de carbono em sarja com relevo, alumínio usinado, alumínio fundido, pneu de rua com banda de rodagem e letreiro no flanco, escape com a coloração do calor e disco de freio furado. Todas as texturas são desenhadas em canvas (`js/3d/textures.js`).
 - No computador: piso com reflexo, oclusão de ambiente (GTAO), antisserrilhado por multiamostragem, bloom, vinheta e grão de filme. A sombra de contato funciona em todos os aparelhos.
 - Modo foto: path tracing com [three-gpu-pathtracer](https://github.com/gkjohnson/three-gpu-pathtracer). O módulo só é baixado quando alguém liga o modo foto. A imagem fica mais limpa a cada amostra; numa placa de vídeo comum fica boa em alguns segundos.
 - Para testar a qualidade: `?hq=1` na URL força a qualidade máxima e `?lq=1` a mínima.

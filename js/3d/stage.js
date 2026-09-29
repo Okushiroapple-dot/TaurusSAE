@@ -117,7 +117,7 @@ const V3 = (a) => new THREE.Vector3(a[0], a[1], a[2]);
 // shift: desloca o carro na horizontal (fração da largura) para abrir espaço ao texto;
 // sy: o mesmo na vertical, usado em telas em pé (celular)
 const STEPS = [
-  { cam: { pos: [4.1, 1.35, 3.9], tgt: [0.1, 0.36, 0] }, st: {}, orbit: 1, shift: 0.2, sy: -0.2 },
+  { cam: { pos: [4.5, 1.45, 4.3], tgt: [0.15, 0.38, 0] }, st: {}, orbit: 1, shift: 0.2, sy: -0.2 },
   { cam: { pos: [0.15, 0.8, 6.4], tgt: [0, 0.5, 0] }, st: { spin: 16, roll: 1 }, shift: 0.16, sy: 0.17 },
   { cam: { pos: [3.0, 3.5, 3.1], tgt: [0.05, 0.3, 0] }, st: { xray: 1, hl: { chassi: 1 } }, shift: -0.15, sy: 0.17 },
   { cam: { pos: [1.95, 0.85, 2.05], tgt: [0.78, 0.3, 0.45] }, st: { xray: 0.7, heaveAmp: 0.028, steerAmp: 0.22, hl: { suspensao: 1 } }, shift: 0.15, sy: 0.17 },
