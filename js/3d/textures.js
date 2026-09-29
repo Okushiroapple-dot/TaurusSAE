@@ -287,34 +287,54 @@ export function studioEnvironment(renderer) {
 
 /* ================= TR-04: texturas do carro real ================= */
 
-/* camuflagem preta com manchas laranja e cinza (asa traseira do TR-04) */
-function camoCanvas(W, H, seed = 13, density = 1) {
+/* camuflagem do TR-04: fundo preto com manchas laranja recortadas, cada uma com uma
+   "sombra" cinza deslocada, e algumas manchas cinza soltas (como os adesivos do carro) */
+export function camoCanvas(W, H, seed = 13, density = 1, scale = 1) {
   const c = canvas(W, H), g = c.getContext("2d");
   g.fillStyle = "#141417";
   g.fillRect(0, 0, W, H);
   const r = rng(seed);
-  const blob = (x, y, s, color) => {
-    const n = 7 + Math.floor(r() * 5);
+  const shape = (x, y, s) => {
+    const n = 9 + Math.floor(r() * 6);
     const pts = [];
     for (let i = 0; i < n; i++) {
-      const a = (i / n) * Math.PI * 2;
-      const rad = s * (0.45 + r() * 0.75);
-      pts.push([x + Math.cos(a) * rad * (1 + r() * 0.8), y + Math.sin(a) * rad * 0.6]);
+      const a = (i / n) * Math.PI * 2 + r() * 0.3;
+      // raios bem irregulares: dão as pontas e reentrâncias das manchas
+      const rad = s * (0.3 + r() * (i % 2 ? 1.1 : 0.55));
+      pts.push([Math.cos(a) * rad * 1.25, Math.sin(a) * rad * 0.8]);
     }
+    return { x, y, rot: r() * Math.PI, pts };
+  };
+  const fill = (sh, color, dx = 0, dy = 0) => {
+    g.save();
+    g.translate(sh.x + dx, sh.y + dy);
+    g.rotate(sh.rot);
     g.fillStyle = color;
     g.beginPath();
-    for (let i = 0; i < n; i++) {
-      const p = pts[i], q = pts[(i + 1) % n];
+    const n = sh.pts.length;
+    for (let i = 0; i <= n; i++) {
+      const p = sh.pts[i % n], q = sh.pts[(i + 1) % n];
       const mx = (p[0] + q[0]) / 2, my = (p[1] + q[1]) / 2;
       if (i === 0) g.moveTo(mx, my);
       else g.quadraticCurveTo(p[0], p[1], mx, my);
     }
-    const p0 = pts[0], p1 = pts[1];
-    g.quadraticCurveTo(p0[0], p0[1], (p0[0] + p1[0]) / 2, (p0[1] + p1[1]) / 2);
     g.fill();
+    g.restore();
   };
-  const count = Math.round(((W * H) / 9000) * density);
-  for (let i = 0; i < count; i++) blob(r() * W, r() * H, 10 + r() * 26, r() < 0.62 ? "#ff7a00" : "#6f737b");
+  const count = Math.round(((W * H) / (11000 * scale * scale)) * density);
+  for (let i = 0; i < count; i++) {
+    // desenha com cópias deslocadas nas bordas para a textura repetir sem emenda
+    const sh = shape(r() * W, r() * H, (12 + r() * 22) * scale);
+    const orange = r() < 0.66;
+    const ox = (r() - 0.3) * 14 * scale, oy = (r() - 0.3) * 14 * scale;
+    for (const [tx, ty] of [[0, 0], [W, 0], [-W, 0], [0, H], [0, -H]]) {
+      const s2 = { ...sh, x: sh.x + tx, y: sh.y + ty };
+      if (orange) {
+        fill(s2, "#6b6e75", ox, oy);
+        fill(s2, "#ff7a00");
+      } else fill(s2, "#6f737b");
+    }
+  }
   return c;
 }
 export function camoTexture({ repeat = [1, 1], seed = 13 } = {}) {
@@ -348,10 +368,82 @@ export function wingPanelTextures() {
   b.fillStyle = "#e9e9ec";
   b.textAlign = "center";
   b.textBaseline = "middle";
-  b.font = '800 150px "Barlow Condensed", "Arial Narrow", sans-serif';
-  b.fillText("A VIDA SÓ É DURA PRA QUEM É MOLE", W / 2, H / 2);
+  b.font = '700 80px "Inter", "Arial", sans-serif';
+  if ("letterSpacing" in b) b.letterSpacing = "4px";
+  b.fillText("A VIDA SÓ É DURA PRA QUEM É MOLE!!", W / 2, H / 2 - 30);
   b.restore();
   return { front: tex(front, { srgb: true }), back: tex(back, { srgb: true }) };
+}
+
+/* asa dianteira: seções de fora (com os patrocinadores) e a do meio, só camuflado.
+   O eixo x do canvas corre pela envergadura e o topo do canvas fica no bordo de fuga. */
+export function frontWingTextures() {
+  const S = 768;
+  const make = (seed, draw) => {
+    const c = camoCanvas(S, S, seed, 0.9, 1.1);
+    if (draw) {
+      const g = c.getContext("2d");
+      g.save();
+      g.translate(S / 2, S * 0.56);
+      draw(g);
+      g.restore();
+    }
+    return tex(c, { srgb: true });
+  };
+  // "mecânica carrara": arco por cima e nome em itálico
+  const carrara = (g) => {
+    g.strokeStyle = g.fillStyle = "#dedee0";
+    g.lineWidth = 9;
+    g.beginPath();
+    g.moveTo(-250, 6);
+    g.bezierCurveTo(-170, -120, 150, -130, 240, -40);
+    g.lineTo(262, -58);
+    g.stroke();
+    g.textAlign = "center";
+    g.textBaseline = "middle";
+    g.font = 'italic 600 44px "Inter", "Arial", sans-serif';
+    g.fillText("mecânica", 60, -52);
+    g.font = 'italic 800 132px "Barlow Condensed", "Arial Narrow", sans-serif';
+    g.fillText("carrara", 0, 50);
+  };
+  // "RADIADORES GOIÁS": caixa com contorno e uma chama estilizada
+  const radiadores = (g) => {
+    g.strokeStyle = g.fillStyle = "#dedee0";
+    g.lineWidth = 8;
+    g.beginPath();
+    g.roundRect(-250, -95, 500, 190, 16);
+    g.stroke();
+    g.beginPath();
+    g.moveTo(-170, 60);
+    g.bezierCurveTo(-240, 20, -205, -40, -180, -70);
+    g.bezierCurveTo(-175, -30, -150, -30, -150, -60);
+    g.bezierCurveTo(-110, -20, -95, 30, -140, 60);
+    g.closePath();
+    g.fill();
+    g.textAlign = "left";
+    g.textBaseline = "middle";
+    g.font = '800 64px "Barlow Condensed", "Arial Narrow", sans-serif';
+    g.fillText("RADIADORES", -95, -32);
+    g.font = '800 84px "Barlow Condensed", "Arial Narrow", sans-serif';
+    g.fillText("GOIÁS", -95, 40);
+  };
+  return { right: make(31, carrara), left: make(32, radiadores), center: make(33) };
+}
+
+/* "powered by BMW" da placa lateral da asa traseira (fundo transparente) */
+export function decalTexture(lines, { w = 512, h = 128 } = {}) {
+  const c = canvas(w, h), g = c.getContext("2d");
+  g.fillStyle = "#f4f4f4";
+  g.textBaseline = "middle";
+  let x = 12;
+  for (const [text, font] of lines) {
+    g.font = font;
+    g.fillText(text, x, h / 2);
+    x += g.measureText(text).width + 14;
+  }
+  const t = tex(c, { srgb: true });
+  t.wrapS = t.wrapT = THREE.ClampToEdgeWrapping;
+  return t;
 }
 
 /* placa branca com o número do carro */

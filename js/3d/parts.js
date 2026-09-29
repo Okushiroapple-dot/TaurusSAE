@@ -47,7 +47,7 @@ export const PARTS = {
   },
   aero: {
     nome: "Pacote aerodinâmico",
-    texto: "Asa dianteira de três elementos e asa traseira de dois (plano principal e flap bem inclinado). Elas geram força para baixo e aumentam a aderência nas curvas, com o custo de mais arrasto nas retas.",
+    texto: "Asa dianteira de um elemento, com as pontas arqueadas e a parte do meio mais baixa, e asa traseira de dois (plano principal e flap bem inclinado). Elas geram força para baixo e aumentam a aderência nas curvas, com o custo de mais arrasto nas retas.",
     cam: { pos: [-3.0, 1.75, 2.5], tgt: [-0.9, 0.95, 0] },
     estado: { air: 1 },
   },

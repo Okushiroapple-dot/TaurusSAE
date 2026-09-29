@@ -355,7 +355,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   position: relative; overflow: hidden;
 }
 .sponsor-cta::after {
-  content: "39"; position: absolute; right: -10px; bottom: -60px;
+  content: "38"; position: absolute; right: -10px; bottom: -60px;
   font-family: var(--f-display); font-weight: 800; font-style: italic; font-size: 14rem; line-height: 1; color: rgba(0, 0, 0, 0.15); pointer-events: none;
 }
 .sponsor-cta h3 { font-family: var(--f-display); font-weight: 800; font-style: italic; text-transform: uppercase; font-size: clamp(1.8rem, 3.5vw, 2.6rem); margin: 0 0 6px; line-height: 1; }

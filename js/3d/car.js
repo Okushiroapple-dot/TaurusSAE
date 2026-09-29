@@ -7,7 +7,7 @@
  * Unidades: metros. Origem no chão, entre os eixos.
  */
 import * as THREE from "../../vendor/three.bundle.min.js";
-import { carbonTextures, flakeNormal, noiseTexture, heatTintTexture, discTexture, fabricNormal, roadTireTextures, camoTexture, wingPanelTextures, numberPlateTexture, labelTexture } from "./textures.js";
+import { carbonTextures, flakeNormal, noiseTexture, heatTintTexture, discTexture, fabricNormal, roadTireTextures, camoTexture, wingPanelTextures, numberPlateTexture, labelTexture, frontWingTextures, decalTexture, camoCanvas } from "./textures.js";
 
 const Y = new THREE.Vector3(0, 1, 0);
 const V = (x, y, z) => new THREE.Vector3(x, y, z);
@@ -16,7 +16,7 @@ const _d = new THREE.Vector3();
 const DEG = Math.PI / 180;
 
 export const PAINTS = {
-  taurus: { body: "#111114", accent: "#1c1d21", stripe: "#ff7a00", lettering: "#ff7a00", matte: true },
+  taurus: { body: "#111114", accent: "#1c1d21", stripe: "#ff7a00", lettering: "#ff7a00", matte: true, camoNose: true },
   papaya: { body: "#ff8000", accent: "#0f0f12", stripe: "#ffffff", lettering: "#0f0f12" },
   preto: { body: "#141418", accent: "#ff8000", stripe: "#ff8000", lettering: "#ffffff" },
   branco: { body: "#f2f2f2", accent: "#ff8000", stripe: "#141418", lettering: "#141418" },
@@ -248,6 +248,33 @@ function imageDraw(img, k = 1) {
   };
 }
 
+// adesivo retangular com texto (ex.: SAE BRASIL)
+function stickerDraw(text, bg, fg, k = 1) {
+  return (g, w, h) => {
+    g.scale(k, 1);
+    const ww = w / k;
+    g.fillStyle = bg;
+    g.fillRect(-ww / 2, -h / 2, ww, h);
+    g.fillStyle = fg;
+    g.textAlign = "center";
+    g.textBaseline = "middle";
+    let size = h * 0.7;
+    g.font = `800 ${size}px "Barlow Condensed", "Arial Narrow", sans-serif`;
+    const m = g.measureText(text).width;
+    if (m > ww * 0.9) { size *= (ww * 0.9) / m; g.font = `800 ${size}px "Barlow Condensed", "Arial Narrow", sans-serif`; }
+    g.fillText(text, 0, 2);
+  };
+}
+// decalque no topo da carenagem (v = 0.5), em u = uc. Lê-se em pé na frente do carro,
+// olhando para trás: o "para cima" do desenho aponta para a traseira. O canvas visto de
+// cima fica espelhado, por isso a matriz tem determinante negativo; k corrige a proporção.
+function topDecal(g, W, H, uc, k, draw) {
+  g.save();
+  g.setTransform(0, -1, -k, 0, uc * W, 0.5 * H);
+  draw(g);
+  g.restore();
+}
+
 /* ------------------------------------------------------------------ */
 /* construção: TR-04, o carro da Taurus Racing (feito a partir de fotos) */
 /* ------------------------------------------------------------------ */
@@ -266,8 +293,6 @@ export function buildCar({ carNumber = "38", carName = "TR-04" } = {}) {
   const discMap = discTexture();
   const fabric = fabricNormal(24);
   const camo = camoTexture({ repeat: [1.6, 1.6] });
-  // elementos finos da asa dianteira: repete mais ao longo da envergadura para as manchas não esticarem
-  const camoSpan = camoTexture({ repeat: [3.6, 1], seed: 7 });
   const wingPanels = wingPanelTextures();
   const base = {
     // pintura: a base muda com a pintura escolhida (setPaint)
@@ -281,9 +306,10 @@ export function buildCar({ carNumber = "38", carName = "TR-04" } = {}) {
     }),
     // asa com adesivo camuflado (vinil fosco)
     camo: () => new THREE.MeshStandardMaterial({ color: "#ffffff", map: camo, roughness: 0.62, metalness: 0.05 }),
-    camoSpan: () => new THREE.MeshStandardMaterial({ color: "#ffffff", map: camoSpan, roughness: 0.62, metalness: 0.05 }),
+    mdf: () => new THREE.MeshStandardMaterial({ color: "#c9a57a", roughness: 0.85, metalness: 0 }),
     wingFront: () => new THREE.MeshStandardMaterial({ color: "#ffffff", map: wingPanels.front, roughness: 0.6, metalness: 0.05 }),
-    wingBack: () => new THREE.MeshStandardMaterial({ color: "#ffffff", map: wingPanels.back, roughness: 0.6, metalness: 0.05 }),
+    // o verso do flap fica na sombra; um pouco de emissão (só nas letras) mantém o lema legível
+    wingBack: () => new THREE.MeshStandardMaterial({ color: "#ffffff", map: wingPanels.back, emissive: "#ffffff", emissiveMap: wingPanels.back, emissiveIntensity: 0.3, roughness: 0.6, metalness: 0.05 }),
     steel: () => new THREE.MeshStandardMaterial({ color: "#cfd2d8", metalness: 1, roughness: 0.2 }),
     chrome: () => new THREE.MeshStandardMaterial({ color: "#e8eaee", metalness: 1, roughness: 0.08 }),
     alu: () => new THREE.MeshPhysicalMaterial({ color: "#c9ccd2", metalness: 1, roughness: 0.16, clearcoat: 0.3, clearcoatRoughness: 0.2 }),
@@ -694,49 +720,123 @@ export function buildCar({ carNumber = "38", carName = "TR-04" } = {}) {
   aeroRear.add(element(V(-0.8, 0.95, 0), 0.56, 0.035, 5, camoMat));
   aeroRear.add(element(V(-1.17, 1.1, 0), 0.3, 0.03, 55, M("aero", "wingFront"), M("aero", "wingBack")));
   const plateNum = numberPlateTexture(carNumber);
+  const bmw = decalTexture([["powered by", '600 46px "Inter", "Arial", sans-serif'], ["BMW", '700 60px "Inter", "Arial", sans-serif']]);
+  // placa lateral: desce abaixo do plano principal, com a placa do número na parte de baixo
+  const endplateShape = [
+    [-0.5, 0.64], [-1.12, 0.64], [-1.26, 0.67], [-1.36, 0.75], [-1.4, 0.86], [-1.4, 1.3], [-1.38, 1.35],
+    [-1.33, 1.37], [-1.02, 1.37], [-0.6, 1.14], [-0.52, 1.08], [-0.49, 1.0],
+  ];
+  // viga em treliça (chapa com recortes triangulares) entre o arco principal e a asa
+  const lattice = (pts, holes, z, thick, mat) => {
+    const sh = new THREE.Shape(pts.map(([x, y]) => new THREE.Vector2(x, y)));
+    for (const h of holes) sh.holes.push(new THREE.Path(h.map(([x, y]) => new THREE.Vector2(x, y))));
+    const geo = new THREE.ExtrudeGeometry(sh, { depth: thick, bevelEnabled: false });
+    geo.translate(0, 0, z - thick / 2);
+    const m = new THREE.Mesh(geo, mat);
+    m.castShadow = true;
+    return m;
+  };
+  const beamHoles = [];
+  {
+    // treliça Warren entre x=-0.33 (arco) e x=-0.86 (asa): furos triangulares alternados,
+    // encolhidos em torno do centro para sobrar a largura das barras
+    const top = (x) => 0.94 + (x + 0.3) * 0.016 - 0.012, bot = (x) => 0.9 + (x + 0.3) * 0.145 + 0.012;
+    const n = 5, x0 = -0.33, dx = (-0.86 - x0) / n;
+    const tN = (k) => [x0 + k * dx, top(x0 + k * dx)], bN = (k) => [x0 + (k + 0.5) * dx, bot(x0 + (k + 0.5) * dx)];
+    const shrink = (tri, f = 0.62) => {
+      const cx = (tri[0][0] + tri[1][0] + tri[2][0]) / 3, cy = (tri[0][1] + tri[1][1] + tri[2][1]) / 3;
+      return tri.map(([x, y]) => [cx + (x - cx) * f, cy + (y - cy) * f]);
+    };
+    for (let k = 0; k < n; k++) {
+      beamHoles.push(shrink([tN(k), bN(k), tN(k + 1)]));
+      if (k < n - 1) beamHoles.push(shrink([bN(k), bN(k + 1), tN(k + 1)]));
+    }
+  }
+  const beamPts = [[-0.28, 0.94], [-0.9, 0.93], [-0.9, 0.81], [-0.28, 0.9]];
   for (const s of [1, -1]) {
-    const ep = plate([[-0.48, 0.74], [-1.36, 0.74], [-1.4, 0.82], [-1.4, 1.36], [-1.08, 1.36], [-0.5, 1.02]], 0.01, (SPAN / 2 + 0.005) * s, camoMat);
-    aeroRear.add(ep);
-    // placa com o número, na face de fora da placa lateral
-    const num = new THREE.Mesh(new THREE.PlaneGeometry(0.2, 0.28), labelMat(plateNum));
-    num.position.set(-1.2, 0.98, (SPAN / 2 + 0.013) * s);
-    if (s < 0) num.rotation.y = Math.PI;
-    aeroRear.add(num);
-    // suportes: dois tirantes até a traseira do chassi e uma chapa triangular até o arco principal
+    const z = (SPAN / 2 + 0.005) * s;
+    aeroRear.add(plate(endplateShape, 0.01, z, camoMat));
+    // placa com o número (parte de baixo, perto da frente) e "powered by BMW" em cima
+    const num = new THREE.Mesh(new THREE.PlaneGeometry(0.22, 0.27), labelMat(plateNum));
+    num.position.set(-0.76, 0.8, z + 0.008 * s);
+    const dec = new THREE.Mesh(new THREE.PlaneGeometry(0.3, 0.075), new THREE.MeshStandardMaterial({ map: bmw, transparent: true, roughness: 0.5, depthWrite: false }));
+    dec.position.set(-1.14, 1.3, z + 0.008 * s);
+    if (s < 0) num.rotation.y = dec.rotation.y = Math.PI;
+    aeroRear.add(num, dec);
+    // suportes: dois tirantes até a traseira do chassi e a viga em treliça até o arco principal
     aeroRear.add(tube(V(-0.95, 0.94, 0.3 * s), V(-1.0, 0.44, 0.18 * s), 0.011, blackA));
     aeroRear.add(tube(V(-0.72, 0.52, 0.22 * s), V(-0.95, 0.94, 0.3 * s), 0.009, blackA));
-    aeroRear.add(plate([[-0.3, 0.96], [-0.62, 0.99], [-0.36, 0.75]], 0.006, 0.23 * s, blackA));
+    aeroRear.add(lattice(beamPts, beamHoles, 0.21 * s, 0.008, blackA));
   }
   aeroRear.userData.explode.set(-0.85, 0.55, 0);
 
-  /* ================= AERODINÂMICA: asa dianteira de 3 elementos ================= */
-  // (não aparece nas fotos porque estava fora do carro para ajustes)
+  /* ================= AERODINÂMICA: asa dianteira ================= */
+  // Um elemento só, em três partes: as de fora com perfil arqueado (bordo de fuga
+  // levantado) e a do meio mais baixa e reta, por baixo do bico. Duas cercas separam
+  // as partes e as placas laterais são pretas com a borda clara da madeira.
   const aeroFront = G("asaDianteira");
-  const FSPAN = 1.4;
-  const frontElement = (center, chord, thick, aoaDeg, span, zc) => {
-    const pivot = new THREE.Group();
-    pivot.position.set(center.x, center.y, zc);
-    pivot.rotation.z = -aoaDeg * DEG; // bordo de fuga (para trás) mais alto que o de ataque
-    const m = new THREE.Mesh(new THREE.BoxGeometry(span, thick, chord), [blackA, blackA, M("aero", "camoSpan"), blackA, blackA, blackA]);
-    m.rotation.y = Math.PI / 2;
-    m.castShadow = true;
-    pivot.add(m);
-    return pivot;
+  const FOUT = 0.7, FIN = 0.2;
+  const fwTex = frontWingTextures();
+  const fwMat = (t) => {
+    const m = M("aero", "camo").clone();
+    m.map = t;
+    registry.aero.add(m);
+    return m;
   };
-  // plano principal inteiro, passando por baixo do bico
-  aeroFront.add(frontElement(V(1.38, 0.058), 0.38, 0.03, 3, FSPAN, 0));
-  // flaps só por fora do bico, um par de cada lado
-  const FIN = 0.2, FOUT = FSPAN / 2;
+  // chapa arqueada: perfil [x, y] do bordo de ataque ao de fuga, extrudada entre z0 e z1.
+  // Na face de cima, u corre pela envergadura (de +z para -z, para o texto ler de frente)
+  // e v do bordo de ataque (0) ao de fuga (1).
+  function sheet(profile, z0, z1, thick) {
+    const n = profile.length;
+    const acc = [0];
+    for (let i = 1; i < n; i++) acc.push(acc[i - 1] + Math.hypot(profile[i][0] - profile[i - 1][0], profile[i][1] - profile[i - 1][1]));
+    const L = acc[n - 1];
+    const parts = [];
+    const grid = (rows, rev, uv) => {
+      const pos = [], uvs = [], idx = [];
+      const cols = rows[0].length;
+      rows.forEach((row, i) => row.forEach((p, j) => { pos.push(...p); uvs.push(...(uv ? uv(i, j) : [0, 0])); }));
+      for (let i = 0; i < rows.length - 1; i++) for (let j = 0; j < cols - 1; j++) {
+        const a = i * cols + j, b = a + 1, c = a + cols, d = c + 1;
+        if (rev) idx.push(a, b, c, b, d, c);
+        else idx.push(a, c, b, b, c, d);
+      }
+      const g = new THREE.BufferGeometry();
+      g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+      g.setAttribute("uv", new THREE.Float32BufferAttribute(uvs, 2));
+      g.setIndex(idx);
+      g.computeVertexNormals();
+      parts.push(g);
+    };
+    const top = profile.map(([x, y]) => [[x, y, z0], [x, y, z1]]);
+    const bot = profile.map(([x, y]) => [[x, y - thick, z0], [x, y - thick, z1]]);
+    grid(top, false, (i, j) => [j ? 0 : 1, acc[i] / L]);
+    grid(bot, true);
+    grid([top[0], bot[0]], true); // bordo de ataque
+    grid([top[n - 1], bot[n - 1]], false); // bordo de fuga
+    grid(profile.map((_, i) => [top[i][1], bot[i][1]]), false); // ponta em z1
+    grid(profile.map((_, i) => [top[i][0], bot[i][0]]), true); // ponta em z0
+    return THREE.mergeGeometries(parts, true);
+  }
+  const outerProfile = [[1.64, 0.072], [1.56, 0.058], [1.46, 0.052], [1.36, 0.056], [1.28, 0.07], [1.21, 0.095], [1.16, 0.13], [1.13, 0.17]];
+  const centerProfile = [[1.6, 0.052], [1.5, 0.042], [1.3, 0.04], [1.2, 0.046], [1.16, 0.058]];
+  const wingMesh = (geo, top) => {
+    const m = new THREE.Mesh(geo, [top, blackA, blackA, blackA, blackA, blackA]);
+    m.castShadow = true;
+    return m;
+  };
+  aeroFront.add(wingMesh(sheet(outerProfile, FIN, FOUT, 0.014), fwMat(fwTex.right)));
+  aeroFront.add(wingMesh(sheet(outerProfile, -FOUT, -FIN, 0.014), fwMat(fwTex.left)));
+  aeroFront.add(wingMesh(sheet(centerProfile, -FIN, FIN, 0.014), fwMat(fwTex.center)));
+  const edgeMat = M("aero", "mdf");
   for (const s of [1, -1]) {
-    const zc = ((FIN + FOUT) / 2) * s, span = FOUT - FIN;
-    aeroFront.add(frontElement(V(1.24, 0.125), 0.2, 0.024, 24, span, zc));
-    aeroFront.add(frontElement(V(1.155, 0.205), 0.12, 0.02, 44, span, zc));
-    // placa lateral
-    aeroFront.add(plate([[1.13, 0.03], [1.62, 0.03], [1.64, 0.07], [1.5, 0.15], [1.28, 0.29], [1.13, 0.29]], 0.01, (FOUT + 0.005) * s, camoMat));
-    // pilones entre o plano principal e o bico
-    aeroFront.add(plate([[1.2, 0.07], [1.34, 0.07], [1.27, 0.14], [1.2, 0.12]], 0.008, 0.08 * s, blackA));
-    // pequena chapa (gurney) no fim do último flap
-    aeroFront.add(tube(V(1.11, 0.25, FIN * s), V(1.11, 0.25, FOUT * s), 0.004, blackA));
+    // placa lateral: baixa na frente e alta atrás; as bordas ficam na cor da madeira
+    const ep = plate([[1.66, 0.03], [1.12, 0.03], [1.1, 0.07], [1.1, 0.27], [1.15, 0.29], [1.22, 0.28], [1.66, 0.11]], 0.012, (FOUT + 0.006) * s, [blackA, edgeMat]);
+    aeroFront.add(ep);
+    // cerca entre a parte de fora e a do meio (alta atrás, como uma barbatana)
+    aeroFront.add(plate([[1.56, 0.04], [1.15, 0.04], [1.12, 0.3], [1.16, 0.3], [1.3, 0.14]], 0.006, FIN * s, blackA));
+    // pilone até o bico
+    aeroFront.add(plate([[1.2, 0.05], [1.34, 0.05], [1.27, 0.14], [1.2, 0.12]], 0.008, 0.08 * s, blackA));
   }
   aeroFront.userData.explode.set(0.5, 0.12, 0);
 
@@ -928,6 +1028,7 @@ export function buildCar({ carNumber = "38", carName = "TR-04" } = {}) {
   let sponsorImg = null;
   let sponsorSlot = false;
   let paint = PAINTS.taurus;
+  const noseCamo = camoCanvas(512, 512, 41, 2.2);
   function drawLivery() {
     const W = liveryCanvas.width, H = liveryCanvas.height;
     const g = liveryCanvas.getContext("2d");
@@ -949,20 +1050,60 @@ export function buildCar({ carNumber = "38", carName = "TR-04" } = {}) {
     lower(false);
     lower(true);
     g.fillRect(0, (1 - 0.06) * H, W, 0.12 * H);
+    // capa do bico: camuflada na pintura original, até a frente do cockpit
+    const NOSE_U = 0.5;
+    const K = 2.8, KN = 2.4; // correção de proporção na lateral do cockpit e no bico
+    if (paint.camoNose) {
+      g.save();
+      g.beginPath();
+      g.rect(0, 0, NOSE_U * W, H);
+      g.clip();
+      const pat = g.createPattern(noseCamo, "repeat");
+      pat.setTransform(new DOMMatrix().scale(2.4, 1.0));
+      g.fillStyle = pat;
+      g.fillRect(0, 0, NOSE_U * W, H);
+      g.fillStyle = "rgba(0,0,0,0.55)"; // emenda entre a capa e a lateral
+      g.fillRect(NOSE_U * W - 3, 0, 6, H);
+      g.restore();
+      // "UFTM" na lateral, perto do fim da capa, e o adesivo da SAE Brasil mais à frente
+      drawSideText(g, W, H, textDraw("UFTM", "#d8d8dc", 800, KN), 0.3, 0.47, 0.3, 0.045);
+      drawSideText(g, W, H, stickerDraw("SAE BRASIL", "#d9d9db", "#1d4f9f", KN), 0.19, 0.28, 0.33, 0.03);
+      // em cima: número 38 num círculo branco e o adesivo da competição 2026
+      topDecal(g, W, H, 0.36, KN, (c) => {
+        c.fillStyle = "#d9d9db";
+        c.beginPath();
+        c.arc(0, 0, 60, 0, Math.PI * 2);
+        c.fill();
+        c.fillStyle = "#111114";
+        c.textAlign = "center";
+        c.textBaseline = "middle";
+        c.font = '600 84px "Inter", "Arial", sans-serif';
+        c.fillText(carNumber, 0, 5);
+      });
+      topDecal(g, W, H, 0.465, KN, (c) => {
+        c.fillStyle = "#d9d9db";
+        c.fillRect(-42, -30, 84, 60);
+        const cols = ["#2f9e44", "#1d4f9f", "#e2231a", "#f2b01e"];
+        cols.forEach((col, i) => { c.fillStyle = col; c.fillRect(-34 + i * 18, 6, 14, 14); });
+        c.fillStyle = "#1d4f9f";
+        c.font = '700 16px "Inter", "Arial", sans-serif';
+        c.textAlign = "center";
+        c.fillText("SAE BRASIL", 0, -8);
+      });
+    }
     // nome da equipe grande na lateral do cockpit; na prévia de patrocínio ele
     // vai para o bico e o espaço do cockpit fica para a marca do patrocinador
     const sp = sponsorImg || sponsorSlot;
-    const K = 2.8, KN = 1.9; // correção de proporção na lateral do cockpit e no bico
     if (sp) {
-      drawSideText(g, W, H, textDraw("TAURUS", paint.lettering, 800, KN), 0.08, 0.36, 0.27, 0.08);
-      drawSideText(g, W, H, textDraw("RACING", paint.lettering, 800, KN), 0.12, 0.32, 0.215, 0.045);
+      drawSideText(g, W, H, textDraw("TAURUS", paint.lettering, 800, KN), 0.03, 0.18, 0.26, 0.05);
+      drawSideText(g, W, H, textDraw("RACING", paint.lettering, 800, KN), 0.05, 0.16, 0.215, 0.03);
     } else {
-      drawSideText(g, W, H, textDraw("TAURUS", paint.lettering, 800, K), 0.44, 0.84, 0.238, 0.068);
-      drawSideText(g, W, H, textDraw("RACING", paint.lettering, 800, K), 0.5, 0.78, 0.198, 0.032);
-      drawSideText(g, W, H, textDraw("BOSCH", "#e2231a", 800, KN), 0.14, 0.36, 0.265, 0.05);
+      drawSideText(g, W, H, textDraw("TAURUS", paint.lettering, 800, K), 0.53, 0.89, 0.238, 0.066);
+      drawSideText(g, W, H, textDraw("RACING", paint.lettering, 800, K), 0.59, 0.83, 0.198, 0.032);
+      drawSideText(g, W, H, textDraw("BOSCH", "#e2231a", 800, K), 0.9, 0.985, 0.25, 0.03);
     }
-    if (sponsorImg) drawSideText(g, W, H, imageDraw(sponsorImg, K), 0.46, 0.84, 0.235, 0.075);
-    else if (sponsorSlot) drawSideText(g, W, H, textDraw("SUA MARCA AQUI", "rgba(255,255,255,0.55)", 700, K), 0.46, 0.84, 0.235, 0.04);
+    if (sponsorImg) drawSideText(g, W, H, imageDraw(sponsorImg, K), 0.53, 0.9, 0.235, 0.075);
+    else if (sponsorSlot) drawSideText(g, W, H, textDraw("SUA MARCA AQUI", "rgba(255,255,255,0.55)", 700, K), 0.53, 0.9, 0.235, 0.04);
     liveryTex.needsUpdate = true;
   }
   drawLivery();
@@ -1033,6 +1174,11 @@ export function buildCar({ carNumber = "38", carName = "TR-04" } = {}) {
       for (const [k, amt] of Object.entries(state.highlight)) if ((subOf[k] || [k]).includes(sub)) h = Math.max(h, amt);
       for (const m of set) {
         if (!m.emissive) continue;
+        if (m.userData.key === "wingBack") {
+          m.emissive.setRGB(1, 1, 1);
+          m.emissiveIntensity = 0.3 + h * 0.55 * pulse;
+          continue;
+        }
         if (m.userData.key === "lamp") {
           m.emissive.set("#ff1a0a");
           m.emissiveIntensity = 0.15 + state.brake * 6;
