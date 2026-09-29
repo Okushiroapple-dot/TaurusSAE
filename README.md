@@ -2,23 +2,24 @@
 
 Site da Taurus Racing, equipe de Fórmula SAE da Universidade Federal do Triângulo Mineiro (UFTM), em Uberaba/MG.
 
-HTML, CSS e JavaScript puros. Não tem build, framework nem dependência: abre direto no navegador e roda em qualquer hospedagem estática.
+HTML, CSS e JavaScript puros, sem etapa de build. O 3D usa [Three.js](https://threejs.org), que já vem empacotado em `vendor/` (não depende de CDN). Roda em qualquer hospedagem estática.
 
-## Seções
+## O que tem no site
 
-| Seção | O que mostra |
+| Seção | O que faz |
 | --- | --- |
-| Hero | Nome, número do carro, chamadas para patrocínio e para o carro, números da equipe |
+| Abertura 3D | O carro nº 39 em 3D. Conforme a pessoa rola a página, a câmera passa pela carenagem, pelo chassi em raio-X, pela suspensão se mexendo, pelo motor com o escape aquecido, pelo fluxo de ar nas asas e termina na vista explodida |
 | Equipe | O que é a Taurus e o ciclo projetar → fabricar → testar → competir |
-| Áreas | Divisão interna da equipe e, se preenchida, a grade de membros |
-| Competição | Provas estáticas e dinâmicas da Fórmula SAE Brasil, em abas |
-| O carro | Desenho do carro com pontos clicáveis por sistema e ficha técnica |
+| Garagem 3D | O carro para girar à vontade: raio-X, fluxo de ar, vista explodida, direção, curso da suspensão, pintura, pontos clicáveis por sistema e partida no motor com conta-giros e som gerado no navegador |
+| Laboratório | Simulações: volta de autocross com mapa animado e diagrama g-g, aceleração de 75 m com semáforo de largada, skidpad e geometria de suspensão duplo A com pontos arrastáveis |
+| Competição | Provas estáticas e dinâmicas da Fórmula SAE Brasil |
 | Trajetória | Linha do tempo desde 2015 |
+| Áreas | Divisão interna da equipe e, se preenchida, a grade de membros |
 | Extensão | O papel da equipe como projeto de extensão da UFTM |
-| Patrocínio | Motivos para patrocinar, cotas, logos dos parceiros e contato |
-| Galeria | Fotos (quando adicionadas) e atalho para o Instagram |
-| Faça parte | Formulário de interesse no processo seletivo |
-| Contato | Redes sociais, e-mail, WhatsApp e mapa do ICTE |
+| Patrocínio | Cotas, logos dos parceiros e uma prévia 3D: a empresa escolhe o logo e vê no sidepod do carro (a imagem não sai do navegador) |
+| Galeria, Faça parte, Contato | Fotos, formulário do processo seletivo, redes e mapa |
+
+O modelo 3D é ilustrativo, desenhado em código para o site. Os números das simulações são típicos de um Fórmula SAE a combustão, não os do carro da equipe.
 
 ## Como atualizar o conteúdo
 
@@ -28,19 +29,28 @@ Quase tudo fica em **`js/config.js`**. Não precisa mexer no HTML.
 - **Membros**: adicione objetos em `membros`. Fotos vão em `assets/img/equipe/` (formato retrato, 4:5).
 - **Patrocinadores**: adicione em `patrocinadores` com a `cota` (`diamante`, `ouro`, `prata` ou `apoio`). Logos em `assets/img/patrocinadores/` (SVG ou PNG com fundo transparente).
 - **Galeria**: coloque as fotos em `assets/img/galeria/` e liste em `galeria`.
-- **Ficha técnica**: preencha `valor` em `carro.ficha` (ex.: `"Aço SAE 4130"`, `"215 kg"`). A tabela aparece quando pelo menos um valor estiver preenchido.
-- **Linha do tempo**: acrescente marcos em `linhaDoTempo`. `destaque: true` deixa o card vermelho.
+- **Ficha técnica**: preencha `valor` em `carro.ficha` (ex.: `"Aço SAE 4130"`). Na garagem 3D, o valor aparece no painel quando alguém clica no sistema correspondente.
+- **Linha do tempo**: acrescente marcos em `linhaDoTempo`. `destaque: true` destaca o card.
 - **Processo seletivo**: `processoSeletivo.aberto = true` troca o selo para "Inscrições abertas".
 - **Formulário direto no e-mail**: crie um formulário grátis no [Formspree](https://formspree.io) e cole o endereço em `contato.formEndpoint`. Sem isso, o formulário abre o app de e-mail (se houver e-mail configurado) ou copia a mensagem e abre o Instagram.
-- **Mídia kit**: salve o PDF em `assets/` e coloque o caminho em `contato.midiaKit`. Aparece um botão de download na seção de patrocínio.
+- **Mídia kit**: salve o PDF em `assets/` e coloque o caminho em `contato.midiaKit`.
+
+### Textos do 3D e das simulações
+
+- Textos dos pontos clicáveis da garagem e enquadramento da câmera: `js/3d/parts.js`.
+- Capítulos da abertura (texto): `index.html`, seção `#topo`. Câmera e estado do carro em cada capítulo: lista `STEPS` em `js/3d/stage.js`.
+- Carro de referência das simulações (massa, potência, pneu, asas): `REFERENCE` em `js/lab/physics.js`.
+- Traçado do autocross: pontos de controle em `js/lab/track.js`.
 
 ### Logo e cores
 
-- O logo em `assets/img/logo.svg` é provisório. Troque pelo logo oficial da equipe mantendo o mesmo nome de arquivo (e copie também para `favicon.svg`).
-- As cores ficam no topo de `css/style.css`, nas variáveis `--red`, `--amber` e `--bg`.
-- A imagem que aparece quando o link é compartilhado no WhatsApp/Instagram é `assets/img/og-image.png` (1200×630).
+- O logo em `assets/img/logo.svg` é provisório. Troque pelo logo oficial mantendo o nome do arquivo (e copie também para `favicon.svg`).
+- A paleta é preto, branco e laranja papaya (#FF8000), inspirada na McLaren. As cores ficam no topo de `css/style.css`. A pintura do carro 3D fica em `PAINTS`, em `js/3d/car.js`.
+- A imagem que aparece quando o link é compartilhado é `assets/img/og-image.png` (1200×630).
 
 ## Ver no computador
+
+O 3D usa módulos JavaScript, então o site precisa ser aberto por um servidor (abrir o arquivo com dois cliques não funciona):
 
 ```bash
 python3 -m http.server 8000
@@ -62,14 +72,34 @@ Importe o repositório e deixe o comando de build vazio. A pasta publicada é a 
 ## Estrutura
 
 ```
-index.html            página única
-css/style.css         estilos (cores e fontes no topo)
-js/config.js          conteúdo editável
-js/main.js            interações e renderização do conteúdo
-assets/fonts/         Barlow Condensed e Inter (licença OFL)
-assets/img/           logo, favicon, imagem de compartilhamento, fotos
+index.html              página única
+css/style.css           estilos (cores e fontes no topo)
+js/config.js            conteúdo editável
+js/main.js              menu, formulário, galeria, patrocinadores, contato
+js/app.js               liga o 3D, o laboratório e a tela de carregamento
+js/3d/car.js            modelo 3D do carro (chassi, suspensão, motor, asas, pintura)
+js/3d/stage.js          cena, luzes, câmera guiada pela rolagem, garagem e prévia do patrocinador
+js/3d/airflow.js        visualização do fluxo de ar
+js/3d/engine-audio.js   som do motor (Web Audio)
+js/3d/parts.js          textos dos sistemas na garagem
+js/lab/physics.js       modelo do carro, volta, aceleração e skidpad
+js/lab/track.js         traçado do autocross
+js/lab/suspension.js    cinemática da suspensão duplo A
+js/lab/lab.js           interface das simulações
+vendor/                 Three.js empacotado (licença MIT)
+tools/                  script para atualizar o Three.js
+assets/fonts/           Barlow Condensed e Inter (licença OFL)
+assets/img/             logo, favicon, imagem de compartilhamento, fotos
 ```
+
+Para atualizar o Three.js: `bash tools/build-vendor.sh` (precisa de Node.js).
+
+## Compatibilidade
+
+- Navegadores sem WebGL mostram um desenho do carro no lugar do 3D; o resto do site funciona normalmente.
+- Em celulares o 3D usa menos partículas, sem pós-processamento, e a garagem só gira o carro depois de tocar em "Girar o carro", para não atrapalhar a rolagem.
+- Quem ativa "reduzir movimento" no sistema vê menos animação.
 
 ## Fontes das informações
 
-Os dados públicos usados no site (fundação em 2015, 32 membros, cursos, TR1 em 37º na Fórmula SAE Brasil 2018, TR2, carro nº 39 na 21ª edição em 2025) vêm das páginas da equipe no LinkedIn, Facebook e Instagram e das listas oficiais da SAE Brasil. Confira e atualize o que tiver mudado.
+Os dados públicos usados no site (fundação em 2015, 32 membros, cursos, TR1 em 37º na Fórmula SAE Brasil 2018, TR2, carro nº 39 na 21ª edição em 2025) vêm das páginas da equipe no LinkedIn, Facebook e Instagram e das listas oficiais da SAE Brasil. As regras citadas (restritor de 20 mm, motor até 710 cm³, saída do piloto em 5 segundos, dois circuitos de freio) são do regulamento da Fórmula SAE. Confira e atualize o que tiver mudado.

@@ -82,8 +82,9 @@ window.TAURUS = {
 
   /*
    * Ficha técnica do carro. Preencha "valor" com os números reais
-   * do protótipo atual. Itens com valor vazio aparecem só com a
-   * descrição.
+   * do protótipo atual (ex.: "Aço SAE 4130", "600 cm³"). Na garagem 3D,
+   * ao clicar em Chassi, Suspensão, Motor, Transmissão ou Freios,
+   * o valor aparece no painel como "No carro da equipe: ...".
    */
   carro: {
     nome: "Protótipo Taurus",
