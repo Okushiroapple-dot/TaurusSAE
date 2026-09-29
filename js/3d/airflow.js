@@ -16,7 +16,7 @@ export function createAirflow(bodyStations, count = 900) {
     const t = (x - a.x) / (b.x - a.x || 1);
     return { w: a.w + (b.w - a.w) * t, yt: a.yt + (b.yt - a.yt) * t };
   }
-  const R = 0.255;
+  const R = 0.28;
   function height(x, z) {
     const az = Math.abs(z);
     let h = 0;
@@ -24,12 +24,14 @@ export function createAirflow(bodyStations, count = 900) {
     if (b && az < b.w + 0.04) h = Math.max(h, b.yt * (1 - Math.pow(az / (b.w + 0.04), 4) * 0.4));
     // arco principal / capacete / admissão
     if (x < -0.05 && x > -0.9 && az < 0.22) h = Math.max(h, x > -0.35 ? 1.02 - Math.abs(x + 0.2) * 0.4 : 0.8);
-    if (az > 0.36 && az < 0.58 && x > -0.56 && x < 0.27) h = Math.max(h, 0.4);
+    // radiador exposto no lado direito
+    if (z > 0.3 && z < 0.52 && x > -0.5 && x < -0.2) h = Math.max(h, 0.55);
     for (const xc of [0.8, -0.76]) {
       const dx = x - xc;
-      if (az > 0.48 && az < 0.74 && Math.abs(dx) < R) h = Math.max(h, R + Math.sqrt(R * R - dx * dx));
+      if (az > 0.5 && az < 0.72 && Math.abs(dx) < R) h = Math.max(h, R + Math.sqrt(R * R - dx * dx));
     }
-    if (x > 1.0 && x < 1.55 && az < 0.7) h = Math.max(h, 0.26);
+    // asa dianteira
+    if (x > 1.1 && x < 1.66 && az < 0.72) h = Math.max(h, 0.29);
     return h;
   }
   function streamY(x, z, h0) {
@@ -39,9 +41,9 @@ export function createAirflow(bodyStations, count = 900) {
     else y = h0 + (H + 0.04) * 0.22 * Math.exp(-(h0 - H) * 4);
     // asa traseira: desvia o ar para cima atrás dela
     const az = Math.abs(z);
-    if (az < 0.53 && h0 > 0.6 && h0 < 1.35) {
-      const k = Math.exp(-Math.pow((h0 - 0.98) / 0.22, 2));
-      const s = 1 / (1 + Math.exp((x + 1.15) * 14)); // 0 antes da asa, 1 depois
+    if (az < 0.66 && h0 > 0.7 && h0 < 1.45) {
+      const k = Math.exp(-Math.pow((h0 - 1.05) / 0.22, 2));
+      const s = 1 / (1 + Math.exp((x + 1.2) * 14)); // 0 antes da asa, 1 depois
       y += 0.26 * k * s;
     }
     return { y, lift: y - h0 };

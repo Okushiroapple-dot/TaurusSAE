@@ -3,7 +3,7 @@
  * da página conforme a rolagem:
  *   story   → abertura com rolagem guiada (o carro se desmonta)
  *   garage  → garagem interativa (girar, raio-x, explodir, ligar o motor)
- *   sponsor → prévia do logo do patrocinador no sidepod
+ *   sponsor → prévia do logo do patrocinador na lateral do carro
  */
 import * as THREE from "../../vendor/three.bundle.min.js";
 import { buildCar } from "./car.js";
@@ -117,12 +117,12 @@ const V3 = (a) => new THREE.Vector3(a[0], a[1], a[2]);
 // shift: desloca o carro na horizontal (fração da largura) para abrir espaço ao texto;
 // sy: o mesmo na vertical, usado em telas em pé (celular)
 const STEPS = [
-  { cam: { pos: [4.1, 1.35, 3.9], tgt: [0.1, 0.36, 0] }, st: {}, orbit: 1, shift: 0.2, sy: -0.2 },
-  { cam: { pos: [0.15, 0.7, 5.8], tgt: [0, 0.42, 0] }, st: { spin: 16, roll: 1 }, shift: 0.16, sy: 0.17 },
+  { cam: { pos: [4.5, 1.45, 4.3], tgt: [0.15, 0.38, 0] }, st: {}, orbit: 1, shift: 0.2, sy: -0.2 },
+  { cam: { pos: [0.15, 0.8, 6.4], tgt: [0, 0.5, 0] }, st: { spin: 16, roll: 1 }, shift: 0.16, sy: 0.17 },
   { cam: { pos: [3.0, 3.5, 3.1], tgt: [0.05, 0.3, 0] }, st: { xray: 1, hl: { chassi: 1 } }, shift: -0.15, sy: 0.17 },
   { cam: { pos: [1.95, 0.85, 2.05], tgt: [0.78, 0.3, 0.45] }, st: { xray: 0.7, heaveAmp: 0.028, steerAmp: 0.22, hl: { suspensao: 1 } }, shift: 0.15, sy: 0.17 },
-  { cam: { pos: [-1.85, 2.75, 3.15], tgt: [-0.55, 0.45, 0] }, st: { xray: 0.3, heat: 0.9, spin: 10, hl: { powertrain: 1, admissao: 0.7 } }, shift: -0.15, sy: 0.17 },
-  { cam: { pos: [0.4, 0.95, 6.2], tgt: [-0.05, 0.5, 0] }, st: { air: 1, spin: 18, roll: 1, hl: { aero: 0.8 } }, shift: 0.15, sy: 0.17 },
+  { cam: { pos: [1.0, 2.3, 2.5], tgt: [-0.5, 0.45, 0] }, st: { xray: 0.3, heat: 0.9, spin: 10, hl: { powertrain: 1, admissao: 0.7 } }, shift: -0.15, sy: 0.17 },
+  { cam: { pos: [0.6, 1.15, 6.7], tgt: [0.3, 0.64, 0] }, st: { air: 1, spin: 18, roll: 1, hl: { aero: 0.8 } }, shift: 0.15, sy: 0.17 },
   { cam: { pos: [5.4, 3.9, 5.6], tgt: [0, 0.85, 0] }, st: { explode: 1, driver: 0 }, shift: -0.14, sy: 0.17 },
 ];
 const DEF = { explode: 0, xray: 0, air: 0, heaveAmp: 0, steerAmp: 0, spin: 0, heat: 0, driver: 1, brake: 0, roll: 0 };
@@ -195,7 +195,7 @@ export function createStage(opts = {}) {
   scene.add(glow);
 
   /* ---------- carro e fluxo de ar ---------- */
-  const car = buildCar({ carNumber: String(opts.carNumber || 39) });
+  const car = buildCar({ carNumber: String(opts.carNumber || 38), carName: opts.carName || "TR-04" });
   scene.add(car.root);
   const air = createAirflow(car.bodyProfile, lowPower ? 450 : 1000);
   scene.add(air.object);
@@ -499,7 +499,7 @@ export function createStage(opts = {}) {
   /* ---------- modo: patrocinador ---------- */
   function updateSponsor() {
     const ang = Math.sin(time * 0.25) * 0.28;
-    _t.set(-0.18, 0.27, 0.5);
+    _t.set(0.22, 0.3, 0.36);
     _p.set(0.3, 0.22, 2.05).applyAxisAngle(THREE.Object3D.DEFAULT_UP, ang).add(_t);
     fit(_p, _t);
     camera.position.copy(_p);
@@ -510,6 +510,7 @@ export function createStage(opts = {}) {
   }
 
   function onEnter(name, prev) {
+    car.setSponsorSlot(name === "sponsor");
     controls.enabled = false;
     canvas.style.touchAction = "pan-y";
     if (name === "garage") {
@@ -598,7 +599,7 @@ export function createStage(opts = {}) {
     renderer,
     air,
     scene,
-    debug: { floor, reflector, glow, contact, gtao, bloom, film, key, rim },
+    debug: { floor, reflector, glow, contact, gtao, bloom, film, key, rim, jump(pos, tgt) { tween = null; camera.position.set(...pos); controls.target.set(...tgt); camera.lookAt(controls.target); controls.update(); } },
     set(key, value) { G[key] = value; },
     view(name) { const v = VIEWS[name]; if (v) { selectPart(null); flyTo(v.pos, v.tgt); } },
     zoom(f) {

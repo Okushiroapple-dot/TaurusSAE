@@ -284,3 +284,246 @@ export function studioEnvironment(renderer) {
   pmrem.dispose();
   return env;
 }
+
+/* ================= TR-04: texturas do carro real ================= */
+
+/* camuflagem do TR-04: fundo preto com manchas laranja recortadas, cada uma com uma
+   "sombra" cinza deslocada, e algumas manchas cinza soltas (como os adesivos do carro) */
+export function camoCanvas(W, H, seed = 13, density = 1, scale = 1) {
+  const c = canvas(W, H), g = c.getContext("2d");
+  g.fillStyle = "#141417";
+  g.fillRect(0, 0, W, H);
+  const r = rng(seed);
+  const shape = (x, y, s) => {
+    const n = 9 + Math.floor(r() * 6);
+    const pts = [];
+    for (let i = 0; i < n; i++) {
+      const a = (i / n) * Math.PI * 2 + r() * 0.3;
+      // raios bem irregulares: dão as pontas e reentrâncias das manchas
+      const rad = s * (0.3 + r() * (i % 2 ? 1.1 : 0.55));
+      pts.push([Math.cos(a) * rad * 1.25, Math.sin(a) * rad * 0.8]);
+    }
+    return { x, y, rot: r() * Math.PI, pts };
+  };
+  const fill = (sh, color, dx = 0, dy = 0) => {
+    g.save();
+    g.translate(sh.x + dx, sh.y + dy);
+    g.rotate(sh.rot);
+    g.fillStyle = color;
+    g.beginPath();
+    const n = sh.pts.length;
+    for (let i = 0; i <= n; i++) {
+      const p = sh.pts[i % n], q = sh.pts[(i + 1) % n];
+      const mx = (p[0] + q[0]) / 2, my = (p[1] + q[1]) / 2;
+      if (i === 0) g.moveTo(mx, my);
+      else g.quadraticCurveTo(p[0], p[1], mx, my);
+    }
+    g.fill();
+    g.restore();
+  };
+  const count = Math.round(((W * H) / (11000 * scale * scale)) * density);
+  for (let i = 0; i < count; i++) {
+    // desenha com cópias deslocadas nas bordas para a textura repetir sem emenda
+    const sh = shape(r() * W, r() * H, (12 + r() * 22) * scale);
+    const orange = r() < 0.66;
+    const ox = (r() - 0.3) * 14 * scale, oy = (r() - 0.3) * 14 * scale;
+    for (const [tx, ty] of [[0, 0], [W, 0], [-W, 0], [0, H], [0, -H]]) {
+      const s2 = { ...sh, x: sh.x + tx, y: sh.y + ty };
+      if (orange) {
+        fill(s2, "#6b6e75", ox, oy);
+        fill(s2, "#ff7a00");
+      } else fill(s2, "#6f737b");
+    }
+  }
+  return c;
+}
+export function camoTexture({ repeat = [1, 1], seed = 13 } = {}) {
+  return tex(camoCanvas(512, 512, seed), { repeat, srgb: true });
+}
+
+/* painéis da asa: frente do flap (patrocinadores) e traseira (lema) */
+export function wingPanelTextures() {
+  const W = 2048, H = 512;
+  const front = camoCanvas(W, H, 21, 0.8);
+  const g = front.getContext("2d");
+  g.textBaseline = "middle";
+  const txt = (s, x, y, color, size, weight = 800) => {
+    g.font = `${weight} ${size}px "Barlow Condensed", "Arial Narrow", sans-serif`;
+    g.fillStyle = "rgba(0,0,0,0.35)";
+    g.fillText(s, x + 4, y + 4);
+    g.fillStyle = color;
+    g.fillText(s, x, y);
+  };
+  // nomes dos patrocinadores como aparecem na asa do carro (só texto, sem logotipos)
+  txt("COLÉGIO", 170, H / 2 - 95, "#f2f2f2", 70, 600);
+  txt("SINAPSE", 150, H / 2 + 20, "#f2f2f2", 170, 800);
+  txt("BOSCH", 880, H / 2, "#e2231a", 150, 800);
+  txt("NANYA", 1330, H / 2, "#f2f2f2", 200, 800);
+  const back = canvas(W, H), b = back.getContext("2d");
+  b.fillStyle = "#121215";
+  b.fillRect(0, 0, W, H);
+  b.save();
+  b.translate(W, H);
+  b.scale(-1, -1); // a face de trás do flap fica girada 180° em relação à da frente
+  b.fillStyle = "#e9e9ec";
+  b.textAlign = "center";
+  b.textBaseline = "middle";
+  b.font = '700 80px "Inter", "Arial", sans-serif';
+  if ("letterSpacing" in b) b.letterSpacing = "4px";
+  b.fillText("A VIDA SÓ É DURA PRA QUEM É MOLE!!", W / 2, H / 2 - 30);
+  b.restore();
+  return { front: tex(front, { srgb: true }), back: tex(back, { srgb: true }) };
+}
+
+/* asa dianteira: seções de fora (com os patrocinadores) e a do meio, só camuflado.
+   O eixo x do canvas corre pela envergadura e o topo do canvas fica no bordo de fuga. */
+export function frontWingTextures() {
+  const S = 768;
+  const make = (seed, draw) => {
+    const c = camoCanvas(S, S, seed, 0.9, 1.1);
+    if (draw) {
+      const g = c.getContext("2d");
+      g.save();
+      g.translate(S / 2, S * 0.56);
+      draw(g);
+      g.restore();
+    }
+    return tex(c, { srgb: true });
+  };
+  // "mecânica carrara": arco por cima e nome em itálico
+  const carrara = (g) => {
+    g.strokeStyle = g.fillStyle = "#dedee0";
+    g.lineWidth = 9;
+    g.beginPath();
+    g.moveTo(-250, 6);
+    g.bezierCurveTo(-170, -120, 150, -130, 240, -40);
+    g.lineTo(262, -58);
+    g.stroke();
+    g.textAlign = "center";
+    g.textBaseline = "middle";
+    g.font = 'italic 600 44px "Inter", "Arial", sans-serif';
+    g.fillText("mecânica", 60, -52);
+    g.font = 'italic 800 132px "Barlow Condensed", "Arial Narrow", sans-serif';
+    g.fillText("carrara", 0, 50);
+  };
+  // "RADIADORES GOIÁS": caixa com contorno e uma chama estilizada
+  const radiadores = (g) => {
+    g.strokeStyle = g.fillStyle = "#dedee0";
+    g.lineWidth = 8;
+    g.beginPath();
+    g.roundRect(-250, -95, 500, 190, 16);
+    g.stroke();
+    g.beginPath();
+    g.moveTo(-170, 60);
+    g.bezierCurveTo(-240, 20, -205, -40, -180, -70);
+    g.bezierCurveTo(-175, -30, -150, -30, -150, -60);
+    g.bezierCurveTo(-110, -20, -95, 30, -140, 60);
+    g.closePath();
+    g.fill();
+    g.textAlign = "left";
+    g.textBaseline = "middle";
+    g.font = '800 64px "Barlow Condensed", "Arial Narrow", sans-serif';
+    g.fillText("RADIADORES", -95, -32);
+    g.font = '800 84px "Barlow Condensed", "Arial Narrow", sans-serif';
+    g.fillText("GOIÁS", -95, 40);
+  };
+  return { right: make(31, carrara), left: make(32, radiadores), center: make(33) };
+}
+
+/* "powered by BMW" da placa lateral da asa traseira (fundo transparente) */
+export function decalTexture(lines, { w = 512, h = 128 } = {}) {
+  const c = canvas(w, h), g = c.getContext("2d");
+  g.fillStyle = "#f4f4f4";
+  g.textBaseline = "middle";
+  let x = 12;
+  for (const [text, font] of lines) {
+    g.font = font;
+    g.fillText(text, x, h / 2);
+    x += g.measureText(text).width + 14;
+  }
+  const t = tex(c, { srgb: true });
+  t.wrapS = t.wrapT = THREE.ClampToEdgeWrapping;
+  return t;
+}
+
+/* placa branca com o número do carro */
+export function numberPlateTexture(num) {
+  const c = canvas(256, 360), g = c.getContext("2d");
+  g.fillStyle = "#f4f4f4";
+  g.beginPath();
+  g.roundRect(4, 4, 248, 352, 18);
+  g.fill();
+  g.fillStyle = "#101012";
+  g.textAlign = "center";
+  g.textBaseline = "middle";
+  g.font = '700 250px "Barlow Condensed", "Arial Narrow", sans-serif';
+  g.fillText(String(num), 128, 190);
+  const t = tex(c, { srgb: true });
+  t.wrapS = t.wrapT = THREE.ClampToEdgeWrapping;
+  return t;
+}
+
+/* plaqueta "TR-04" */
+export function labelTexture(text, { w = 512, h = 160, bg = "#121215", fg = "#f2f2f2" } = {}) {
+  const c = canvas(w, h), g = c.getContext("2d");
+  g.fillStyle = bg;
+  g.fillRect(0, 0, w, h);
+  g.fillStyle = fg;
+  g.textAlign = "center";
+  g.textBaseline = "middle";
+  g.font = `800 ${Math.round(h * 0.62)}px "Barlow Condensed", "Arial Narrow", sans-serif`;
+  g.fillText(text, w / 2, h / 2 + 4);
+  const t = tex(c, { srgb: true });
+  t.wrapS = t.wrapT = THREE.ClampToEdgeWrapping;
+  return t;
+}
+
+/* pneu de rua: banda com sulcos e lamelas + letreiro discreto no flanco */
+export function roadTireTextures() {
+  const W = 2048, H = 512;
+  const col = canvas(W, H), g = col.getContext("2d");
+  const bump = canvas(W, H), b = bump.getContext("2d");
+  g.fillStyle = "#1a1a1d";
+  g.fillRect(0, 0, W, H);
+  b.fillStyle = "#808080";
+  b.fillRect(0, 0, W, H);
+  // a banda de rodagem fica em v ∈ [0, 0.1] e [0.9, 1] (o perfil começa no meio da banda)
+  const band = (y0, y1) => {
+    const ya = (1 - y1) * H, yb = (1 - y0) * H;
+    // sulcos circunferenciais
+    for (const f of [0.25, 0.75]) {
+      const y = ya + (yb - ya) * f;
+      g.fillStyle = "#0c0c0e"; g.fillRect(0, y - 4, W, 8);
+      b.fillStyle = "#1a1a1a"; b.fillRect(0, y - 4, W, 8);
+    }
+    // lamelas transversais inclinadas
+    for (let x = 0; x < W; x += 22) {
+      g.strokeStyle = "#0f0f11"; b.strokeStyle = "#303030";
+      g.lineWidth = b.lineWidth = 3;
+      for (const ctx of [g, b]) {
+        ctx.beginPath(); ctx.moveTo(x, ya); ctx.lineTo(x + 10, ya + (yb - ya) * 0.22); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(x + 6, ya + (yb - ya) * 0.3); ctx.lineTo(x + 16, ya + (yb - ya) * 0.7); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(x, ya + (yb - ya) * 0.78); ctx.lineTo(x + 10, yb); ctx.stroke();
+      }
+    }
+  };
+  band(0, 0.1);
+  band(0.9, 1);
+  // letreiro em relevo no flanco externo (v ≈ 0.25), preto sobre preto
+  const label = "TOURING  ·  175/65 R14  ·  ";
+  g.font = b.font = `700 ${Math.round(H * 0.06)}px "Barlow Condensed", "Arial Narrow", sans-serif`;
+  const stretch = 1.5;
+  const unit = g.measureText(label).width * stretch;
+  const reps = Math.max(1, Math.round(W / unit));
+  const k = W / (reps * unit);
+  for (const [ctx, color] of [[g, "#2c2c31"], [b, "#b0b0b0"]]) {
+    ctx.save();
+    ctx.translate(W, H * (1 - 0.25));
+    ctx.scale(-stretch * k, -1);
+    ctx.fillStyle = color;
+    ctx.textBaseline = "middle";
+    for (let i = 0; i < reps; i++) ctx.fillText(label, (i * unit) / stretch, 0);
+    ctx.restore();
+  }
+  return { map: tex(col, { srgb: true }), bumpMap: tex(bump) };
+}

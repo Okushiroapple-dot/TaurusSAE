@@ -41,7 +41,8 @@ requestAnimationFrame(loaderTick);
 let stage = null;
 try {
   stage = createStage({
-    carNumber: (cfg.equipe && cfg.equipe.numeroCarro) || 39,
+    carNumber: (cfg.carro && cfg.carro.numero) || (cfg.equipe && cfg.equipe.numeroCarro) || 38,
+    carName: (cfg.carro && cfg.carro.nome) || "TR-04",
     story: { section: $("#topo"), host: $("#stage-story"), bar: $("#story-bar") },
     garage: {
       host: $("#stage-garage"),
@@ -247,7 +248,7 @@ file && file.addEventListener("change", () => {
     stage.sponsor(c);
     URL.revokeObjectURL(url);
     reset.hidden = false;
-    status.textContent = "Pronto. Sua marca está no sidepod do carro 39.";
+    status.textContent = "Pronto. Sua marca está na lateral do TR-04.";
   };
   img.onerror = () => { status.textContent = "Não consegui abrir essa imagem. Tente um PNG ou JPG."; };
   img.src = url;

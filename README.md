@@ -8,7 +8,7 @@ HTML, CSS e JavaScript puros, sem etapa de build. O 3D usa [Three.js](https://th
 
 | Seção | O que faz |
 | --- | --- |
-| Abertura 3D | O carro nº 39 em 3D. Conforme a pessoa rola a página, a câmera passa pela carenagem, pelo chassi em raio-X, pela suspensão se mexendo, pelo motor com o escape aquecido, pelo fluxo de ar nas asas e termina na vista explodida |
+| Abertura 3D | O TR-04, carro nº 38, em 3D. Conforme a pessoa rola a página, a câmera passa pela carenagem, pelo chassi em raio-X, pela suspensão se mexendo, pelo motor com o escape aquecido, pelo fluxo de ar nas asas e termina na vista explodida |
 | Equipe | O que é a Taurus e o ciclo projetar → fabricar → testar → competir |
 | Garagem 3D | O carro para girar à vontade: raio-X, fluxo de ar, vista explodida, direção, curso da suspensão, pintura, pontos clicáveis por sistema, partida no motor com conta-giros e som gerado no navegador, e modo foto com traçado de raios (salva a imagem em PNG) |
 | Laboratório | Simulações: volta de autocross com mapa animado e diagrama g-g, aceleração de 75 m com semáforo de largada, skidpad e geometria de suspensão duplo A com pontos arrastáveis |
@@ -16,10 +16,10 @@ HTML, CSS e JavaScript puros, sem etapa de build. O 3D usa [Three.js](https://th
 | Trajetória | Linha do tempo desde 2015 |
 | Áreas | Divisão interna da equipe e, se preenchida, a grade de membros |
 | Extensão | O papel da equipe como projeto de extensão da UFTM |
-| Patrocínio | Cotas, logos dos parceiros e uma prévia 3D: a empresa escolhe o logo e vê no sidepod do carro (a imagem não sai do navegador) |
+| Patrocínio | Cotas, logos dos parceiros e uma prévia 3D: a empresa escolhe o logo e vê na lateral do carro (a imagem não sai do navegador) |
 | Galeria, Faça parte, Contato | Fotos, formulário do processo seletivo, redes e mapa |
 
-O modelo 3D é ilustrativo, desenhado em código para o site. Os números das simulações são típicos de um Fórmula SAE a combustão, não os do carro da equipe.
+O modelo 3D é o TR-04 redesenhado em código a partir de fotos do carro, então as medidas são aproximadas. Os números das simulações são típicos de um Fórmula SAE a combustão, não os do carro da equipe.
 
 ## Como atualizar o conteúdo
 
@@ -45,7 +45,7 @@ Quase tudo fica em **`js/config.js`**. Não precisa mexer no HTML.
 ### Logo e cores
 
 - O logo em `assets/img/logo.svg` é provisório. Troque pelo logo oficial mantendo o nome do arquivo (e copie também para `favicon.svg`).
-- A paleta é preto, branco e laranja papaya (#FF8000), inspirada na McLaren. As cores ficam no topo de `css/style.css`. A pintura do carro 3D fica em `PAINTS`, em `js/3d/car.js`.
+- A paleta é preto, branco e laranja papaya (#FF8000), inspirada na McLaren. As cores ficam no topo de `css/style.css`. A pintura do carro 3D fica em `PAINTS`, em `js/3d/car.js` (`taurus` é a pintura real do TR-04; as outras são opções da garagem).
 - A imagem que aparece quando o link é compartilhado é `assets/img/og-image.png` (1200×630).
 
 ## Ver no computador
@@ -99,7 +99,7 @@ Para atualizar o Three.js e o path tracer: `bash tools/build-vendor.sh` (precisa
 ## Gráficos
 
 - Iluminação de estúdio gerada em código (softboxes e faixas de luz que desenham os reflexos longos na pintura).
-- Materiais físicos: pintura com microflocos e verniz, fibra de carbono em sarja com relevo, alumínio usinado, alumínio fundido, borracha com letreiro no flanco, escape com a coloração do calor e disco de freio furado. Todas as texturas são desenhadas em canvas (`js/3d/textures.js`).
+- Materiais físicos: preto fosco da carenagem, camuflado laranja e cinza das asas com os patrocinadores, fibra de carbono em sarja com relevo, alumínio usinado, alumínio fundido, pneu de rua com banda de rodagem e letreiro no flanco, escape com a coloração do calor e disco de freio furado. Todas as texturas são desenhadas em canvas (`js/3d/textures.js`).
 - No computador: piso com reflexo, oclusão de ambiente (GTAO), antisserrilhado por multiamostragem, bloom, vinheta e grão de filme. A sombra de contato funciona em todos os aparelhos.
 - Modo foto: path tracing com [three-gpu-pathtracer](https://github.com/gkjohnson/three-gpu-pathtracer). O módulo só é baixado quando alguém liga o modo foto. A imagem fica mais limpa a cada amostra; numa placa de vídeo comum fica boa em alguns segundos.
 - Para testar a qualidade: `?hq=1` na URL força a qualidade máxima e `?lq=1` a mínima.

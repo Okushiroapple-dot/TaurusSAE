@@ -247,7 +247,7 @@
   }
   // atalho para o Instagram (sempre no fim da galeria)
   var tiles = "";
-  ["T", "R", "39", "UF", "TM", "FSAE"].forEach(function (t) { tiles += "<span>" + t + "</span>"; });
+  ["T", "R", "38", "UF", "TM", "FSAE"].forEach(function (t) { tiles += "<span>" + t + "</span>"; });
   gal.appendChild(el("div", { class: "insta reveal" }, [
     el("div", {}, [
       el("h3", { text: "Os bastidores estão no Instagram" }),
