@@ -825,3 +825,9 @@ input[type="range"]:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 6px 
   .story__step, .story__step--right { left: var(--gutter); right: auto; width: min(560px, calc(100vw - 2 * var(--gutter))); top: auto; bottom: 40px; transform: translate3d(0, var(--dy), 0); }
   .story__step--hero { top: calc(var(--nav-h) + 40px); bottom: auto; width: min(640px, calc(100vw - 2 * var(--gutter))); }
 }
+
+/* modo foto */
+.photo-hud { position: absolute; left: 50%; bottom: 34px; transform: translateX(-50%); z-index: 4; display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 999px; background: rgba(11, 11, 13, 0.8); border: 1px solid rgba(255, 128, 0, 0.5); font-size: 0.85rem; color: #e4e4ea; white-space: nowrap; }
+.photo-hud strong { font-variant-numeric: tabular-nums; color: #fff; }
+.garage--photo .hot3d, .garage--photo .tach { display: none; }
+@media (max-width: 960px) { .photo-hud { bottom: 60px; } }

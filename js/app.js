@@ -49,6 +49,8 @@ try {
       onSelect: showInfo,
       onRpm: updateTach,
       onLeave: () => stopEngine(),
+      onPhoto: (n) => { const el = $("#photo-samples"); if (el) el.textContent = Math.floor(n); },
+      onPhotoEnd: () => photoUI(false),
     },
     sponsorHost: $("#stage-sponsor"),
     onReady: () => { ready = true; },
@@ -125,6 +127,26 @@ if (stage) {
   }
 
   // motor
+  // modo foto (path tracing)
+  const photoBtn = $("#g-photo"), photoSave = $("#g-photo-save");
+  photoBtn.addEventListener("click", async () => {
+    if (stage.photo.active) { stage.photo.stop(); return; }
+    photoBtn.disabled = true;
+    photoBtn.textContent = "Preparando a cena…";
+    try {
+      stopEngine();
+      await stage.photo.start();
+      photoUI(true);
+    } catch (err) {
+      console.error(err);
+      photoBtn.textContent = "Não foi possível renderizar aqui";
+      setTimeout(() => photoUI(false), 2500);
+    } finally {
+      photoBtn.disabled = false;
+    }
+  });
+  photoSave.addEventListener("click", () => stage.photo.save());
+
   const engBtn = $("#g-engine"), thr = $("#g-throttle"), mute = $("#g-mute");
   engBtn.addEventListener("click", () => (stage.engine.on ? stopEngine() : startEngine()));
   const press = (v) => (e) => { if (!stage.engine.on) return; e.preventDefault(); stage.engine.throttle(v); thr.classList.toggle("is-down", v > 0); };
@@ -158,6 +180,18 @@ if (stage) {
     mute.setAttribute("aria-label", m ? "Ligar som" : "Sem som");
     stage.engine.mute(m);
   });
+}
+function photoUI(on) {
+  const btn = $("#g-photo"), save = $("#g-photo-save"), hud = $("#photo-hud");
+  if (!btn) return;
+  btn.textContent = on ? "Sair do modo foto" : "Renderizar foto realista";
+  btn.classList.toggle("is-on", on);
+  save.hidden = !on;
+  hud.hidden = !on;
+  $("#garagem").classList.toggle("garage--photo", on);
+  // o motor fica bloqueado durante a foto (a cena renderizada é uma cópia estática)
+  $("#g-engine").disabled = on;
+  $("#g-throttle").disabled = on || !(stage && stage.engine.on);
 }
 function startEngine() {
   if (!stage) return;

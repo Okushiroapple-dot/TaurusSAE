@@ -10,7 +10,7 @@ HTML, CSS e JavaScript puros, sem etapa de build. O 3D usa [Three.js](https://th
 | --- | --- |
 | Abertura 3D | O carro nº 39 em 3D. Conforme a pessoa rola a página, a câmera passa pela carenagem, pelo chassi em raio-X, pela suspensão se mexendo, pelo motor com o escape aquecido, pelo fluxo de ar nas asas e termina na vista explodida |
 | Equipe | O que é a Taurus e o ciclo projetar → fabricar → testar → competir |
-| Garagem 3D | O carro para girar à vontade: raio-X, fluxo de ar, vista explodida, direção, curso da suspensão, pintura, pontos clicáveis por sistema e partida no motor com conta-giros e som gerado no navegador |
+| Garagem 3D | O carro para girar à vontade: raio-X, fluxo de ar, vista explodida, direção, curso da suspensão, pintura, pontos clicáveis por sistema, partida no motor com conta-giros e som gerado no navegador, e modo foto com traçado de raios (salva a imagem em PNG) |
 | Laboratório | Simulações: volta de autocross com mapa animado e diagrama g-g, aceleração de 75 m com semáforo de largada, skidpad e geometria de suspensão duplo A com pontos arrastáveis |
 | Competição | Provas estáticas e dinâmicas da Fórmula SAE Brasil |
 | Trajetória | Linha do tempo desde 2015 |
@@ -82,22 +82,32 @@ js/3d/stage.js          cena, luzes, câmera guiada pela rolagem, garagem e pré
 js/3d/airflow.js        visualização do fluxo de ar
 js/3d/engine-audio.js   som do motor (Web Audio)
 js/3d/parts.js          textos dos sistemas na garagem
+js/3d/textures.js       texturas e estúdio gerados em código
+js/3d/photo.js          modo foto (path tracing)
 js/lab/physics.js       modelo do carro, volta, aceleração e skidpad
 js/lab/track.js         traçado do autocross
 js/lab/suspension.js    cinemática da suspensão duplo A
 js/lab/lab.js           interface das simulações
-vendor/                 Three.js empacotado (licença MIT)
-tools/                  script para atualizar o Three.js
+vendor/                 Three.js e three-gpu-pathtracer empacotados (licença MIT)
+tools/                  script para atualizar o Three.js e o path tracer
 assets/fonts/           Barlow Condensed e Inter (licença OFL)
 assets/img/             logo, favicon, imagem de compartilhamento, fotos
 ```
 
-Para atualizar o Three.js: `bash tools/build-vendor.sh` (precisa de Node.js).
+Para atualizar o Three.js e o path tracer: `bash tools/build-vendor.sh` (precisa de Node.js).
+
+## Gráficos
+
+- Iluminação de estúdio gerada em código (softboxes e faixas de luz que desenham os reflexos longos na pintura).
+- Materiais físicos: pintura com microflocos e verniz, fibra de carbono em sarja com relevo, alumínio usinado, alumínio fundido, borracha com letreiro no flanco, escape com a coloração do calor e disco de freio furado. Todas as texturas são desenhadas em canvas (`js/3d/textures.js`).
+- No computador: piso com reflexo, oclusão de ambiente (GTAO), antisserrilhado por multiamostragem, bloom, vinheta e grão de filme. A sombra de contato funciona em todos os aparelhos.
+- Modo foto: path tracing com [three-gpu-pathtracer](https://github.com/gkjohnson/three-gpu-pathtracer). O módulo só é baixado quando alguém liga o modo foto. A imagem fica mais limpa a cada amostra; numa placa de vídeo comum fica boa em alguns segundos.
+- Para testar a qualidade: `?hq=1` na URL força a qualidade máxima e `?lq=1` a mínima.
 
 ## Compatibilidade
 
 - Navegadores sem WebGL mostram um desenho do carro no lugar do 3D; o resto do site funciona normalmente.
-- Em celulares o 3D usa menos partículas, sem pós-processamento, e a garagem só gira o carro depois de tocar em "Girar o carro", para não atrapalhar a rolagem.
+- Em celulares o 3D usa menos partículas, sem reflexo no piso nem pós-processamento, e a garagem só gira o carro depois de tocar em "Girar o carro", para não atrapalhar a rolagem.
 - Quem ativa "reduzir movimento" no sistema vê menos animação.
 
 ## Fontes das informações
