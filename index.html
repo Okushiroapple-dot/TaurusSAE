@@ -350,6 +350,7 @@
             <div class="tach__read"><strong id="tach-rpm">0</strong><span>rpm</span></div>
           </div>
           <p class="garage__note">Modelo 3D ilustrativo de um Fórmula SAE a combustão, feito para este site.</p>
+          <div class="photo-hud" id="photo-hud" hidden><span class="dot"></span> Renderizando · <strong id="photo-samples">0</strong> amostras</div>
           <div class="stage__fallback stage__fallback--msg"><p>Seu navegador não conseguiu abrir o 3D (WebGL). Tente pelo Chrome, Edge, Firefox ou Safari atualizados.</p></div>
         </div>
 
@@ -382,6 +383,14 @@
               <button type="button" data-paint="branco" style="--c:#f2f2f2" aria-label="Branco"></button>
               <button type="button" data-paint="carbono" style="--c:#2a2a31" aria-label="Carbono"></button>
             </div>
+          </fieldset>
+          <fieldset class="ctrl ctrl--photo">
+            <legend>Modo foto</legend>
+            <div class="engine">
+              <button type="button" class="btn btn--primary btn--sm" id="g-photo">Renderizar foto realista</button>
+              <button type="button" class="btn btn--ghost btn--sm" id="g-photo-save" hidden>Salvar imagem</button>
+            </div>
+            <p class="ctrl__hint">Traçado de raios: a imagem fica mais limpa a cada segundo. Dá para girar o carro enquanto renderiza. Funciona melhor em computador com placa de vídeo.</p>
           </fieldset>
           <fieldset class="ctrl ctrl--engine">
             <legend>Motor</legend>

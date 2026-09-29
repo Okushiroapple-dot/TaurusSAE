@@ -10,6 +10,102 @@ import { buildCar } from "./car.js";
 import { createAirflow } from "./airflow.js";
 import { EngineAudio } from "./engine-audio.js";
 import { PARTS, VIEWS } from "./parts.js";
+import { studioEnvironment, floorTextures } from "./textures.js";
+import { createPhotoMode } from "./photo.js";
+
+/* vinheta + grão de filme, aplicados depois do tone mapping */
+const FilmShader = {
+  uniforms: { tDiffuse: { value: null }, time: { value: 0 }, vignette: { value: 0.32 }, grain: { value: 0.028 } },
+  vertexShader: "varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }",
+  fragmentShader: `
+    uniform sampler2D tDiffuse; uniform float time; uniform float vignette; uniform float grain; varying vec2 vUv;
+    float hash(vec2 p){ return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
+    void main(){
+      vec4 c = texture2D(tDiffuse, vUv);
+      vec2 d = vUv - 0.5;
+      c.rgb *= 1.0 - vignette * smoothstep(0.25, 0.85, length(d) * 1.35);
+      c.rgb += (hash(vUv * 1000.0 + fract(time) * 100.0) - 0.5) * grain;
+      gl_FragColor = c;
+    }`,
+};
+
+/*
+ * Sombra de contato (técnica usada em apresentações de produto): uma câmera
+ * ortográfica olha o carro de baixo para cima, grava a profundidade como
+ * opacidade, e o resultado desfocado é aplicado num plano logo acima do piso.
+ */
+function createContactShadows(renderer, scene, { size = [4, 3], res = 512, blur = 3, darkness = 1.5, opacity = 0.8, far = 0.9 } = {}) {
+  const [w, h] = size;
+  const rtA = new THREE.WebGLRenderTarget(res, res);
+  const rtB = new THREE.WebGLRenderTarget(res, res);
+  rtA.texture.generateMipmaps = rtB.texture.generateMipmaps = false;
+  const plane = new THREE.Mesh(
+    new THREE.PlaneGeometry(w, h),
+    new THREE.MeshBasicMaterial({ map: rtA.texture, transparent: true, opacity, depthWrite: false, side: THREE.DoubleSide })
+  );
+  plane.rotation.x = -Math.PI / 2;
+  plane.scale.y = -1; // a câmera olha de baixo: a imagem vem espelhada
+  plane.position.y = 0.003;
+  plane.renderOrder = 1;
+  scene.add(plane);
+  const cam = new THREE.OrthographicCamera(-w / 2, w / 2, h / 2, -h / 2, 0, far);
+  cam.rotation.x = Math.PI / 2;
+  const depthMat = new THREE.MeshDepthMaterial();
+  depthMat.depthTest = depthMat.depthWrite = false;
+  depthMat.transparent = true;
+  depthMat.onBeforeCompile = (shader) => {
+    shader.uniforms.darkness = { value: darkness };
+    shader.fragmentShader = "uniform float darkness;\n" + shader.fragmentShader.replace(
+      "gl_FragColor = vec4( vec3( 1.0 - fragCoordZ ), opacity );",
+      "gl_FragColor = vec4( vec3( 0.0 ), ( 1.0 - fragCoordZ ) * darkness );"
+    );
+  };
+  const quadCam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+  const quad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2));
+  const hBlur = new THREE.ShaderMaterial(THREE.HorizontalBlurShader);
+  const vBlur = new THREE.ShaderMaterial(THREE.VerticalBlurShader);
+  hBlur.depthTest = vBlur.depthTest = false;
+  const clear = new THREE.Color();
+  const api = {
+    hide: [],
+    update(target) {
+      const prevBg = scene.background, prevOverride = scene.overrideMaterial, prevFog = scene.fog;
+      const prevAlpha = renderer.getClearAlpha();
+      renderer.getClearColor(clear);
+      const vis = api.hide.map((o) => o.visible);
+      api.hide.forEach((o) => (o.visible = false));
+      plane.visible = false;
+      scene.background = null;
+      scene.fog = null;
+      scene.overrideMaterial = depthMat;
+      renderer.setClearColor(0x000000, 0);
+      renderer.setRenderTarget(rtA);
+      renderer.clear();
+      renderer.render(scene, cam);
+      scene.overrideMaterial = prevOverride;
+      // desfoque em duas passadas (horizontal e vertical), duas vezes
+      for (let i = 0; i < 2; i++) {
+        quad.material = hBlur;
+        hBlur.uniforms.tDiffuse.value = rtA.texture;
+        hBlur.uniforms.h.value = (blur * (i + 1)) / (res * 2);
+        renderer.setRenderTarget(rtB);
+        renderer.render(quad, quadCam);
+        quad.material = vBlur;
+        vBlur.uniforms.tDiffuse.value = rtB.texture;
+        vBlur.uniforms.v.value = (blur * (i + 1)) / (res * 2);
+        renderer.setRenderTarget(rtA);
+        renderer.render(quad, quadCam);
+      }
+      renderer.setRenderTarget(null);
+      renderer.setClearColor(clear, prevAlpha);
+      scene.background = prevBg;
+      scene.fog = prevFog;
+      api.hide.forEach((o, i) => (o.visible = vis[i]));
+      plane.visible = true;
+    },
+  };
+  return api;
+}
 
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const lerp = (a, b, t) => a + (b - a) * t;
@@ -37,7 +133,9 @@ export function createStage(opts = {}) {
   if (!gl) return null;
 
   const isTouch = matchMedia("(pointer: coarse)").matches;
-  const lowPower = isTouch || (navigator.hardwareConcurrency || 8) <= 4;
+  // ?hq=1 força a qualidade máxima e ?lq=1 a mínima (útil para testar)
+  const qs = new URLSearchParams(location.search);
+  const lowPower = qs.has("hq") ? false : qs.has("lq") ? true : isTouch || (navigator.hardwareConcurrency || 8) < 4;
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   const canvas = document.createElement("canvas");
@@ -47,79 +145,49 @@ export function createStage(opts = {}) {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, lowPower ? 1.5 : 2));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.05;
+  renderer.toneMappingExposure = 0.95;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFShadowMap;
   renderer.setClearColor("#0b0b0d", 1);
 
-  /* ---------- cena ---------- */
+  /* ---------- cena: estúdio fotográfico ---------- */
   const scene = new THREE.Scene();
-  scene.fog = new THREE.Fog("#0b0b0d", 7, 18);
-  const pmrem = new THREE.PMREMGenerator(renderer);
-  scene.environment = pmrem.fromScene(new THREE.RoomEnvironment(), 0.04).texture;
-  scene.environmentIntensity = 0.55;
+  scene.fog = new THREE.Fog("#0b0b0d", 7, 17);
+  scene.environment = studioEnvironment(renderer);
+  scene.environmentIntensity = 1.0;
 
-  const key = new THREE.DirectionalLight("#ffffff", 2.4);
-  key.position.set(3, 6, 4);
+  const key = new THREE.DirectionalLight("#ffffff", 1.6);
+  key.position.set(2.5, 7, 3);
   key.castShadow = true;
   key.shadow.mapSize.set(lowPower ? 1024 : 2048, lowPower ? 1024 : 2048);
   Object.assign(key.shadow.camera, { left: -3.2, right: 3.2, top: 3.2, bottom: -3.2, near: 1, far: 20 });
   key.shadow.bias = -0.0004;
   key.shadow.normalBias = 0.02;
   scene.add(key);
-  // contraluz laranja baixo: marca o contorno do carro sem tingir o piso
-  const rim = new THREE.DirectionalLight("#ff8000", 3);
-  rim.position.set(-4.5, 0.9, -3.5);
-  scene.add(rim);
-  const rim2 = new THREE.DirectionalLight("#ffd2a6", 1.2);
-  rim2.position.set(-2, 3, 4);
-  scene.add(rim2);
-  scene.add(new THREE.HemisphereLight("#ffffff", "#0b0b0d", 0.35));
+  // o contorno laranja vem da faixa de luz laranja do estúdio (textures.js), sem luz direta no piso
+  const rim = null;
 
-  // piso com grade (rola quando o carro "anda")
-  const gridC = document.createElement("canvas");
-  gridC.width = gridC.height = 256;
-  {
-    const g = gridC.getContext("2d");
-    g.fillStyle = "#0e0e11";
-    g.fillRect(0, 0, 256, 256);
-    g.strokeStyle = "#23252b";
-    g.lineWidth = 2;
-    g.strokeRect(0, 0, 256, 256);
-    g.strokeStyle = "#16171b";
-    g.lineWidth = 1;
-    for (let i = 64; i < 256; i += 64) {
-      g.beginPath(); g.moveTo(i, 0); g.lineTo(i, 256); g.stroke();
-      g.beginPath(); g.moveTo(0, i); g.lineTo(256, i); g.stroke();
-    }
-  }
-  const gridTex = new THREE.CanvasTexture(gridC);
-  gridTex.wrapS = gridTex.wrapT = THREE.RepeatWrapping;
-  gridTex.repeat.set(20, 20);
-  gridTex.anisotropy = 8;
-  gridTex.colorSpace = THREE.SRGBColorSpace;
-  const floor = new THREE.Mesh(new THREE.PlaneGeometry(40, 40), new THREE.MeshStandardMaterial({ map: gridTex, color: "#77777d", roughness: 0.72, metalness: 0.1 }));
+  // piso de concreto polido (a textura rola quando o carro "anda")
+  const floorT = floorTextures();
+  const floorMat = new THREE.MeshStandardMaterial({
+    map: floorT.map, roughnessMap: floorT.roughnessMap, roughness: 0.55, metalness: 0,
+    transparent: !lowPower, opacity: lowPower ? 1 : 0.9,
+  });
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(40, 40), floorMat);
   floor.rotation.x = -Math.PI / 2;
+  floor.position.y = 0.001;
   floor.receiveShadow = true;
   scene.add(floor);
-
-  const radial = (inner, outer) => {
-    const c = document.createElement("canvas");
-    c.width = c.height = 256;
-    const g = c.getContext("2d");
-    const grd = g.createRadialGradient(128, 128, 0, 128, 128, 128);
-    grd.addColorStop(0, inner);
-    grd.addColorStop(1, outer);
-    g.fillStyle = grd;
-    g.fillRect(0, 0, 256, 256);
-    const t = new THREE.CanvasTexture(c);
-    t.colorSpace = THREE.SRGBColorSpace;
-    return t;
-  };
-  const shadow = new THREE.Mesh(new THREE.PlaneGeometry(3.6, 2.0), new THREE.MeshBasicMaterial({ map: radial("rgba(0,0,0,0.85)", "rgba(0,0,0,0)"), transparent: true, depthWrite: false }));
-  shadow.rotation.x = -Math.PI / 2;
-  shadow.position.y = 0.002;
-  scene.add(shadow);
+  // reflexo do carro no piso (só em computador)
+  let reflector = null;
+  if (!lowPower) {
+    reflector = new THREE.Reflector(new THREE.PlaneGeometry(40, 40), { textureWidth: 1024, textureHeight: 1024, color: 0x7a7a80 });
+    reflector.rotation.x = -Math.PI / 2;
+    // não recalcula o reflexo nas passadas auxiliares (oclusão de ambiente, sombra)
+    const reflect = reflector.onBeforeRender;
+    reflector.onBeforeRender = function (r, s, c) { if (!s.overrideMaterial) reflect.call(this, r, s, c); };
+    scene.add(reflector);
+  }
   const glow = new THREE.Mesh(new THREE.RingGeometry(1.95, 2.0, 128), new THREE.MeshBasicMaterial({ color: "#ff8000", transparent: true, opacity: 0.2, blending: THREE.AdditiveBlending, depthWrite: false }));
   glow.rotation.x = -Math.PI / 2;
   glow.scale.set(1.2, 0.72, 1);
@@ -132,10 +200,16 @@ export function createStage(opts = {}) {
   const air = createAirflow(car.bodyProfile, lowPower ? 450 : 1000);
   scene.add(air.object);
 
+  /* ---------- sombra de contato: o carro visto de baixo, desfocado ---------- */
+  const contact = createContactShadows(renderer, scene, { size: [4.4, 3.0], res: lowPower ? 256 : 512, blur: lowPower ? 2 : 3, darkness: 1.6, opacity: 0.8 });
+  contact.hide = [floor, glow, air.object, ...(reflector ? [reflector] : [])];
+
   /* ---------- câmera, controles, pós-processamento ---------- */
   const camera = new THREE.PerspectiveCamera(32, 1, 0.05, 60);
   camera.position.set(3.7, 1.3, 3.5);
+  const photo = createPhotoMode(renderer, () => camera);
   const controls = new THREE.OrbitControls(camera, canvas);
+  controls.addEventListener("change", () => photo.cameraMoved());
   controls.enabled = false;
   controls.enableZoom = false;
   controls.enablePan = false;
@@ -147,13 +221,21 @@ export function createStage(opts = {}) {
   controls.target.set(0, 0.38, 0);
   canvas.style.touchAction = "pan-y";
 
-  let composer = null, bloom = null;
+  // pós-processamento (computador): MSAA, oclusão de ambiente, bloom, vinheta e grão
+  let composer = null, bloom = null, gtao = null, film = null;
   if (!lowPower) {
-    composer = new THREE.EffectComposer(renderer);
+    const rt = new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType, samples: 4 });
+    composer = new THREE.EffectComposer(renderer, rt);
     composer.addPass(new THREE.RenderPass(scene, camera));
-    bloom = new THREE.UnrealBloomPass(new THREE.Vector2(512, 512), 0.4, 0.45, 0.86);
+    gtao = new THREE.GTAOPass(scene, camera, 1, 1);
+    gtao.updateGtaoMaterial({ radius: 0.22, distanceExponent: 1.5, thickness: 1, scale: 1.1, samples: 12 });
+    gtao.blendIntensity = 0.85;
+    composer.addPass(gtao);
+    bloom = new THREE.UnrealBloomPass(new THREE.Vector2(512, 512), 0.35, 0.4, 0.9);
     composer.addPass(bloom);
     composer.addPass(new THREE.OutputPass());
+    film = new THREE.ShaderPass(FilmShader);
+    composer.addPass(film);
   }
 
   /* ---------- hosts ---------- */
@@ -275,7 +357,12 @@ export function createStage(opts = {}) {
     target.steer = mix("steerAmp") * Math.sin(time * 1.3);
     spinRate = mix("spin");
     const roll = mix("roll");
-    if (roll > 0.01) gridTex.offset.x -= (spinRate * 0.255 * dt * roll) / 2;
+    if (roll > 0.01) {
+      // a textura cobre 4 m; desloca na velocidade da roda
+      const d = (spinRate * 0.255 * dt * roll) / 4;
+      floorT.map.offset.x -= d;
+      floorT.roughnessMap.offset.x -= d;
+    }
     for (const k in hlTarget) hlTarget[k] = 0;
     for (const [k, v] of Object.entries(A.st.hl || {})) hlTarget[k] = (hlTarget[k] || 0) + v * (1 - t);
     for (const [k, v] of Object.entries(B.st.hl || {})) hlTarget[k] = (hlTarget[k] || 0) + v * t;
@@ -346,6 +433,10 @@ export function createStage(opts = {}) {
     canvas.style.touchAction = controls.enabled && isTouch ? "none" : "pan-y";
   }
   function updateGarage(dt) {
+    updateGarageCamera(dt);
+    updateGarageState();
+  }
+  function updateGarageCamera(dt) {
     if (tween) {
       tween.t = Math.min(1, tween.t + dt / tween.dur);
       const e = easeIO(tween.t);
@@ -354,7 +445,8 @@ export function createStage(opts = {}) {
       camera.lookAt(controls.target);
       if (tween.t >= 1) tween = null;
     } else controls.update();
-
+  }
+  function updateGarageState() {
     const part = G.sel ? PARTS[G.sel].estado : {};
     target.explode = G.explode;
     target.xray = Math.max(G.xray, part.xray || 0);
@@ -371,6 +463,14 @@ export function createStage(opts = {}) {
     spinRate = eng.on && eng.crank <= 0 ? n * 55 : 0;
 
     placeTags(labelEls, () => (tween ? 0.35 : 1), hosts.garage);
+  }
+
+  /* ---------- modo foto (path tracing) ---------- */
+  let saveRequested = false;
+  function stopPhoto() {
+    if (!photo.active) return;
+    photo.stop();
+    if (garage.onPhotoEnd) garage.onPhotoEnd();
   }
 
   /* ---------- motor (roda mesmo com a garagem fora da tela) ---------- */
@@ -445,6 +545,21 @@ export function createStage(opts = {}) {
     if (!active || document.hidden) return;
     time += dt;
 
+    // modo foto: só o path tracer desenha; a câmera continua livre
+    if (photo.active) {
+      if (active !== "garage") {
+        stopPhoto();
+      } else {
+        const moving = !!tween;
+        updateGarageCamera(dt);
+        if (moving) photo.cameraMoved();
+        photo.render();
+        if (saveRequested) { saveRequested = false; photo.snapshot(); }
+        if (garage.onPhoto) garage.onPhoto(photo.samples);
+        return;
+      }
+    }
+
     if (active === "story") updateStory(dt);
     else {
       setOffset(0, 0);
@@ -462,6 +577,8 @@ export function createStage(opts = {}) {
     air.update(dt, S.air);
     glow.material.opacity = 0.14 + 0.12 * S.heat + 0.05 * Math.sin(time * 2);
 
+    contact.update(car.root);
+    if (film) film.uniforms.time.value = time;
     if (composer) composer.render();
     else renderer.render(scene, camera);
     if (firstFrame) {
@@ -480,6 +597,8 @@ export function createStage(opts = {}) {
     car,
     renderer,
     air,
+    scene,
+    debug: { floor, reflector, glow, contact, gtao, bloom, film, key, rim },
     set(key, value) { G[key] = value; },
     view(name) { const v = VIEWS[name]; if (v) { selectPart(null); flyTo(v.pos, v.tgt); } },
     zoom(f) {
@@ -491,6 +610,15 @@ export function createStage(opts = {}) {
     setTouch,
     paint(name) { car.setPaint(name); },
     sponsor(img) { car.setSponsor(img); },
+    photo: {
+      // tira a foto do carro como ele está agora (explodido, raio-x, pintura...)
+      async start() {
+        await photo.start(car.root);
+      },
+      stop: stopPhoto,
+      save() { saveRequested = true; },
+      get active() { return photo.active; },
+    },
     engine: {
       start() { audio.start(); eng.on = true; eng.crank = 0.9; },
       stop() { eng.on = false; eng.throttle = 0; audio.stop(); },
