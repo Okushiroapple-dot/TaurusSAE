@@ -19,7 +19,7 @@ window.TAURUS = {
     sigla: "UFTM",
     cidade: "Uberaba · MG",
     fundacao: 2015,
-    numeroCarro: 39,
+    numeroCarro: 38,
     membros: 32,
     // Endereço do campus de engenharia (ICTE). Ajuste se a oficina for em outro lugar.
     endereco: "ICTE/UFTM · Av. Dr. Randolfo Borges Júnior, 1400 · Univerdecidade · Uberaba/MG",
@@ -87,11 +87,12 @@ window.TAURUS = {
    * o valor aparece no painel como "No carro da equipe: ...".
    */
   carro: {
-    nome: "Protótipo Taurus",
+    nome: "TR-04",
+    numero: "38",
     categoria: "Fórmula SAE · Combustão",
     ficha: [
       { rotulo: "Chassi", valor: "", texto: "Treliça de tubos de aço soldados, com arcos de proteção e atenuador de impacto conforme o regulamento." },
-      { rotulo: "Suspensão", valor: "", texto: "Duplo A nas quatro rodas, com geometria calculada para o traçado travado das provas." },
+      { rotulo: "Suspensão", valor: "", texto: "Duplo A nas quatro rodas com coilovers de ação direta, geometria calculada para o traçado travado das provas." },
       { rotulo: "Motor", valor: "", texto: "Motor de motocicleta, limitado por restritor de admissão exigido pela regra." },
       { rotulo: "Transmissão", valor: "", texto: "Câmbio sequencial do próprio motor e transmissão final por corrente." },
       { rotulo: "Freios", valor: "", texto: "Disco nas quatro rodas, com duplo circuito hidráulico e balanço ajustável." },

@@ -11,7 +11,7 @@ export const PARTS = {
   },
   suspensao: {
     nome: "Suspensão duplo A",
-    texto: "Duas bandejas em A seguram cada roda. O pushrod leva a carga até o balancim, que comprime a mola e o amortecedor montados dentro do chassi. A geometria das bandejas define quanto a roda inclina nas curvas.",
+    texto: "Duas bandejas em A seguram cada roda. O coilover (mola e amortecedor num conjunto só) vai direto da bandeja ao chassi, sem balancim. A geometria das bandejas define quanto a roda inclina nas curvas.",
     cam: { pos: [1.75, 0.85, 1.75], tgt: [0.78, 0.3, 0.45] },
     estado: { xray: 0.75, demo: "heave" },
   },
@@ -23,7 +23,7 @@ export const PARTS = {
   },
   powertrain: {
     nome: "Motor",
-    texto: "Motor de motocicleta de até 710 cm³ montado atrás do piloto, com o câmbio sequencial do próprio motor. O radiador fica no sidepod direito.",
+    texto: "Motor de motocicleta de até 710 cm³ montado atrás do piloto, com o câmbio sequencial do próprio motor. O radiador fica exposto no lado direito, logo atrás do piloto.",
     cam: { pos: [-1.9, 1.5, 1.7], tgt: [-0.5, 0.4, 0] },
     estado: { xray: 0.35 },
   },
@@ -46,9 +46,9 @@ export const PARTS = {
     estado: { xray: 0.8 },
   },
   aero: {
-    nome: "Pacote aerodinâmico",
-    texto: "Asas dianteira e traseira com três elementos cada. Elas geram força para baixo e aumentam a aderência nas curvas, com o custo de mais arrasto nas retas.",
-    cam: { pos: [0.3, 1.1, 4.8], tgt: [0, 0.5, 0] },
+    nome: "Asa traseira",
+    texto: "Asa traseira de dois elementos: plano principal e flap bem inclinado. Ela gera força para baixo e aumenta a aderência nas curvas, com o custo de mais arrasto nas retas.",
+    cam: { pos: [-3.0, 1.75, 2.5], tgt: [-0.9, 0.95, 0] },
     estado: { air: 1 },
   },
   cockpit: {
