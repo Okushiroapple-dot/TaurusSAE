@@ -2,12 +2,13 @@
 # Recompila os pacotes de terceiros usados pelo site:
 #   vendor/three.bundle.min.js       Three.js + addons (controles, pós-processamento, reflexo)
 #   vendor/pathtracer.bundle.min.js  three-gpu-pathtracer (modo foto), usando o mesmo Three.js
+#   vendor/firebase.bundle.min.js    Firebase (app + Firestore lite) para os formulários
 # Só é preciso rodar ao atualizar as versões.
 set -euo pipefail
 cd "$(dirname "$0")"
 TMP="$(mktemp -d)"
-cp vendor-entry.js pathtracer-entry.js "$TMP/"
-( cd "$TMP" && npm init -y >/dev/null && npm i three@0.186.1 three-gpu-pathtracer@0.0.26 three-mesh-bvh@0.9.15 xatlas-web esbuild >/dev/null )
+cp vendor-entry.js pathtracer-entry.js firebase-entry.js "$TMP/"
+( cd "$TMP" && npm init -y >/dev/null && npm i three@0.186.1 three-gpu-pathtracer@0.0.26 three-mesh-bvh@0.9.15 xatlas-web firebase@13.1.0 esbuild >/dev/null )
 "$TMP/node_modules/.bin/esbuild" "$TMP/vendor-entry.js" --bundle --format=esm --minify \
   --legal-comments=eof --outfile=../vendor/three.bundle.min.js
 # o path tracer importa "three" de fora; apontamos para o bundle acima
@@ -16,5 +17,7 @@ cp vendor-entry.js pathtracer-entry.js "$TMP/"
 sed -e 's#from"three"#from"./three.bundle.min.js"#g' \
     -e 's#from"three/examples/jsm/postprocessing/Pass.js"#from"./three.bundle.min.js"#g' \
     "$TMP/pt.js" > ../vendor/pathtracer.bundle.min.js
+"$TMP/node_modules/.bin/esbuild" "$TMP/firebase-entry.js" --bundle --format=esm --minify \
+  --legal-comments=eof --outfile=../vendor/firebase.bundle.min.js
 rm -rf "$TMP"
-echo "ok: vendor/three.bundle.min.js e vendor/pathtracer.bundle.min.js"
+echo "ok: vendor/three.bundle.min.js, vendor/pathtracer.bundle.min.js e vendor/firebase.bundle.min.js"

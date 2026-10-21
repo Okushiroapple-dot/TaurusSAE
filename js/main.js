@@ -264,64 +264,124 @@
   st.classList.toggle("is-open", !!ps.aberto);
   $("#ps-text").textContent = ps.texto || "";
 
-  var form = $("#join-form");
-  var note = $("#form-note");
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
-    note.className = "form__note";
-    var ok = true;
-    $$("[required]", form).forEach(function (f) {
-      var bad = !f.value.trim() || (f.type === "email" && !/^\S+@\S+\.\S+$/.test(f.value));
-      f.classList.toggle("is-invalid", bad);
-      if (bad) ok = false;
-    });
-    if (!ok) {
-      note.textContent = "Preencha nome, e-mail válido e curso.";
-      note.classList.add("is-err");
-      return;
+  /* ---------- formulários ---------- */
+  // Primeiro tenta gravar no Firestore (js/forms.js). Se o Firebase não estiver
+  // configurado ou falhar, usa o Formspree (contato.formEndpoint), o app de e-mail
+  // ou copia a mensagem e abre o Instagram.
+  function ligarFormulario(opts) {
+    var form = $(opts.form);
+    if (!form) return;
+    var note = $(".form__note", form);
+    var btn = $("[type=submit]", form);
+    function aviso(texto, tipo, html) {
+      note.className = "form__note" + (tipo ? " is-" + tipo : "");
+      if (html) note.innerHTML = texto;
+      else note.textContent = texto;
     }
-    var data = new FormData(form);
-
-    if (ct.formEndpoint) {
-      note.textContent = "Enviando…";
-      fetch(ct.formEndpoint, { method: "POST", body: data, headers: { Accept: "application/json" } })
-        .then(function (r) {
-          if (!r.ok) throw new Error();
-          form.reset();
-          note.textContent = "Recebemos! A equipe vai te chamar quando o processo seletivo abrir.";
-          note.classList.add("is-ok");
-        })
-        .catch(function () {
-          note.textContent = "Não foi possível enviar agora. Tente pelo Instagram " + (ct.instagramUser || "") + ".";
-          note.classList.add("is-err");
-        });
-      return;
+    function dadosDo(data) {
+      var d = {};
+      opts.campos.forEach(function (k) { d[k] = String(data.get(k) || "").trim(); });
+      return d;
     }
-
-    var body =
-      "Nome: " + data.get("nome") + "\n" +
-      "E-mail: " + data.get("email") + "\n" +
-      "Curso: " + data.get("curso") + "\n" +
-      "Período: " + (data.get("periodo") || "-") + "\n" +
-      "Área de interesse: " + data.get("area") + "\n\n" +
-      (data.get("mensagem") || "");
-
-    if (ct.email) {
-      window.location.href = mailto("Quero entrar na Taurus Racing") + "&body=" + encodeURIComponent(body);
-      note.textContent = "Abrimos seu app de e-mail com a mensagem pronta. É só enviar.";
-      note.classList.add("is-ok");
-    } else {
+    function planoB(d) {
+      var body = opts.corpo(d);
+      if (ct.formEndpoint) {
+        var fd = new FormData();
+        fd.append("formulario", opts.colecao);
+        Object.keys(d).forEach(function (k) { fd.append(k, d[k]); });
+        return fetch(ct.formEndpoint, { method: "POST", body: fd, headers: { Accept: "application/json" } })
+          .then(function (r) {
+            if (!r.ok) throw new Error();
+            form.reset();
+            aviso(opts.sucesso, "ok");
+          })
+          .catch(function () {
+            aviso("Não foi possível enviar agora. Tente pelo Instagram " + (ct.instagramUser || "") + ".", "err");
+          });
+      }
+      if (ct.email) {
+        window.location.href = mailto(opts.assuntoEmail) + "&body=" + encodeURIComponent(body);
+        aviso("Abrimos seu app de e-mail com a mensagem pronta. É só enviar.", "ok");
+        return;
+      }
       var copied = function () {
-        note.innerHTML = "Mensagem copiada. Cole no direct do <a class=\"link\" target=\"_blank\" rel=\"noopener\" href=\"" + ct.instagram + "\">" + (ct.instagramUser || "Instagram") + "</a>.";
-        note.classList.add("is-ok");
+        aviso("Mensagem copiada. Cole no direct do <a class=\"link\" target=\"_blank\" rel=\"noopener\" href=\"" + ct.instagram + "\">" + (ct.instagramUser || "Instagram") + "</a>.", "ok", true);
         window.open(ct.instagram, "_blank", "noopener");
       };
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(body).then(copied, copied);
-      } else {
-        copied();
-      }
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(body).then(copied, copied);
+      else copied();
     }
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var ok = true;
+      $$("[required]", form).forEach(function (f) {
+        var bad = !f.value.trim() || (f.type === "email" && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.value.trim()));
+        f.classList.toggle("is-invalid", bad);
+        if (bad) ok = false;
+      });
+      if (!ok) {
+        aviso(opts.faltando, "err");
+        return;
+      }
+      var data = new FormData(form);
+      // campo escondido: só robô preenche
+      if (data.get("site")) {
+        form.reset();
+        aviso(opts.sucesso, "ok");
+        return;
+      }
+      var d = dadosDo(data);
+      if (!window.taurusForms) {
+        planoB(d);
+        return;
+      }
+      aviso("Enviando…");
+      btn.disabled = true;
+      window.taurusForms.save(opts.colecao, d)
+        .then(function () {
+          form.reset();
+          aviso(opts.sucesso, "ok");
+        })
+        .catch(function (err) {
+          if (window.console) console.warn("Firestore:", err && err.message);
+          planoB(d);
+        })
+        .then(function () { btn.disabled = false; });
+    });
+  }
+
+  ligarFormulario({
+    form: "#join-form",
+    colecao: "inscricoes",
+    campos: ["nome", "email", "curso", "periodo", "area", "mensagem"],
+    faltando: "Preencha nome, e-mail válido e curso.",
+    sucesso: "Recebemos! A equipe vai te chamar quando o processo seletivo abrir.",
+    assuntoEmail: "Quero entrar na Taurus Racing",
+    corpo: function (d) {
+      return "Nome: " + d.nome + "\n" +
+        "E-mail: " + d.email + "\n" +
+        "Curso: " + d.curso + "\n" +
+        "Período: " + (d.periodo || "-") + "\n" +
+        "Área de interesse: " + d.area + "\n\n" +
+        d.mensagem;
+    },
+  });
+
+  ligarFormulario({
+    form: "#contact-form",
+    colecao: "mensagens",
+    campos: ["nome", "email", "assunto", "empresa", "mensagem"],
+    faltando: "Preencha nome, e-mail válido, assunto e mensagem.",
+    sucesso: "Mensagem enviada! A equipe responde pelo e-mail que você informou.",
+    assuntoEmail: "Contato pelo site · Taurus Racing",
+    corpo: function (d) {
+      return "Nome: " + d.nome + "\n" +
+        "E-mail: " + d.email + "\n" +
+        (d.empresa ? "Empresa: " + d.empresa + "\n" : "") +
+        "Assunto: " + d.assunto + "\n\n" +
+        d.mensagem;
+    },
   });
 
   /* ---------- contato ---------- */

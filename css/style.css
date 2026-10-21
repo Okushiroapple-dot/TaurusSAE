@@ -444,6 +444,11 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .contact__map { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); background: var(--surface); display: flex; flex-direction: column; }
 .contact__map iframe { width: 100%; flex: 1; min-height: 300px; border: 0; filter: grayscale(1) invert(0.92) contrast(0.9); }
 .contact__map p { margin: 0; padding: 16px 20px; color: var(--muted); font-size: 0.9rem; }
+.contact-form { margin-top: clamp(40px, 6vw, 72px); }
+.contact-form .h3 { margin-top: 0; }
+.contact-form .prose { color: #d4d4dc; }
+/* campo-isca contra robôs: fora da tela e fora da navegação por teclado */
+.hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
 @media (max-width: 900px) { .contact { grid-template-columns: 1fr; } }
 @media (max-width: 460px) { .contact__cards { grid-template-columns: 1fr; } }
 

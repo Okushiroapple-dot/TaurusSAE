@@ -1,0 +1,50 @@
+name: Publicar no Firebase
+
+# A cada merge na main: publica o site no Firebase Hosting (taurus-racing.web.app)
+# e as regras do Firestore (firestore.rules).
+# Precisa do segredo FIREBASE_SERVICE_ACCOUNT_TAURUS_RACING (veja o README).
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: firebase-live
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      SA: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_TAURUS_RACING }}
+    steps:
+      - name: Confere a chave do Firebase
+        id: chave
+        run: |
+          if [ -z "$SA" ]; then
+            echo "::warning::Falta o segredo FIREBASE_SERVICE_ACCOUNT_TAURUS_RACING (veja o README). Nada foi publicado no Firebase."
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/checkout@v4
+        if: steps.chave.outputs.ok == 'true'
+      - uses: actions/setup-node@v4
+        if: steps.chave.outputs.ok == 'true'
+        with:
+          node-version: 22
+      - name: Regras do Firestore
+        if: steps.chave.outputs.ok == 'true'
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_TAURUS_RACING }}
+        run: node tools/deploy-rules.mjs taurus-racing
+      - name: Site no Firebase Hosting
+        if: steps.chave.outputs.ok == 'true'
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_TAURUS_RACING }}
+          projectId: taurus-racing
+          channelId: live
