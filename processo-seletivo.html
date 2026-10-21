@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="pt-BR" class="no-js">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Processo seletivo · Taurus Racing</title>
+  <meta name="description" content="Entre na Taurus Racing: requisitos, áreas da equipe e lista de interesse do processo seletivo para alunos da UFTM." />
+  <meta name="theme-color" content="#0b0b0d" />
+  <meta name="color-scheme" content="dark" />
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml" />
+  <link rel="canonical" href="https://taurus-racing.web.app/processo-seletivo" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="pt_BR" />
+  <meta property="og:site_name" content="Taurus Racing" />
+  <meta property="og:title" content="Processo seletivo · Taurus Racing" />
+  <meta property="og:description" content="Entre na Taurus Racing: requisitos, áreas da equipe e lista de interesse do processo seletivo para alunos da UFTM." />
+  <meta property="og:url" content="https://taurus-racing.web.app/processo-seletivo" />
+  <meta property="og:image" content="https://taurus-racing.web.app/assets/img/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="preload" href="assets/fonts/barlow-condensed-latin-800-italic.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+  <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+
+  <!-- ===================== MENU (igual em todas as páginas) ===================== -->
+  <header class="nav" id="nav">
+    <div class="container nav__inner">
+      <a href="index.html" class="brand" aria-label="Taurus Racing, página inicial">
+        <img src="assets/img/logo.svg" alt="" width="40" height="40" />
+        <span class="brand__text">TAURUS<b>RACING</b></span>
+      </a>
+      <nav class="nav__links" id="nav-links" aria-label="Páginas">
+        <a href="index.html">Início</a>
+        <a href="oficina.html">Oficina 3D</a>
+        <a href="laboratorio.html">Laboratório</a>
+        <a href="competicao.html">Competição</a>
+        <a href="processo-seletivo.html" class="is-active" aria-current="page">Faça parte</a>
+        <a href="contato.html">Contato</a>
+        <a href="patrocinio.html" class="btn btn--sm btn--primary">Patrocine</a>
+      </nav>
+      <button class="nav__toggle" id="nav-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav-links">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="conteudo">
+    <!-- ===================== FAÇA PARTE ===================== -->
+    <section class="section section--alt" id="faca-parte">
+      <div class="container split">
+        <div class="reveal">
+          <p class="kicker">01 · Faça parte</p>
+          <h1 class="h2">Quer entrar na equipe?</h1>
+          <p class="status" id="ps-status"></p>
+          <p class="prose" id="ps-text"></p>
+          <ul class="checklist">
+            <li>Aluno de graduação da UFTM</li>
+            <li>Qualquer período</li>
+            <li>Engenharias e outros cursos (gestão, marketing e design também contam)</li>
+            <li>Vontade de aprender vale mais do que experiência</li>
+          </ul>
+        </div>
+
+        <form class="form reveal" id="join-form" novalidate>
+          <div class="field">
+            <label for="f-nome">Nome</label>
+            <input id="f-nome" name="nome" type="text" autocomplete="name" maxlength="120" required />
+          </div>
+          <div class="field">
+            <label for="f-email">E-mail</label>
+            <input id="f-email" name="email" type="email" autocomplete="email" maxlength="160" required />
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="f-curso">Curso</label>
+              <select id="f-curso" name="curso" required>
+                <option value="">Selecione</option>
+                <option>Engenharia Mecânica</option>
+                <option>Engenharia Elétrica</option>
+                <option>Engenharia de Produção</option>
+                <option>Engenharia Civil</option>
+                <option>Engenharia Química</option>
+                <option>Engenharia de Alimentos</option>
+                <option>Engenharia Ambiental</option>
+                <option>Outro curso</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="f-periodo">Período</label>
+              <select id="f-periodo" name="periodo">
+                <option value="">Selecione</option>
+                <option>1º</option><option>2º</option><option>3º</option><option>4º</option><option>5º</option>
+                <option>6º</option><option>7º</option><option>8º</option><option>9º</option><option>10º</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label for="f-area">Área que mais te interessa</label>
+            <select id="f-area" name="area">
+              <option>Ainda não sei</option>
+              <option>Chassi e ergonomia</option>
+              <option>Suspensão e direção</option>
+              <option>Powertrain</option>
+              <option>Freios</option>
+              <option>Eletrônica e dados</option>
+              <option>Aerodinâmica e carenagem</option>
+              <option>Gestão e custos</option>
+              <option>Marketing e patrocínio</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="f-msg">Por que você quer entrar? <small>(opcional)</small></label>
+            <textarea id="f-msg" name="mensagem" rows="4" maxlength="3000"></textarea>
+          </div>
+          <div class="hp" aria-hidden="true">
+            <label>Deixe em branco <input name="site" type="text" tabindex="-1" autocomplete="off" /></label>
+          </div>
+          <button class="btn btn--primary btn--block" type="submit">Enviar</button>
+          <p class="form__note" id="form-note" role="status"></p>
+        </form>
+      </div>
+    </section>
+    <!-- ===================== ÁREAS ===================== -->
+    <section class="section section--alt" id="areas">
+      <div class="container">
+        <div class="section__head reveal">
+          <p class="kicker">02 · Áreas</p>
+          <h2 class="h2">Onde você pode atuar</h2>
+          <p class="section__sub">Cada área cuida de um pedaço do carro ou da operação, e todas respondem ao mesmo cronograma. No formulário, escolha a que mais te interessa. Dá para mudar depois.</p>
+        </div>
+
+        <div class="areas">
+          <article class="area reveal">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M6 36 L18 12 L30 36 L42 12" /><path d="M6 36 H42" /></svg>
+            <h3>Chassi e ergonomia</h3>
+            <p>Estrutura tubular, arcos de proteção, atenuador de impacto, banco e posição do piloto.</p>
+          </article>
+          <article class="area reveal">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="14" /><circle cx="24" cy="24" r="4" /><path d="M24 10 V4 M24 44 V38 M10 24 H4 M44 24 H38" /></svg>
+            <h3>Suspensão e direção</h3>
+            <p>Geometria, cinemática, amortecedores, cubos, mangas de eixo e caixa de direção.</p>
+          </article>
+          <article class="area reveal">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><rect x="8" y="14" width="26" height="22" rx="2" /><path d="M34 20 H42 V30 H34 M16 14 V8 H26 V14" /></svg>
+            <h3>Powertrain</h3>
+            <p>Motor, admissão com restritor, escape, arrefecimento, combustível e transmissão.</p>
+          </article>
+          <article class="area reveal">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="16" /><circle cx="24" cy="24" r="7" /><path d="M36 13 A16 16 0 0 1 40 24" stroke-width="5" /></svg>
+            <h3>Freios</h3>
+            <p>Discos, pinças, cilindros mestres e o balanço de frenagem que o piloto ajusta.</p>
+          </article>
+          <article class="area reveal">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M26 4 L10 28 H24 L22 44 L38 20 H24 Z" /></svg>
+            <h3>Eletrônica e dados</h3>
+            <p>Chicote, painel, sensores e aquisição de dados para entender o carro em pista.</p>
+          </article>
+          <article class="area reveal">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M4 30 Q24 14 44 22" /><path d="M4 38 Q24 24 44 30" /><path d="M8 18 Q24 6 40 12" /></svg>
+            <h3>Aerodinâmica e carenagem</h3>
+            <p>Formas da carroceria e dos aerofólios, estudadas em CFD e fabricadas em compósito.</p>
+          </article>
+          <article class="area reveal">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 40 V26 M18 40 V18 M28 40 V22 M38 40 V10" /><path d="M4 40 H44" /></svg>
+            <h3>Gestão e custos</h3>
+            <p>Cronograma, compras, relatório de custos e o plano de negócios apresentado na competição.</p>
+          </article>
+          <article class="area reveal">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><rect x="6" y="10" width="36" height="26" rx="3" /><circle cx="24" cy="23" r="7" /><path d="M16 10 L19 5 H29 L32 10" /></svg>
+            <h3>Marketing e patrocínio</h3>
+            <p>Redes sociais, identidade visual, relacionamento com empresas e captação de recursos.</p>
+          </article>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================== RODAPÉ (igual em todas as páginas) ===================== -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <img src="assets/img/logo.svg" alt="" width="56" height="56" />
+        <div>
+          <strong>Taurus Racing</strong>
+          <span>Fórmula SAE · Universidade Federal do Triângulo Mineiro</span>
+        </div>
+      </div>
+      <nav class="footer__nav" aria-label="Páginas do site">
+        <a href="index.html">Início</a>
+        <a href="oficina.html">Oficina 3D</a>
+        <a href="laboratorio.html">Laboratório</a>
+        <a href="competicao.html">Competição</a>
+        <a href="processo-seletivo.html">Faça parte</a>
+        <a href="contato.html">Contato</a>
+        <a href="patrocinio.html">Patrocínio</a>
+      </nav>
+      <nav class="footer__social" id="footer-social" aria-label="Redes sociais"></nav>
+    </div>
+    <div class="container footer__legal">
+      <p>© <span id="year"></span> Taurus Racing · Projeto de extensão da UFTM · Uberaba/MG</p>
+      <a href="#" class="link">Voltar ao topo ↑</a>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/main.js"></script>
+  <script type="module" src="js/forms.js"></script>
+</body>
+</html>

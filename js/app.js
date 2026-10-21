@@ -1,15 +1,16 @@
 /*
  * Liga o palco 3D, o laboratório e a tela de carregamento.
  * O conteúdo textual do site continua em js/config.js + js/main.js.
+ * Cada página só baixa o que usa: o 3D (Three.js) onde há um palco e as
+ * simulações onde há o laboratório.
  */
-import { createStage } from "./3d/stage.js";
-import { initLab } from "./lab/lab.js";
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 const cfg = window.TAURUS || {};
 
 /* ---------- tela de carregamento (conta-giros) ---------- */
+// só aparece nas páginas que abrem com o carro em 3D (início e oficina)
 const loader = $("#loader");
 const fill = $("#loader-fill");
 const needle = $("#loader-needle");
@@ -35,36 +36,39 @@ function loaderTick(now) {
   }
   requestAnimationFrame(loaderTick);
 }
-requestAnimationFrame(loaderTick);
+if (loader) requestAnimationFrame(loaderTick);
+else document.documentElement.classList.add("is-loaded");
 
 /* ---------- palco 3D ---------- */
+const storyHost = $("#stage-story"), garageHost = $("#stage-garage"), sponsorHost = $("#stage-sponsor");
 let stage = null;
-try {
-  stage = createStage({
-    carNumber: (cfg.carro && cfg.carro.numero) || (cfg.equipe && cfg.equipe.numeroCarro) || 38,
-    carName: (cfg.carro && cfg.carro.nome) || "TR-04",
-    story: { section: $("#topo"), host: $("#stage-story"), bar: $("#story-bar") },
-    garage: {
-      host: $("#stage-garage"),
-      labels: $$("#garage-labels .hot3d"),
-      onSelect: showInfo,
-      onRpm: updateTach,
-      onLeave: () => stopEngine(),
-      onPhoto: (n) => { const el = $("#photo-samples"); if (el) el.textContent = Math.floor(n); },
-      onPhotoEnd: () => photoUI(false),
-    },
-    sponsorHost: $("#stage-sponsor"),
-    onReady: () => { ready = true; },
-  });
-} catch (err) {
-  console.error(err);
-  stage = null;
+if (storyHost || garageHost || sponsorHost) {
+  try {
+    const { createStage } = await import("./3d/stage.js");
+    stage = createStage({
+      carNumber: (cfg.carro && cfg.carro.numero) || (cfg.equipe && cfg.equipe.numeroCarro) || 38,
+      carName: (cfg.carro && cfg.carro.nome) || "TR-04",
+      story: { section: $("#topo"), host: storyHost, bar: $("#story-bar") },
+      garage: {
+        host: garageHost,
+        labels: $$("#garage-labels .hot3d"),
+        onSelect: showInfo,
+        onRpm: updateTach,
+        onLeave: () => stopEngine(),
+        onPhoto: (n) => { const el = $("#photo-samples"); if (el) el.textContent = Math.floor(n); },
+        onPhotoEnd: () => photoUI(false),
+      },
+      sponsorHost,
+      onReady: () => { ready = true; },
+    });
+  } catch (err) {
+    console.error(err);
+    stage = null;
+  }
+  if (!stage) document.documentElement.classList.add("no-webgl");
 }
 if (stage) window.taurus3d = stage;
-if (!stage) {
-  document.documentElement.classList.add("no-webgl");
-  ready = true;
-}
+else ready = true;
 
 /* ---------- garagem: controles ---------- */
 const info = $("#g-info");
@@ -85,7 +89,7 @@ function showInfo(name, part) {
 }
 $("#g-info-close")?.addEventListener("click", () => stage && stage.select(null));
 
-if (stage) {
+if (stage && garageHost) {
   $$("[data-toggle]").forEach((b) =>
     b.addEventListener("click", () => {
       const on = b.getAttribute("aria-pressed") !== "true";
@@ -275,10 +279,15 @@ const hint = $(".story__hint");
 if (hint) window.addEventListener("scroll", () => { hint.style.opacity = window.scrollY > 60 ? "0" : "1"; }, { passive: true });
 
 /* ---------- laboratório ---------- */
-initLab($("#laboratorio"));
-$$("[data-lab-open]").forEach((a) =>
-  a.addEventListener("click", () => {
-    const tab = $(`[data-lab-tab="${a.dataset.labOpen}"]`);
-    tab && tab.click();
-  })
-);
+const labEl = $("#laboratorio");
+if (labEl) {
+  const { initLab } = await import("./lab/lab.js");
+  initLab(labEl);
+  // laboratorio.html#suspensao (ou #aceleracao, #skidpad, #volta) abre direto na aba
+  const openTab = () => {
+    const tab = $(`[data-lab-tab="${location.hash.slice(1)}"]`);
+    if (tab) tab.click();
+  };
+  openTab();
+  window.addEventListener("hashchange", openTab);
+}

@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="pt-BR" class="no-js">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Oficina 3D · Taurus Racing</title>
+  <meta name="description" content="Desmonte o TR-04, carro nº 38 da Taurus Racing, em 3D: chassi, suspensão, motor e aerodinâmica, garagem interativa com motor e modo foto realista." />
+  <meta name="theme-color" content="#0b0b0d" />
+  <meta name="color-scheme" content="dark" />
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml" />
+  <link rel="canonical" href="https://taurus-racing.web.app/oficina" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="pt_BR" />
+  <meta property="og:site_name" content="Taurus Racing" />
+  <meta property="og:title" content="Oficina 3D · Taurus Racing" />
+  <meta property="og:description" content="Desmonte o TR-04, carro nº 38 da Taurus Racing, em 3D: chassi, suspensão, motor e aerodinâmica, garagem interativa com motor e modo foto realista." />
+  <meta property="og:url" content="https://taurus-racing.web.app/oficina" />
+  <meta property="og:image" content="https://taurus-racing.web.app/assets/img/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="preload" href="assets/fonts/barlow-condensed-latin-800-italic.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="modulepreload" href="vendor/three.bundle.min.js" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+  <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+
+  <!-- ===================== CARREGAMENTO ===================== -->
+  <div class="loader" id="loader" aria-hidden="true">
+    <div class="loader__inner">
+      <svg class="loader__gauge" viewBox="0 0 220 130">
+        <path d="M20 115 A90 90 0 0 1 200 115" class="loader__track" />
+        <path d="M20 115 A90 90 0 0 1 200 115" class="loader__fill" id="loader-fill" pathLength="100" />
+        <g class="loader__ticks">
+          <line x1="20" y1="115" x2="32" y2="115" /><line x1="46" y1="51" x2="54" y2="59" /><line x1="110" y1="25" x2="110" y2="37" /><line x1="174" y1="51" x2="166" y2="59" /><line x1="200" y1="115" x2="188" y2="115" />
+        </g>
+        <line x1="110" y1="115" x2="110" y2="42" class="loader__needle" id="loader-needle" />
+        <circle cx="110" cy="115" r="7" class="loader__hub" />
+      </svg>
+      <div class="loader__rpm"><span id="loader-rpm">0</span> rpm</div>
+      <div class="loader__brand">TAURUS<b>RACING</b></div>
+    </div>
+  </div>
+
+  <!-- Símbolo do carro, reutilizado no hero e na seção do carro -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="g-body" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#ff9a3d" />
+        <stop offset="1" stop-color="#d96a00" />
+      </linearGradient>
+      <linearGradient id="g-dark" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#2a2a31" />
+        <stop offset="1" stop-color="#101014" />
+      </linearGradient>
+      <radialGradient id="g-rim" cx=".5" cy=".5" r=".5">
+        <stop offset="0" stop-color="#d9d9e0" />
+        <stop offset=".7" stop-color="#8c8c96" />
+        <stop offset="1" stop-color="#55555e" />
+      </radialGradient>
+      <symbol id="car" viewBox="0 0 1000 330">
+        <!-- sombra -->
+        <ellipse cx="540" cy="312" rx="440" ry="12" fill="#000" opacity=".55" />
+        <!-- asa traseira -->
+        <g class="car-wing">
+          <path d="M205 212 L182 128" stroke="#2b2b33" stroke-width="7" stroke-linecap="round" />
+          <path d="M240 208 L200 128" stroke="#2b2b33" stroke-width="5" stroke-linecap="round" />
+          <rect x="112" y="58" width="16" height="104" rx="3" fill="url(#g-dark)" />
+          <path d="M122 76 Q170 60 222 70 L220 82 Q170 76 122 90 Z" fill="#ff8000" />
+          <path d="M122 100 Q175 88 232 98 L230 110 Q175 104 122 116 Z" fill="#1c1c22" />
+          <path d="M122 124 Q175 114 236 124 L234 134 Q175 130 122 140 Z" fill="#1c1c22" />
+        </g>
+        <!-- arco principal -->
+        <path d="M468 182 L458 104 Q456 92 444 92 L432 92" fill="none" stroke="#3a3a44" stroke-width="10" stroke-linecap="round" />
+        <!-- corpo -->
+        <path d="M968 246 C930 228 862 210 742 203 L622 192 Q602 190 592 176 L476 176 L446 148 L400 148 C334 148 292 172 250 194 L172 206 L166 252 L300 264 L700 264 L968 256 Z" fill="url(#g-body)" />
+        <!-- faixa preta superior -->
+        <path d="M742 203 L622 192 Q602 190 592 176 L476 176 L446 148 L400 148 C360 148 330 156 300 168 L306 178 C336 168 366 162 400 162 L444 162 L470 190 L596 190 Q610 204 628 206 L742 215 C850 222 920 236 960 250 L968 246 C930 228 862 210 742 203 Z" fill="#141418" opacity=".85" />
+        <!-- sidepod -->
+        <path d="M568 214 L338 214 C316 214 304 236 308 260 L568 260 Z" fill="url(#g-dark)" />
+        <path d="M568 214 L556 214 L556 260 L568 260 Z" fill="#000" opacity=".5" />
+        <text x="440" y="252" text-anchor="middle" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="800" font-style="italic" font-size="44" fill="#fff">38</text>
+        <!-- piloto -->
+        <circle cx="524" cy="150" r="24" fill="#f3f3f5" />
+        <path d="M530 138 Q552 140 548 158 L532 158 Z" fill="#101014" />
+        <path d="M502 150 Q506 128 526 126" fill="none" stroke="#ff8000" stroke-width="5" />
+        <!-- volante / arco frontal -->
+        <path d="M598 180 L592 160" stroke="#3a3a44" stroke-width="7" stroke-linecap="round" />
+        <!-- asa dianteira -->
+        <path d="M858 272 L992 268 L996 282 L858 286 Z" fill="#1c1c22" />
+        <rect x="978" y="248" width="12" height="38" rx="3" fill="#ffffff" />
+        <!-- suspensão -->
+        <g stroke="#55555e" stroke-width="4" stroke-linecap="round">
+          <path d="M760 250 L690 222 M760 250 L690 256" />
+          <path d="M238 250 L310 224 M238 250 L310 258" />
+        </g>
+        <!-- rodas -->
+        <g class="wheel">
+          <circle cx="238" cy="252" r="58" fill="#121216" />
+          <circle cx="238" cy="252" r="56" fill="none" stroke="#26262d" stroke-width="3" />
+          <g class="rim" style="transform-origin:238px 252px">
+            <circle cx="238" cy="252" r="32" fill="url(#g-rim)" />
+            <path d="M238 222 L238 282 M208 252 L268 252 M217 231 L259 273 M259 231 L217 273" stroke="#3a3a44" stroke-width="5" />
+            <circle cx="238" cy="252" r="8" fill="#ff8000" />
+          </g>
+        </g>
+        <g class="wheel">
+          <circle cx="760" cy="252" r="58" fill="#121216" />
+          <circle cx="760" cy="252" r="56" fill="none" stroke="#26262d" stroke-width="3" />
+          <g class="rim" style="transform-origin:760px 252px">
+            <circle cx="760" cy="252" r="32" fill="url(#g-rim)" />
+            <path d="M760 222 L760 282 M730 252 L790 252 M739 231 L781 273 M781 231 L739 273" stroke="#3a3a44" stroke-width="5" />
+            <circle cx="760" cy="252" r="8" fill="#ff8000" />
+          </g>
+          <circle cx="760" cy="252" r="40" fill="none" stroke="#ff8000" stroke-width="4" stroke-dasharray="30 222" class="caliper" />
+        </g>
+      </symbol>
+    </defs>
+  </svg>
+
+  <!-- Símbolo do carro, reutilizado no hero e na seção do carro -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="g-body" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#ff9a3d" />
+        <stop offset="1" stop-color="#d96a00" />
+      </linearGradient>
+      <linearGradient id="g-dark" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#2a2a31" />
+        <stop offset="1" stop-color="#101014" />
+      </linearGradient>
+      <radialGradient id="g-rim" cx=".5" cy=".5" r=".5">
+        <stop offset="0" stop-color="#d9d9e0" />
+        <stop offset=".7" stop-color="#8c8c96" />
+        <stop offset="1" stop-color="#55555e" />
+      </radialGradient>
+      <symbol id="car" viewBox="0 0 1000 330">
+        <!-- sombra -->
+        <ellipse cx="540" cy="312" rx="440" ry="12" fill="#000" opacity=".55" />
+        <!-- asa traseira -->
+        <g class="car-wing">
+          <path d="M205 212 L182 128" stroke="#2b2b33" stroke-width="7" stroke-linecap="round" />
+          <path d="M240 208 L200 128" stroke="#2b2b33" stroke-width="5" stroke-linecap="round" />
+          <rect x="112" y="58" width="16" height="104" rx="3" fill="url(#g-dark)" />
+          <path d="M122 76 Q170 60 222 70 L220 82 Q170 76 122 90 Z" fill="#ff8000" />
+          <path d="M122 100 Q175 88 232 98 L230 110 Q175 104 122 116 Z" fill="#1c1c22" />
+          <path d="M122 124 Q175 114 236 124 L234 134 Q175 130 122 140 Z" fill="#1c1c22" />
+        </g>
+        <!-- arco principal -->
+        <path d="M468 182 L458 104 Q456 92 444 92 L432 92" fill="none" stroke="#3a3a44" stroke-width="10" stroke-linecap="round" />
+        <!-- corpo -->
+        <path d="M968 246 C930 228 862 210 742 203 L622 192 Q602 190 592 176 L476 176 L446 148 L400 148 C334 148 292 172 250 194 L172 206 L166 252 L300 264 L700 264 L968 256 Z" fill="url(#g-body)" />
+        <!-- faixa preta superior -->
+        <path d="M742 203 L622 192 Q602 190 592 176 L476 176 L446 148 L400 148 C360 148 330 156 300 168 L306 178 C336 168 366 162 400 162 L444 162 L470 190 L596 190 Q610 204 628 206 L742 215 C850 222 920 236 960 250 L968 246 C930 228 862 210 742 203 Z" fill="#141418" opacity=".85" />
+        <!-- sidepod -->
+        <path d="M568 214 L338 214 C316 214 304 236 308 260 L568 260 Z" fill="url(#g-dark)" />
+        <path d="M568 214 L556 214 L556 260 L568 260 Z" fill="#000" opacity=".5" />
+        <text x="440" y="252" text-anchor="middle" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="800" font-style="italic" font-size="44" fill="#fff">38</text>
+        <!-- piloto -->
+        <circle cx="524" cy="150" r="24" fill="#f3f3f5" />
+        <path d="M530 138 Q552 140 548 158 L532 158 Z" fill="#101014" />
+        <path d="M502 150 Q506 128 526 126" fill="none" stroke="#ff8000" stroke-width="5" />
+        <!-- volante / arco frontal -->
+        <path d="M598 180 L592 160" stroke="#3a3a44" stroke-width="7" stroke-linecap="round" />
+        <!-- asa dianteira -->
+        <path d="M858 272 L992 268 L996 282 L858 286 Z" fill="#1c1c22" />
+        <rect x="978" y="248" width="12" height="38" rx="3" fill="#ffffff" />
+        <!-- suspensão -->
+        <g stroke="#55555e" stroke-width="4" stroke-linecap="round">
+          <path d="M760 250 L690 222 M760 250 L690 256" />
+          <path d="M238 250 L310 224 M238 250 L310 258" />
+        </g>
+        <!-- rodas -->
+        <g class="wheel">
+          <circle cx="238" cy="252" r="58" fill="#121216" />
+          <circle cx="238" cy="252" r="56" fill="none" stroke="#26262d" stroke-width="3" />
+          <g class="rim" style="transform-origin:238px 252px">
+            <circle cx="238" cy="252" r="32" fill="url(#g-rim)" />
+            <path d="M238 222 L238 282 M208 252 L268 252 M217 231 L259 273 M259 231 L217 273" stroke="#3a3a44" stroke-width="5" />
+            <circle cx="238" cy="252" r="8" fill="#ff8000" />
+          </g>
+        </g>
+        <g class="wheel">
+          <circle cx="760" cy="252" r="58" fill="#121216" />
+          <circle cx="760" cy="252" r="56" fill="none" stroke="#26262d" stroke-width="3" />
+          <g class="rim" style="transform-origin:760px 252px">
+            <circle cx="760" cy="252" r="32" fill="url(#g-rim)" />
+            <path d="M760 222 L760 282 M730 252 L790 252 M739 231 L781 273 M781 231 L739 273" stroke="#3a3a44" stroke-width="5" />
+            <circle cx="760" cy="252" r="8" fill="#ff8000" />
+          </g>
+          <circle cx="760" cy="252" r="40" fill="none" stroke="#ff8000" stroke-width="4" stroke-dasharray="30 222" class="caliper" />
+        </g>
+      </symbol>
+    </defs>
+  </svg>
+
+  <!-- ===================== MENU (igual em todas as páginas) ===================== -->
+  <header class="nav" id="nav">
+    <div class="container nav__inner">
+      <a href="index.html" class="brand" aria-label="Taurus Racing, página inicial">
+        <img src="assets/img/logo.svg" alt="" width="40" height="40" />
+        <span class="brand__text">TAURUS<b>RACING</b></span>
+      </a>
+      <nav class="nav__links" id="nav-links" aria-label="Páginas">
+        <a href="index.html">Início</a>
+        <a href="oficina.html" class="is-active" aria-current="page">Oficina 3D</a>
+        <a href="laboratorio.html">Laboratório</a>
+        <a href="competicao.html">Competição</a>
+        <a href="processo-seletivo.html">Faça parte</a>
+        <a href="contato.html">Contato</a>
+        <a href="patrocinio.html" class="btn btn--sm btn--primary">Patrocine</a>
+      </nav>
+      <button class="nav__toggle" id="nav-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav-links">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="conteudo">
+    <!-- ===================== ABERTURA 3D (rolagem guiada) ===================== -->
+    <section class="story" id="topo" aria-label="O TR-04 por dentro">
+      <div class="story__sticky">
+        <div class="stage stage--story" id="stage-story">
+          <div class="stage__fallback" aria-hidden="true">
+            <svg class="car" viewBox="0 0 1000 330"><use href="#car" /></svg>
+          </div>
+        </div>
+        <div class="story__shade" aria-hidden="true"></div>
+        <div class="story__tags" aria-hidden="true">
+          <span class="tag3d" data-tag-step="2" data-anchor="chassi">Treliça de aço</span>
+          <span class="tag3d" data-tag-step="3" data-anchor="suspensao">Bandejas + coilover</span>
+          <span class="tag3d" data-tag-step="4" data-anchor="admissao">Restritor de 20 mm</span>
+          <span class="tag3d" data-tag-step="5" data-anchor="aero">Asa traseira de 2 elementos</span>
+        </div>
+
+        <div class="story__panels">
+          <div class="story__step story__step--hero" data-step="0">
+            <p class="eyebrow"><span class="dot"></span> Oficina 3D · TR-04 · nº 38</p>
+            <h1 class="hero__title" aria-label="Oficina 3D">
+              <span class="line" aria-hidden="true">OFICINA</span>
+              <span class="line line--accent" aria-hidden="true">3D</span>
+            </h1>
+            <p class="hero__lead">
+              Role a página e desmonte o TR-04, o carro da Taurus Racing: chassi, suspensão, motor,
+              aerodinâmica e a vista explodida. Depois, abra o carro você mesmo na garagem.
+            </p>
+            <div class="hero__cta">
+              <a href="#garagem" class="btn btn--primary">Ir direto para a garagem</a>
+              <a href="laboratorio.html" class="btn btn--ghost">Ver as simulações</a>
+            </div>
+          </div>
+
+          <article class="story__step" data-step="1">
+            <p class="kicker">01 · TR-04 · nº 38</p>
+            <h2 class="story__h">Um carro de corrida feito por alunos</h2>
+            <p>Um Fórmula SAE a combustão tem por volta de 3 metros de comprimento e costuma pesar entre 200 e 250 kg sem o piloto. Cada peça passa por projeto, cálculo e fabricação dentro da equipe ou com parceiros.</p>
+          </article>
+
+          <article class="story__step story__step--right" data-step="2">
+            <p class="kicker">02 · Chassi</p>
+            <h2 class="story__h">Treliça de tubos de aço</h2>
+            <p>Por baixo da carenagem fica uma estrutura de tubos soldados. Os arcos principal e frontal protegem o piloto numa capotagem e a estrutura lateral absorve impactos. O regulamento fixa diâmetro e espessura mínimos de cada tubo.</p>
+          </article>
+
+          <article class="story__step" data-step="3">
+            <p class="kicker">03 · Suspensão</p>
+            <h2 class="story__h">Duplo A com coilover</h2>
+            <p>Duas bandejas em A seguram cada roda. O conjunto de mola e amortecedor (coilover) liga a bandeja direto ao chassi, sem balancim. A geometria das bandejas decide quanto a roda inclina nas curvas.</p>
+            <a class="link" href="laboratorio.html#suspensao">Mexa na geometria no laboratório →</a>
+          </article>
+
+          <article class="story__step story__step--right" data-step="4">
+            <p class="kicker">04 · Powertrain</p>
+            <h2 class="story__h">Motor de moto com restritor</h2>
+            <p>Motor de motocicleta de até 710 cm³ atrás do piloto. Todo o ar que ele respira passa por um restritor de 20 mm exigido pela regra. A força chega às rodas traseiras por corrente e diferencial.</p>
+          </article>
+
+          <article class="story__step" data-step="5">
+            <p class="kicker">05 · Aerodinâmica</p>
+            <h2 class="story__h">Asas que empurram o carro para baixo</h2>
+            <p>A asa dianteira tem um elemento só, com as pontas arqueadas, e a traseira tem dois. Elas funcionam como a de um avião de cabeça para baixo: desviam o ar para cima e o carro é empurrado contra o chão. Mais aderência nas curvas, mais arrasto nas retas.</p>
+            <p class="story__note">Visualização ilustrativa do fluxo de ar.</p>
+          </article>
+
+          <article class="story__step story__step--right" data-step="6">
+            <p class="kicker">06 · Vista explodida</p>
+            <h2 class="story__h">Cada conjunto tem um responsável</h2>
+            <p>Chassi, suspensão, powertrain, freios, eletrônica e aerodinâmica. Cada área da equipe cuida de um conjunto, e todos precisam caber no mesmo carro e no mesmo prazo.</p>
+            <a class="btn btn--primary" href="#garagem">Montar e desmontar na garagem</a>
+          </article>
+        </div>
+
+        <nav class="story__nav" aria-label="Capítulos do carro">
+          <button type="button" data-go="0"><span>Oficina</span></button>
+          <button type="button" data-go="1"><span>TR-04</span></button>
+          <button type="button" data-go="2"><span>Chassi</span></button>
+          <button type="button" data-go="3"><span>Suspensão</span></button>
+          <button type="button" data-go="4"><span>Powertrain</span></button>
+          <button type="button" data-go="5"><span>Aerodinâmica</span></button>
+          <button type="button" data-go="6"><span>Explodida</span></button>
+        </nav>
+        <div class="story__rail" aria-hidden="true"><span id="story-bar"></span></div>
+        <div class="story__hint" aria-hidden="true"><span class="mouse"></span> Role para desmontar o carro</div>
+      </div>
+    </section>
+    <!-- ===================== GARAGEM 3D ===================== -->
+    <section class="section section--alt garage" id="garagem">
+      <div class="container">
+        <div class="section__head reveal">
+          <p class="kicker">01 · Garagem 3D</p>
+          <h2 class="h2">Abra o carro você mesmo</h2>
+          <p class="section__sub">Gire o carro, ligue o raio-X, separe as peças, esterce as rodas e dê a partida no motor. Os pontos laranja explicam cada sistema.</p>
+        </div>
+      </div>
+      <div class="container garage__wrap">
+        <div class="garage__stage stage" id="stage-garage">
+          <div class="garage__labels" id="garage-labels">
+            <button type="button" class="hot3d" data-anchor="chassi"><i></i><span>Chassi</span></button>
+            <button type="button" class="hot3d" data-anchor="suspensao"><i></i><span>Suspensão</span></button>
+            <button type="button" class="hot3d" data-anchor="freios"><i></i><span>Freios</span></button>
+            <button type="button" class="hot3d" data-anchor="powertrain"><i></i><span>Motor</span></button>
+            <button type="button" class="hot3d" data-anchor="admissao"><i></i><span>Admissão</span></button>
+            <button type="button" class="hot3d" data-anchor="escape"><i></i><span>Escape</span></button>
+            <button type="button" class="hot3d" data-anchor="transmissao"><i></i><span>Transmissão</span></button>
+            <button type="button" class="hot3d" data-anchor="aero"><i></i><span>Aerodinâmica</span></button>
+            <button type="button" class="hot3d" data-anchor="cockpit"><i></i><span>Cockpit</span></button>
+          </div>
+          <div class="garage__views" role="group" aria-label="Vistas">
+            <button type="button" data-view="34" class="is-active">3/4</button>
+            <button type="button" data-view="lado">Lado</button>
+            <button type="button" data-view="frente">Frente</button>
+            <button type="button" data-view="tras">Trás</button>
+            <button type="button" data-view="topo">Topo</button>
+          </div>
+          <div class="garage__zoom" role="group" aria-label="Zoom">
+            <button type="button" data-zoom="0.8" aria-label="Aproximar">+</button>
+            <button type="button" data-zoom="1.25" aria-label="Afastar">−</button>
+          </div>
+          <button type="button" class="garage__touch" id="g-touch" hidden>Girar o carro</button>
+          <aside class="garage__info" id="g-info" hidden aria-live="polite">
+            <button type="button" class="garage__close" id="g-info-close" aria-label="Fechar">×</button>
+            <p class="kicker">Sistema</p>
+            <h3 id="g-info-title"></h3>
+            <p class="garage__value" id="g-info-value" hidden></p>
+            <p id="g-info-text"></p>
+          </aside>
+          <div class="tach" id="tach" aria-hidden="true">
+            <div class="tach__leds" id="tach-leds"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            <svg viewBox="0 0 200 120">
+              <path d="M18 108 A84 84 0 0 1 182 108" class="tach__track" />
+              <path d="M18 108 A84 84 0 0 1 182 108" class="tach__fill" id="tach-fill" pathLength="100" />
+              <path d="M167 60 A84 84 0 0 1 182 108" class="tach__red" />
+              <line x1="100" y1="108" x2="100" y2="34" class="tach__needle" id="tach-needle" />
+              <circle cx="100" cy="108" r="6" class="tach__hub" />
+            </svg>
+            <div class="tach__read"><strong id="tach-rpm">0</strong><span>rpm</span></div>
+          </div>
+          <p class="garage__note">TR-04 redesenhado em código a partir de fotos do carro. As medidas são aproximadas.</p>
+          <div class="photo-hud" id="photo-hud" hidden><span class="dot"></span> Renderizando · <strong id="photo-samples">0</strong> amostras</div>
+          <div class="stage__fallback stage__fallback--msg"><p>Seu navegador não conseguiu abrir o 3D (WebGL). Tente pelo Chrome, Edge, Firefox ou Safari atualizados.</p></div>
+        </div>
+
+        <div class="garage__panel reveal">
+          <fieldset class="ctrl">
+            <legend>Visão</legend>
+            <div class="toggles">
+              <button type="button" class="toggle" data-toggle="xray" aria-pressed="false"><i></i>Raio-X</button>
+              <button type="button" class="toggle" data-toggle="air" aria-pressed="false"><i></i>Fluxo de ar</button>
+              <button type="button" class="toggle" data-toggle="driver" aria-pressed="true"><i></i>Piloto</button>
+            </div>
+          </fieldset>
+          <label class="ctrl range">
+            <span class="range__head"><span>Vista explodida</span><output id="o-explode">0%</output></span>
+            <input type="range" id="g-explode" min="0" max="100" value="0" />
+          </label>
+          <label class="ctrl range">
+            <span class="range__head"><span>Direção</span><output id="o-steer">0°</output></span>
+            <input type="range" id="g-steer" min="-100" max="100" value="0" />
+          </label>
+          <label class="ctrl range">
+            <span class="range__head"><span>Suspensão (curso)</span><output id="o-heave">0 mm</output></span>
+            <input type="range" id="g-heave" min="-100" max="100" value="0" />
+          </label>
+          <fieldset class="ctrl">
+            <legend>Pintura</legend>
+            <div class="swatches">
+              <button type="button" data-paint="taurus" class="is-active" style="--c:linear-gradient(135deg,#111114 58%,#ff7a00 58%)" aria-label="TR-04 (original)" title="TR-04 original"></button>
+              <button type="button" data-paint="papaya" style="--c:#ff8000" aria-label="Papaya"></button>
+              <button type="button" data-paint="preto" style="--c:#141418" aria-label="Preto"></button>
+              <button type="button" data-paint="branco" style="--c:#f2f2f2" aria-label="Branco"></button>
+              <button type="button" data-paint="carbono" style="--c:#2a2a31" aria-label="Carbono"></button>
+            </div>
+          </fieldset>
+          <fieldset class="ctrl ctrl--photo">
+            <legend>Modo foto</legend>
+            <div class="engine">
+              <button type="button" class="btn btn--primary btn--sm" id="g-photo">Renderizar foto realista</button>
+              <button type="button" class="btn btn--ghost btn--sm" id="g-photo-save" hidden>Salvar imagem</button>
+            </div>
+            <p class="ctrl__hint">Traçado de raios: a imagem fica mais limpa a cada segundo. Dá para girar o carro enquanto renderiza. Funciona melhor em computador com placa de vídeo.</p>
+          </fieldset>
+          <fieldset class="ctrl ctrl--engine">
+            <legend>Motor</legend>
+            <div class="engine">
+              <button type="button" class="btn btn--primary btn--sm" id="g-engine">Dar partida</button>
+              <button type="button" class="btn btn--ghost btn--sm" id="g-throttle" disabled>Acelerar (segure)</button>
+              <button type="button" class="icon-btn" id="g-mute" aria-pressed="false" aria-label="Sem som">🔊</button>
+            </div>
+            <p class="ctrl__hint">No computador, segure a barra de espaço para acelerar. O som é gerado no navegador.</p>
+          </fieldset>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================== RODAPÉ (igual em todas as páginas) ===================== -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <img src="assets/img/logo.svg" alt="" width="56" height="56" />
+        <div>
+          <strong>Taurus Racing</strong>
+          <span>Fórmula SAE · Universidade Federal do Triângulo Mineiro</span>
+        </div>
+      </div>
+      <nav class="footer__nav" aria-label="Páginas do site">
+        <a href="index.html">Início</a>
+        <a href="oficina.html">Oficina 3D</a>
+        <a href="laboratorio.html">Laboratório</a>
+        <a href="competicao.html">Competição</a>
+        <a href="processo-seletivo.html">Faça parte</a>
+        <a href="contato.html">Contato</a>
+        <a href="patrocinio.html">Patrocínio</a>
+      </nav>
+      <nav class="footer__social" id="footer-social" aria-label="Redes sociais"></nav>
+    </div>
+    <div class="container footer__legal">
+      <p>© <span id="year"></span> Taurus Racing · Projeto de extensão da UFTM · Uberaba/MG</p>
+      <a href="#" class="link">Voltar ao topo ↑</a>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/main.js"></script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
