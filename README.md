@@ -85,7 +85,7 @@ A partir daí:
 
 O que é publicado e os cabeçalhos de cache ficam em `firebase.json`. O site é a raiz do repositório; `README.md`, `tools/`, as regras e os arquivos ocultos ficam de fora.
 
-Para publicar do próprio computador (opcional): `npm install -g firebase-tools`, `firebase login` e `firebase deploy` na pasta do repositório.
+Para publicar do próprio computador (opcional, precisa do Node.js): `npm install -g firebase-tools`, `firebase login` e `firebase deploy` na pasta do repositório. Se o Firestore ainda não existir, o deploy cria o banco em São Paulo (`southamerica-east1`, definido em `firebase.json`).
 
 ### Formulários no Firebase
 
