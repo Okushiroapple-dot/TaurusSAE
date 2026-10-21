@@ -8,12 +8,12 @@ HTML, CSS e JavaScript puros, sem etapa de build. O 3D usa [Three.js](https://th
 
 | Página | Arquivo | O que tem |
 | --- | --- | --- |
-| Início | `index.html` | Abertura com o TR-04 em 3D, o que é a equipe, o ciclo projetar → fabricar → testar → competir, o papel como projeto de extensão da UFTM, a grade de membros (se preenchida) e atalhos para as outras páginas |
+| Início | `index.html` | Página de apresentação, curta de propósito: abertura com o TR-04 em 3D, o que é o projeto (com uma ficha rápida), o que a equipe faz, os objetivos e um convite para o processo seletivo e o patrocínio |
 | Oficina 3D | `oficina.html` | Tour com rolagem guiada: a câmera passa pela carenagem, pelo chassi em raio-X, pela suspensão, pelo motor com o escape aquecido, pelo fluxo de ar nas asas e termina na vista explodida. Depois, a garagem: girar o carro, raio-X, vista explodida, direção, suspensão, pintura, pontos clicáveis, partida no motor com conta-giros e som, e modo foto com traçado de raios |
 | Laboratório | `laboratorio.html` | Volta de autocross com mapa animado e diagrama g-g, aceleração de 75 m, skidpad e geometria de suspensão duplo A com pontos arrastáveis. `laboratorio.html#suspensao` (ou `#aceleracao`, `#skidpad`) abre direto na aba |
 | Competição | `competicao.html` | Provas estáticas e dinâmicas da Fórmula SAE Brasil, linha do tempo desde 2015 e galeria |
 | Patrocínio | `patrocinio.html` | Cotas, logos dos parceiros e uma prévia 3D: a empresa escolhe o logo e vê na lateral do carro (a imagem não sai do navegador) |
-| Faça parte | `processo-seletivo.html` | Situação do processo seletivo, requisitos, formulário da lista de interesse e as áreas da equipe |
+| Faça parte | `processo-seletivo.html` | Situação do processo seletivo, requisitos, formulário da lista de interesse, o que o aluno ganha participando (extensão), as áreas da equipe e a grade de membros (se preenchida) |
 | Contato | `contato.html` | Redes, mapa e formulário de mensagem. `contato.html?assunto=Patrocínio` já abre com o assunto escolhido (é para onde vai o botão "Pedir proposta") |
 
 O menu e o rodapé se repetem no topo e no fim de cada arquivo `.html`. Para mudar um link do menu, mude nos sete arquivos. O 3D só é baixado nas páginas que mostram o carro (início, oficina e patrocínio).

@@ -82,27 +82,10 @@
 
   // o link da página atual já vem marcado no HTML (aria-current="page")
 
-  /* ---------- números do hero ---------- */
-  if (eq.membros) {
-    var m = $('.stats [data-count="32"]');
-    if (m) { m.dataset.count = eq.membros; m.textContent = eq.membros; }
-  }
+  /* ---------- ficha do projeto (página inicial) ---------- */
+  var fatoMembros = $("#fato-membros");
+  if (fatoMembros && eq.membros) fatoMembros.textContent = eq.membros;
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  function countUp(node) {
-    var end = parseInt(node.dataset.count, 10);
-    if (isNaN(end) || reduce) return;
-    var start = node.hasAttribute("data-plain") ? end - 40 : 0;
-    var t0 = null, dur = 1400;
-    function step(t) {
-      if (!t0) t0 = t;
-      var p = Math.min((t - t0) / dur, 1);
-      var eased = 1 - Math.pow(1 - p, 3);
-      node.textContent = Math.round(start + (end - start) * eased);
-      if (p < 1) requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
-  }
-  $$(".stats [data-count]").forEach(countUp);
 
   /* ---------- abas de provas ---------- */
   var tabs = $$("#competicao .tab");
@@ -145,8 +128,6 @@
   var mWrap = $("#membros-wrap");
   if (membros.length && mWrap) {
     mWrap.hidden = false;
-    var mSec = $("#membros-sec");
-    if (mSec) mSec.hidden = false;
     var mg = $("#membros");
     membros.forEach(function (p) {
       var initials = (p.nome || "?").split(/\s+/).map(function (w) { return w[0]; }).slice(0, 2).join("").toUpperCase();
