@@ -34,17 +34,13 @@
   function mailto(subject) {
     return "mailto:" + ct.email + "?subject=" + encodeURIComponent(subject);
   }
-  var primaryContact = ct.email
-    ? mailto("Patrocínio · Taurus Racing")
-    : ct.instagram;
+  // pedidos de patrocínio vão para o formulário da página de contato, já com o assunto
+  var primaryContact = "contato.html?assunto=" + encodeURIComponent("Patrocínio") + "#mensagem";
 
   var ctaSponsor = $("#cta-sponsor");
-  if (ctaSponsor) {
-    ctaSponsor.href = primaryContact;
-    if (!ct.email) { ctaSponsor.target = "_blank"; ctaSponsor.rel = "noopener"; ctaSponsor.textContent = "Pedir proposta no Instagram"; }
-  }
-  if (ct.midiaKit) {
-    var kit = $("#cta-kit");
+  if (ctaSponsor) ctaSponsor.href = primaryContact;
+  var kit = $("#cta-kit");
+  if (ct.midiaKit && kit) {
     kit.href = ct.midiaKit;
     kit.hidden = false;
   }
@@ -84,20 +80,7 @@
   }, { passive: true });
   onScroll();
 
-  // link ativo conforme a seção visível
-  var navMap = {};
-  $$('a[href^="#"]', links).forEach(function (a) { navMap[a.getAttribute("href").slice(1)] = a; });
-  if ("IntersectionObserver" in window) {
-    var spy = new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) {
-        if (en.isIntersecting && navMap[en.target.id]) {
-          Object.keys(navMap).forEach(function (k) { navMap[k].classList.remove("is-active"); });
-          navMap[en.target.id].classList.add("is-active");
-        }
-      });
-    }, { rootMargin: "-45% 0px -50% 0px" });
-    $$("main section[id]").forEach(function (s) { spy.observe(s); });
-  }
+  // o link da página atual já vem marcado no HTML (aria-current="page")
 
   /* ---------- números do hero ---------- */
   if (eq.membros) {
@@ -130,6 +113,7 @@
       t.setAttribute("aria-selected", String(on));
       t.tabIndex = on ? 0 : -1;
       var panel = document.getElementById(t.getAttribute("aria-controls"));
+      if (!panel) return;
       panel.hidden = !on;
       panel.classList.toggle("is-active", on);
     });
@@ -146,7 +130,7 @@
 
   /* ---------- linha do tempo ---------- */
   var tl = $("#timeline");
-  (C.linhaDoTempo || []).forEach(function (it) {
+  if (tl) (C.linhaDoTempo || []).forEach(function (it) {
     tl.appendChild(el("li", { class: "tl reveal" + (it.destaque ? " tl--hl" : "") }, [
       el("div", { class: "tl__card" }, [
         el("div", { class: "tl__year", text: it.ano }),
@@ -158,8 +142,11 @@
 
   /* ---------- membros ---------- */
   var membros = C.membros || [];
-  if (membros.length) {
-    $("#membros-wrap").hidden = false;
+  var mWrap = $("#membros-wrap");
+  if (membros.length && mWrap) {
+    mWrap.hidden = false;
+    var mSec = $("#membros-sec");
+    if (mSec) mSec.hidden = false;
     var mg = $("#membros");
     membros.forEach(function (p) {
       var initials = (p.nome || "?").split(/\s+/).map(function (w) { return w[0]; }).slice(0, 2).join("").toUpperCase();
@@ -186,11 +173,11 @@
   ];
   var patrocinadores = C.patrocinadores || [];
   function slot() {
-    var a = el("a", { class: "sponsor sponsor--slot", href: primaryContact, html: "<div><b>+</b>Sua marca aqui</div>" });
-    if (!ct.email) { a.target = "_blank"; a.rel = "noopener"; }
-    return a;
+    return el("a", { class: "sponsor sponsor--slot", href: primaryContact, html: "<div><b>+</b>Sua marca aqui</div>" });
   }
-  if (patrocinadores.length) {
+  if (!sp) {
+    // página sem a lista de patrocinadores
+  } else if (patrocinadores.length) {
     tiersOrder.forEach(function (t) {
       var list = patrocinadores.filter(function (p) { return (p.cota || "apoio") === t[0]; });
       if (!list.length) return;
@@ -234,7 +221,7 @@
   }
   function closeLightbox() { lb.hidden = true; }
 
-  if (fotos.length) {
+  if (gal && fotos.length) {
     fotos.forEach(function (f) {
       var fig = el("figure", { class: "reveal", tabindex: "0" }, [
         el("img", { src: f.src, alt: f.legenda || "Foto da Taurus Racing", loading: "lazy" }),
@@ -248,7 +235,7 @@
   // atalho para o Instagram (sempre no fim da galeria)
   var tiles = "";
   ["T", "R", "38", "UF", "TM", "FSAE"].forEach(function (t) { tiles += "<span>" + t + "</span>"; });
-  gal.appendChild(el("div", { class: "insta reveal" }, [
+  if (gal) gal.appendChild(el("div", { class: "insta reveal" }, [
     el("div", {}, [
       el("h3", { text: "Os bastidores estão no Instagram" }),
       el("p", { text: "Solda do chassi, testes, viagens para a competição e o dia a dia da oficina. Tudo sai primeiro no " + (ct.instagramUser || "Instagram") + "." }),
@@ -260,9 +247,11 @@
   /* ---------- processo seletivo ---------- */
   var ps = C.processoSeletivo || {};
   var st = $("#ps-status");
-  st.textContent = ps.aberto ? "Inscrições abertas" : "Lista de interesse";
-  st.classList.toggle("is-open", !!ps.aberto);
-  $("#ps-text").textContent = ps.texto || "";
+  if (st) {
+    st.textContent = ps.aberto ? "Inscrições abertas" : "Lista de interesse";
+    st.classList.toggle("is-open", !!ps.aberto);
+    $("#ps-text").textContent = ps.texto || "";
+  }
 
   /* ---------- formulários ---------- */
   // Primeiro tenta gravar no Firestore (js/forms.js). Se o Firebase não estiver
@@ -393,12 +382,26 @@
     if (/^https?:/.test(href)) { a.target = "_blank"; a.rel = "noopener"; }
     return a;
   }
-  if (ct.instagram) cards.appendChild(ccard("instagram", "Instagram", ct.instagramUser || "Instagram", ct.instagram));
-  if (ct.email) cards.appendChild(ccard("mail", "E-mail", ct.email, "mailto:" + ct.email));
-  if (ct.whatsapp) cards.appendChild(ccard("whatsapp", "WhatsApp", "Mandar mensagem", "https://wa.me/" + ct.whatsapp));
-  if (ct.linkedin) cards.appendChild(ccard("linkedin", "LinkedIn", "Taurus Racing FSAE", ct.linkedin));
-  if (ct.facebook) cards.appendChild(ccard("facebook", "Facebook", "taurusracingfsae", ct.facebook));
-  $("#address").textContent = eq.endereco || "";
+  if (cards) {
+    if (ct.instagram) cards.appendChild(ccard("instagram", "Instagram", ct.instagramUser || "Instagram", ct.instagram));
+    if (ct.email) cards.appendChild(ccard("mail", "E-mail", ct.email, "mailto:" + ct.email));
+    if (ct.whatsapp) cards.appendChild(ccard("whatsapp", "WhatsApp", "Mandar mensagem", "https://wa.me/" + ct.whatsapp));
+    if (ct.linkedin) cards.appendChild(ccard("linkedin", "LinkedIn", "Taurus Racing FSAE", ct.linkedin));
+    if (ct.facebook) cards.appendChild(ccard("facebook", "Facebook", "taurusracingfsae", ct.facebook));
+  }
+  var addr = $("#address");
+  if (addr) addr.textContent = eq.endereco || "";
+
+  // contato.html?assunto=Patrocínio já chega com o assunto escolhido no formulário
+  var assunto = $("#c-assunto");
+  if (assunto && window.URLSearchParams) {
+    var pedido = new URLSearchParams(location.search).get("assunto");
+    if (pedido) {
+      $$("option", assunto).forEach(function (o) {
+        if (o.value.toLowerCase() === pedido.toLowerCase()) assunto.value = o.value;
+      });
+    }
+  }
 
   var social = $("#footer-social");
   [["instagram", ct.instagram, "Instagram"], ["facebook", ct.facebook, "Facebook"], ["linkedin", ct.linkedin, "LinkedIn"]]

@@ -6,18 +6,17 @@ HTML, CSS e JavaScript puros, sem etapa de build. O 3D usa [Three.js](https://th
 
 ## O que tem no site
 
-| Seção | O que faz |
-| --- | --- |
-| Abertura 3D | O TR-04, carro nº 38, em 3D. Conforme a pessoa rola a página, a câmera passa pela carenagem, pelo chassi em raio-X, pela suspensão se mexendo, pelo motor com o escape aquecido, pelo fluxo de ar nas asas e termina na vista explodida |
-| Equipe | O que é a Taurus e o ciclo projetar → fabricar → testar → competir |
-| Garagem 3D | O carro para girar à vontade: raio-X, fluxo de ar, vista explodida, direção, curso da suspensão, pintura, pontos clicáveis por sistema, partida no motor com conta-giros e som gerado no navegador, e modo foto com traçado de raios (salva a imagem em PNG) |
-| Laboratório | Simulações: volta de autocross com mapa animado e diagrama g-g, aceleração de 75 m com semáforo de largada, skidpad e geometria de suspensão duplo A com pontos arrastáveis |
-| Competição | Provas estáticas e dinâmicas da Fórmula SAE Brasil |
-| Trajetória | Linha do tempo desde 2015 |
-| Áreas | Divisão interna da equipe e, se preenchida, a grade de membros |
-| Extensão | O papel da equipe como projeto de extensão da UFTM |
-| Patrocínio | Cotas, logos dos parceiros e uma prévia 3D: a empresa escolhe o logo e vê na lateral do carro (a imagem não sai do navegador) |
-| Galeria, Faça parte, Contato | Fotos, formulário do processo seletivo, redes e mapa |
+| Página | Arquivo | O que tem |
+| --- | --- | --- |
+| Início | `index.html` | Abertura com o TR-04 em 3D, o que é a equipe, o ciclo projetar → fabricar → testar → competir, o papel como projeto de extensão da UFTM, a grade de membros (se preenchida) e atalhos para as outras páginas |
+| Oficina 3D | `oficina.html` | Tour com rolagem guiada: a câmera passa pela carenagem, pelo chassi em raio-X, pela suspensão, pelo motor com o escape aquecido, pelo fluxo de ar nas asas e termina na vista explodida. Depois, a garagem: girar o carro, raio-X, vista explodida, direção, suspensão, pintura, pontos clicáveis, partida no motor com conta-giros e som, e modo foto com traçado de raios |
+| Laboratório | `laboratorio.html` | Volta de autocross com mapa animado e diagrama g-g, aceleração de 75 m, skidpad e geometria de suspensão duplo A com pontos arrastáveis. `laboratorio.html#suspensao` (ou `#aceleracao`, `#skidpad`) abre direto na aba |
+| Competição | `competicao.html` | Provas estáticas e dinâmicas da Fórmula SAE Brasil, linha do tempo desde 2015 e galeria |
+| Patrocínio | `patrocinio.html` | Cotas, logos dos parceiros e uma prévia 3D: a empresa escolhe o logo e vê na lateral do carro (a imagem não sai do navegador) |
+| Faça parte | `processo-seletivo.html` | Situação do processo seletivo, requisitos, formulário da lista de interesse e as áreas da equipe |
+| Contato | `contato.html` | Redes, mapa e formulário de mensagem. `contato.html?assunto=Patrocínio` já abre com o assunto escolhido (é para onde vai o botão "Pedir proposta") |
+
+O menu e o rodapé se repetem no topo e no fim de cada arquivo `.html`. Para mudar um link do menu, mude nos sete arquivos. O 3D só é baixado nas páginas que mostram o carro (início, oficina e patrocínio).
 
 O modelo 3D é o TR-04 redesenhado em código a partir de fotos do carro, então as medidas são aproximadas. Os números das simulações são típicos de um Fórmula SAE a combustão, não os do carro da equipe.
 
@@ -38,7 +37,7 @@ Quase tudo fica em **`js/config.js`**. Não precisa mexer no HTML.
 ### Textos do 3D e das simulações
 
 - Textos dos pontos clicáveis da garagem e enquadramento da câmera: `js/3d/parts.js`.
-- Capítulos da abertura (texto): `index.html`, seção `#topo`. Câmera e estado do carro em cada capítulo: lista `STEPS` em `js/3d/stage.js`.
+- Capítulos da abertura (texto): `oficina.html`, seção `#topo`. Câmera e estado do carro em cada capítulo: lista `STEPS` em `js/3d/stage.js`.
 - Carro de referência das simulações (massa, potência, pneu, asas): `REFERENCE` em `js/lab/physics.js`.
 - Traçado do autocross: pontos de controle em `js/lab/track.js`.
 
@@ -110,7 +109,13 @@ Importe o repositório e deixe o comando de build vazio. A pasta publicada é a 
 ## Estrutura
 
 ```
-index.html              página única
+index.html              página inicial
+oficina.html            oficina 3D (tour e garagem)
+laboratorio.html        simulações
+competicao.html         competição, trajetória e galeria
+patrocinio.html         patrocínio
+processo-seletivo.html  faça parte
+contato.html            contato
 css/style.css           estilos (cores e fontes no topo)
 js/config.js            conteúdo editável
 js/main.js              menu, formulários, galeria, patrocinadores, contato

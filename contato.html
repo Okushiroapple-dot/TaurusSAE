@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="pt-BR" class="no-js">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Contato · Taurus Racing</title>
+  <meta name="description" content="Fale com a Taurus Racing: patrocínio, imprensa, visitas e dúvidas. Redes sociais e endereço da oficina na UFTM, em Uberaba (MG)." />
+  <meta name="theme-color" content="#0b0b0d" />
+  <meta name="color-scheme" content="dark" />
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml" />
+  <link rel="canonical" href="https://taurus-racing.web.app/contato" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="pt_BR" />
+  <meta property="og:site_name" content="Taurus Racing" />
+  <meta property="og:title" content="Contato · Taurus Racing" />
+  <meta property="og:description" content="Fale com a Taurus Racing: patrocínio, imprensa, visitas e dúvidas. Redes sociais e endereço da oficina na UFTM, em Uberaba (MG)." />
+  <meta property="og:url" content="https://taurus-racing.web.app/contato" />
+  <meta property="og:image" content="https://taurus-racing.web.app/assets/img/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="preload" href="assets/fonts/barlow-condensed-latin-800-italic.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+  <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+
+  <!-- ===================== MENU (igual em todas as páginas) ===================== -->
+  <header class="nav" id="nav">
+    <div class="container nav__inner">
+      <a href="index.html" class="brand" aria-label="Taurus Racing, página inicial">
+        <img src="assets/img/logo.svg" alt="" width="40" height="40" />
+        <span class="brand__text">TAURUS<b>RACING</b></span>
+      </a>
+      <nav class="nav__links" id="nav-links" aria-label="Páginas">
+        <a href="index.html">Início</a>
+        <a href="oficina.html">Oficina 3D</a>
+        <a href="laboratorio.html">Laboratório</a>
+        <a href="competicao.html">Competição</a>
+        <a href="processo-seletivo.html">Faça parte</a>
+        <a href="contato.html" class="is-active" aria-current="page">Contato</a>
+        <a href="patrocinio.html" class="btn btn--sm btn--primary">Patrocine</a>
+      </nav>
+      <button class="nav__toggle" id="nav-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav-links">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="conteudo">
+    <!-- ===================== CONTATO ===================== -->
+    <section class="section" id="contato">
+      <div class="container">
+        <div class="section__head reveal">
+          <p class="kicker">01 · Contato</p>
+          <h1 class="h2">Fale com a Taurus</h1>
+        </div>
+
+        <div class="contact">
+          <div class="contact__cards" id="contact-cards"></div>
+          <div class="contact__map reveal">
+            <iframe title="Mapa do ICTE/UFTM em Uberaba" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+              src="https://www.google.com/maps?q=ICTE+UFTM+Av.+Dr.+Randolfo+Borges+J%C3%BAnior+1400+Uberaba&output=embed"></iframe>
+            <p id="address"></p>
+          </div>
+        </div>
+
+        <div class="contact-form split" id="mensagem">
+          <div class="reveal">
+            <h3 class="h3">Mande uma mensagem</h3>
+            <p class="prose">Patrocínio, apoio em material ou serviço, imprensa, visita à oficina ou qualquer dúvida. A mensagem chega direto para a equipe e a resposta vai para o seu e-mail.</p>
+          </div>
+          <form class="form reveal" id="contact-form" novalidate>
+            <div class="field-row">
+              <div class="field">
+                <label for="c-nome">Nome</label>
+                <input id="c-nome" name="nome" type="text" autocomplete="name" maxlength="120" required />
+              </div>
+              <div class="field">
+                <label for="c-email">E-mail</label>
+                <input id="c-email" name="email" type="email" autocomplete="email" maxlength="160" required />
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="c-assunto">Assunto</label>
+                <select id="c-assunto" name="assunto" required>
+                  <option value="">Selecione</option>
+                  <option>Patrocínio</option>
+                  <option>Apoio em material ou serviço</option>
+                  <option>Imprensa</option>
+                  <option>Visita ou evento</option>
+                  <option>Outro</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="c-empresa">Empresa <small>(opcional)</small></label>
+                <input id="c-empresa" name="empresa" type="text" autocomplete="organization" maxlength="120" />
+              </div>
+            </div>
+            <div class="field">
+              <label for="c-msg">Mensagem</label>
+              <textarea id="c-msg" name="mensagem" rows="5" maxlength="4000" required></textarea>
+            </div>
+            <div class="hp" aria-hidden="true">
+              <label>Deixe em branco <input name="site" type="text" tabindex="-1" autocomplete="off" /></label>
+            </div>
+            <button class="btn btn--primary btn--block" type="submit">Enviar mensagem</button>
+            <p class="form__note" role="status"></p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================== RODAPÉ (igual em todas as páginas) ===================== -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <img src="assets/img/logo.svg" alt="" width="56" height="56" />
+        <div>
+          <strong>Taurus Racing</strong>
+          <span>Fórmula SAE · Universidade Federal do Triângulo Mineiro</span>
+        </div>
+      </div>
+      <nav class="footer__nav" aria-label="Páginas do site">
+        <a href="index.html">Início</a>
+        <a href="oficina.html">Oficina 3D</a>
+        <a href="laboratorio.html">Laboratório</a>
+        <a href="competicao.html">Competição</a>
+        <a href="processo-seletivo.html">Faça parte</a>
+        <a href="contato.html">Contato</a>
+        <a href="patrocinio.html">Patrocínio</a>
+      </nav>
+      <nav class="footer__social" id="footer-social" aria-label="Redes sociais"></nav>
+    </div>
+    <div class="container footer__legal">
+      <p>© <span id="year"></span> Taurus Racing · Projeto de extensão da UFTM · Uberaba/MG</p>
+      <a href="#" class="link">Voltar ao topo ↑</a>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/main.js"></script>
+  <script type="module" src="js/forms.js"></script>
+</body>
+</html>

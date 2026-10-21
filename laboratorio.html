@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="pt-BR" class="no-js">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Laboratório · Taurus Racing</title>
+  <meta name="description" content="Simulações de Fórmula SAE no navegador: volta de autocross com diagrama g-g, aceleração de 75 m, skidpad e geometria de suspensão duplo A." />
+  <meta name="theme-color" content="#0b0b0d" />
+  <meta name="color-scheme" content="dark" />
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml" />
+  <link rel="canonical" href="https://taurus-racing.web.app/laboratorio" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="pt_BR" />
+  <meta property="og:site_name" content="Taurus Racing" />
+  <meta property="og:title" content="Laboratório · Taurus Racing" />
+  <meta property="og:description" content="Simulações de Fórmula SAE no navegador: volta de autocross com diagrama g-g, aceleração de 75 m, skidpad e geometria de suspensão duplo A." />
+  <meta property="og:url" content="https://taurus-racing.web.app/laboratorio" />
+  <meta property="og:image" content="https://taurus-racing.web.app/assets/img/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="preload" href="assets/fonts/barlow-condensed-latin-800-italic.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+  <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+
+  <!-- ===================== MENU (igual em todas as páginas) ===================== -->
+  <header class="nav" id="nav">
+    <div class="container nav__inner">
+      <a href="index.html" class="brand" aria-label="Taurus Racing, página inicial">
+        <img src="assets/img/logo.svg" alt="" width="40" height="40" />
+        <span class="brand__text">TAURUS<b>RACING</b></span>
+      </a>
+      <nav class="nav__links" id="nav-links" aria-label="Páginas">
+        <a href="index.html">Início</a>
+        <a href="oficina.html">Oficina 3D</a>
+        <a href="laboratorio.html" class="is-active" aria-current="page">Laboratório</a>
+        <a href="competicao.html">Competição</a>
+        <a href="processo-seletivo.html">Faça parte</a>
+        <a href="contato.html">Contato</a>
+        <a href="patrocinio.html" class="btn btn--sm btn--primary">Patrocine</a>
+      </nav>
+      <button class="nav__toggle" id="nav-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav-links">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="conteudo">
+    <!-- ===================== LABORATÓRIO ===================== -->
+    <section class="section lab" id="laboratorio">
+      <div class="container">
+        <div class="section__head reveal">
+          <p class="kicker">01 · Laboratório</p>
+          <h1 class="h2">Simule como engenheiro da equipe</h1>
+          <p class="section__sub">
+            Mude peso, potência, pneu e asas e veja o tempo de volta mudar. São as contas que uma equipe faz
+            para decidir onde gastar cada quilo e cada real, numa versão simplificada.
+          </p>
+        </div>
+
+        <div class="lab__tabs" role="tablist" aria-label="Simulações">
+          <button type="button" role="tab" data-lab-tab="volta" class="is-active" aria-selected="true">Volta de autocross</button>
+          <button type="button" role="tab" data-lab-tab="aceleracao" aria-selected="false" tabindex="-1">Aceleração 75 m</button>
+          <button type="button" role="tab" data-lab-tab="skidpad" aria-selected="false" tabindex="-1">Skidpad</button>
+          <button type="button" role="tab" data-lab-tab="suspensao" aria-selected="false" tabindex="-1">Geometria de suspensão</button>
+        </div>
+
+        <div class="lab__grid">
+          <aside class="lab__setup">
+            <h3>Acerto do carro</h3>
+            <p class="lab__hint">A marca branca em cada barra é o carro de referência.</p>
+            <label class="ctrl range"><span class="range__head"><span>Massa (carro + piloto)</span><output data-out="mass"></output></span><span class="range__wrap"><input type="range" data-param="mass" min="220" max="340" step="5" /></span></label>
+            <label class="ctrl range"><span class="range__head"><span>Potência nas rodas</span><output data-out="power"></output></span><span class="range__wrap"><input type="range" data-param="power" min="30" max="70" step="1" /></span></label>
+            <label class="ctrl range"><span class="range__head"><span>Aderência do pneu (<span class="nocase">μ</span>)</span><output data-out="mu"></output></span><span class="range__wrap"><input type="range" data-param="mu" min="1.1" max="1.8" step="0.01" /></span></label>
+            <label class="ctrl range"><span class="range__head"><span>Downforce (Cl·A)</span><output data-out="cla"></output></span><span class="range__wrap"><input type="range" data-param="cla" min="0" max="4" step="0.1" /></span></label>
+            <label class="ctrl range"><span class="range__head"><span>Arrasto (Cd·A)</span><output data-out="cda"></output></span><span class="range__wrap"><input type="range" data-param="cda" min="0.6" max="2" step="0.05" /></span></label>
+            <div class="chips">
+              <button type="button" data-preset="referencia" class="is-active">Referência</button>
+              <button type="button" data-preset="sem-asas">Sem asas</button>
+              <button type="button" data-preset="leve">30 kg mais leve</button>
+              <button type="button" data-preset="pneu">Pneu mais macio</button>
+              <button type="button" data-preset="potencia">+12 kW</button>
+            </div>
+            <p class="lab__disclaimer">Modelo de massa pontual, sem transferência lateral de carga. Os valores iniciais são típicos de um Fórmula SAE a combustão, não os do carro da equipe.</p>
+          </aside>
+
+          <div class="lab__main">
+            <!-- volta -->
+            <div data-lab-panel="volta">
+              <div class="lab__map">
+                <canvas id="lab-track" aria-label="Mapa do traçado com o carro simulado"></canvas>
+                <div class="hud">
+                  <div><span>Tempo</span><strong id="hud-t">0,00 s</strong></div>
+                  <div><span>Velocidade</span><strong id="hud-v">0 km/h</strong></div>
+                  <div><span>G lateral</span><strong id="hud-gy">0,00 g</strong></div>
+                  <div><span>G longitudinal</span><strong id="hud-gx">0,00 g</strong></div>
+                </div>
+                <div class="lab__legend"><span class="lab__ramp"></span><span>lento</span><span>rápido</span><span class="ghost">◇ referência</span></div>
+                <div class="lab__play">
+                  <button type="button" id="lap-play" aria-pressed="false">Pausar</button>
+                  <button type="button" data-lap-speed="1">1×</button>
+                  <button type="button" data-lap-speed="2" class="is-active">2×</button>
+                  <button type="button" data-lap-speed="4">4×</button>
+                </div>
+              </div>
+              <div class="results">
+                <div class="result result--main"><span>Tempo de volta</span><strong id="r-lap">—</strong><em id="r-lap-d" class="delta"></em></div>
+                <div class="result"><span>Velocidade máxima</span><strong id="r-vmax">—</strong></div>
+                <div class="result"><span>Velocidade média</span><strong id="r-vavg">—</strong></div>
+                <div class="result"><span>G lateral máximo</span><strong id="r-gy">—</strong></div>
+              </div>
+              <div class="charts">
+                <figure><figcaption>Velocidade ao longo da volta</figcaption><canvas id="lab-speed"></canvas></figure>
+                <figure class="charts__gg"><figcaption>Diagrama g-g</figcaption><canvas id="lab-gg"></canvas></figure>
+              </div>
+            </div>
+
+            <!-- aceleração -->
+            <div data-lab-panel="aceleracao" hidden>
+              <div class="lab__map lab__map--accel">
+                <div class="lights" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+                <canvas id="lab-accel" aria-label="Pista de aceleração com dois carros"></canvas>
+                <button type="button" class="btn btn--primary accel__go" id="acc-go">Largar</button>
+              </div>
+              <div class="results">
+                <div class="result result--main"><span>Tempo nos 75 m</span><strong id="r-acc">—</strong><em id="r-acc-d" class="delta"></em></div>
+                <div class="result"><span>Velocidade na chegada</span><strong id="r-acc-v">—</strong></div>
+                <div class="result"><span>0 a 100 km/h</span><strong id="r-acc-100">—</strong></div>
+              </div>
+              <p class="lab__explain">Na largada o limite é a aderência dos pneus traseiros (parte do peso vai para trás quando o carro acelera). Depois de uns 70 km/h quem manda é a potência. Por isso tirar peso ajuda nas duas fases.</p>
+            </div>
+
+            <!-- skidpad -->
+            <div data-lab-panel="skidpad" hidden>
+              <div class="lab__map">
+                <canvas id="lab-skid" aria-label="Pista em forma de oito do skidpad"></canvas>
+              </div>
+              <div class="results">
+                <div class="result result--main"><span>Tempo por volta</span><strong id="r-skid">—</strong><em id="r-skid-d" class="delta"></em></div>
+                <div class="result"><span>Velocidade</span><strong id="r-skid-v">—</strong></div>
+                <div class="result"><span>Aceleração lateral</span><strong id="r-skid-g">—</strong></div>
+              </div>
+              <p class="lab__explain">O carro dá duas voltas em cada círculo do oito e só a segunda é cronometrada. Tudo depende de quanta força lateral os pneus aguentam: pneu melhor e mais downforce deixam o carro fazer a curva mais rápido.</p>
+            </div>
+
+            <!-- suspensão -->
+            <div data-lab-panel="suspensao" hidden>
+              <div class="susp">
+                <div class="lab__map lab__map--susp">
+                  <canvas id="lab-susp" aria-label="Vista frontal da suspensão duplo A"></canvas>
+                  <p class="susp__hint">Arraste os pontos laranja para mudar a geometria</p>
+                </div>
+                <div class="susp__side">
+                  <label class="ctrl range">
+                    <span class="range__head"><span>Curso da roda</span><output id="s-tr">0 mm</output></span>
+                    <input type="range" id="susp-travel" min="-40" max="40" value="0" />
+                  </label>
+                  <div class="chips">
+                    <button type="button" id="susp-anim" aria-pressed="false">Animar</button>
+                    <button type="button" data-susp="desiguais" class="is-active">Braços desiguais</button>
+                    <button type="button" data-susp="paralelas">Paralelos e iguais</button>
+                    <button type="button" data-susp="agressiva">Ganho alto</button>
+                  </div>
+                  <div class="results results--susp">
+                    <div class="result"><span>Cambagem</span><strong id="s-cam">—</strong></div>
+                    <div class="result"><span>Ganho de cambagem</span><strong id="s-gain">—</strong></div>
+                    <div class="result"><span>Centro de rolagem</span><strong id="s-rc">—</strong></div>
+                    <div class="result"><span>Variação de bitola</span><strong id="s-trk">—</strong></div>
+                  </div>
+                  <canvas id="lab-camber" class="susp__chart" aria-label="Gráfico de cambagem por curso"></canvas>
+                </div>
+              </div>
+              <p class="lab__explain">Numa curva o carro inclina e a roda de fora sobe. Se ela ganhar cambagem negativa ao subir, o pneu fica mais apoiado no chão e segura mais. Braços paralelos e iguais não dão esse ganho. O centro de rolagem define quanto o carro inclina.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================== RODAPÉ (igual em todas as páginas) ===================== -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <img src="assets/img/logo.svg" alt="" width="56" height="56" />
+        <div>
+          <strong>Taurus Racing</strong>
+          <span>Fórmula SAE · Universidade Federal do Triângulo Mineiro</span>
+        </div>
+      </div>
+      <nav class="footer__nav" aria-label="Páginas do site">
+        <a href="index.html">Início</a>
+        <a href="oficina.html">Oficina 3D</a>
+        <a href="laboratorio.html">Laboratório</a>
+        <a href="competicao.html">Competição</a>
+        <a href="processo-seletivo.html">Faça parte</a>
+        <a href="contato.html">Contato</a>
+        <a href="patrocinio.html">Patrocínio</a>
+      </nav>
+      <nav class="footer__social" id="footer-social" aria-label="Redes sociais"></nav>
+    </div>
+    <div class="container footer__legal">
+      <p>© <span id="year"></span> Taurus Racing · Projeto de extensão da UFTM · Uberaba/MG</p>
+      <a href="#" class="link">Voltar ao topo ↑</a>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/main.js"></script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
