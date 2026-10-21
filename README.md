@@ -66,7 +66,9 @@ Configuração (uma vez só, pelo navegador):
 
 1. **App da Web**: no [console do Firebase](https://console.firebase.google.com/project/taurus-racing/settings/general), em *Configurações do projeto → Geral → Seus apps*, adicione um app da Web (ícone `</>`), marque "Configurar também o Firebase Hosting" e conclua sem rodar os comandos que ele mostra. Copie o bloco `firebaseConfig` para `firebase` em `js/config.js`.
 2. **Firestore**: em *Firestore Database → Criar banco de dados*, escolha a região `southamerica-east1 (São Paulo)` e o modo de produção.
-3. **Conta de serviço para o GitHub**: no [Google Cloud](https://console.cloud.google.com/iam-admin/serviceaccounts?project=taurus-racing), crie uma conta de serviço (ex.: `github-taurussae`) com estes papéis:
+3. **Conta de serviço para o GitHub** (jeito mais fácil): no computador, com a Firebase CLI instalada e logada (`firebase login`), rode `firebase init hosting:github` dentro da pasta do repositório. Ela cria a conta de serviço e o segredo `FIREBASE_SERVICE_ACCOUNT_TAURUS_RACING` sozinha. Responda: repositório `Okushiroapple-dot/TaurusSAE`; script de build **N**; sobrescrever o arquivo de prévia **N**; publicar ao fazer merge **Y**; branch `main`; sobrescrever o arquivo de publicação **N**. Essa conta não tem permissão para as regras do Firestore: quando mudar `firestore.rules`, rode `firebase deploy --only firestore:rules` (ou dê a ela o papel "Administrador de regras do Firebase"). Os passos 3 e 4 abaixo fazem a mesma coisa pelo navegador.
+
+   **Conta de serviço pelo navegador**: no [Google Cloud](https://console.cloud.google.com/iam-admin/serviceaccounts?project=taurus-racing), crie uma conta de serviço (ex.: `github-taurussae`) com estes papéis:
    - Administrador do Firebase Hosting (`roles/firebasehosting.admin`)
    - Leitor de chaves de API (`roles/serviceusage.apiKeysViewer`)
    - Administrador do Firebase Authentication (`roles/firebaseauth.admin`), usado pelas prévias dos PRs
@@ -78,7 +80,7 @@ Configuração (uma vez só, pelo navegador):
 
 A partir daí:
 
-- Cada merge na `main` roda `.github/workflows/firebase-hosting-merge.yml`, que publica as regras do Firestore (`tools/deploy-rules.mjs`) e o site.
+- Cada merge na `main` roda `.github/workflows/firebase-hosting-merge.yml`, que publica o site e, se `firestore.rules` mudou, as regras do Firestore (`tools/deploy-rules.mjs`). Também dá para rodar na mão em *Actions → Publicar no Firebase → Run workflow*.
 - Cada PR ganha uma prévia com link próprio, comentado no PR, que expira em 7 dias (`.github/workflows/firebase-hosting-pull-request.yml`).
 - Enquanto o segredo não existir, os dois workflows só deixam um aviso e não falham.
 

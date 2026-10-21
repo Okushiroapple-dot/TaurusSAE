@@ -1,7 +1,7 @@
 name: Publicar no Firebase
 
 # A cada merge na main: publica o site no Firebase Hosting (taurus-racing.web.app)
-# e as regras do Firestore (firestore.rules).
+# e, se firestore.rules mudou, as regras do Firestore.
 # Precisa do segredo FIREBASE_SERVICE_ACCOUNT_TAURUS_RACING (veja o README).
 on:
   push:
@@ -32,15 +32,8 @@ jobs:
           fi
       - uses: actions/checkout@v4
         if: steps.chave.outputs.ok == 'true'
-      - uses: actions/setup-node@v4
-        if: steps.chave.outputs.ok == 'true'
         with:
-          node-version: 22
-      - name: Regras do Firestore
-        if: steps.chave.outputs.ok == 'true'
-        env:
-          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_TAURUS_RACING }}
-        run: node tools/deploy-rules.mjs taurus-racing
+          fetch-depth: 0
       - name: Site no Firebase Hosting
         if: steps.chave.outputs.ok == 'true'
         uses: FirebaseExtended/action-hosting-deploy@v0
@@ -48,3 +41,31 @@ jobs:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_TAURUS_RACING }}
           projectId: taurus-racing
           channelId: live
+      - name: Confere se as regras do Firestore mudaram
+        id: regras
+        if: steps.chave.outputs.ok == 'true'
+        env:
+          BEFORE: ${{ github.event.before }}
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] || [ -z "$BEFORE" ] || [ "$BEFORE" = "0000000000000000000000000000000000000000" ] \
+             || git diff --name-only "$BEFORE" HEAD | grep -qx 'firestore.rules'; then
+            echo "mudou=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "mudou=false" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/setup-node@v4
+        if: steps.regras.outputs.mudou == 'true'
+        with:
+          node-version: 22
+      # a chave criada pelo "firebase init hosting:github" não tem permissão para as
+      # regras; se faltar, o site continua publicado e o passo só deixa um aviso
+      - name: Regras do Firestore
+        if: steps.regras.outputs.mudou == 'true'
+        continue-on-error: true
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_TAURUS_RACING }}
+        run: |
+          node tools/deploy-rules.mjs taurus-racing || {
+            echo "::warning::As regras do Firestore não foram publicadas. Dê à conta de serviço o papel 'Administrador de regras do Firebase' ou rode 'firebase deploy --only firestore:rules' no computador."
+            exit 1
+          }
