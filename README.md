@@ -32,7 +32,7 @@ Quase tudo fica em **`js/config.js`**. Não precisa mexer no HTML.
 - **Ficha técnica**: preencha `valor` em `carro.ficha` (ex.: `"Aço SAE 4130"`). Na garagem 3D, o valor aparece no painel quando alguém clica no sistema correspondente.
 - **Linha do tempo**: acrescente marcos em `linhaDoTempo`. `destaque: true` destaca o card.
 - **Processo seletivo**: `processoSeletivo.aberto = true` troca o selo para "Inscrições abertas".
-- **Formulário direto no e-mail**: crie um formulário grátis no [Formspree](https://formspree.io) e cole o endereço em `contato.formEndpoint`. Sem isso, o formulário abre o app de e-mail (se houver e-mail configurado) ou copia a mensagem e abre o Instagram.
+- **Formulários**: "Faça parte" e "Fale com a Taurus" gravam no Firestore (veja [Formulários no Firebase](#formulários-no-firebase)). Se o Firebase falhar, o site usa o [Formspree](https://formspree.io) (endereço em `contato.formEndpoint`), abre o app de e-mail (se houver e-mail configurado) ou copia a mensagem e abre o Instagram.
 - **Mídia kit**: salve o PDF em `assets/` e coloque o caminho em `contato.midiaKit`.
 
 ### Textos do 3D e das simulações
@@ -59,11 +59,49 @@ python3 -m http.server 8000
 
 ## Publicar
 
-### GitHub Pages (grátis)
+O site oficial fica no **Firebase Hosting**, no projeto `taurus-racing`: <https://taurus-racing.web.app>. Uma cópia continua no GitHub Pages. Os dois são atualizados sozinhos a cada merge na `main`.
+
+### Firebase Hosting
+
+Configuração (uma vez só, pelo navegador):
+
+1. **App da Web**: no [console do Firebase](https://console.firebase.google.com/project/taurus-racing/settings/general), em *Configurações do projeto → Geral → Seus apps*, adicione um app da Web (ícone `</>`), marque "Configurar também o Firebase Hosting" e conclua sem rodar os comandos que ele mostra. Copie o bloco `firebaseConfig` para `firebase` em `js/config.js`.
+2. **Firestore**: em *Firestore Database → Criar banco de dados*, escolha a região `southamerica-east1 (São Paulo)` e o modo de produção.
+3. **Conta de serviço para o GitHub**: no [Google Cloud](https://console.cloud.google.com/iam-admin/serviceaccounts?project=taurus-racing), crie uma conta de serviço (ex.: `github-taurussae`) com estes papéis:
+   - Administrador do Firebase Hosting (`roles/firebasehosting.admin`)
+   - Leitor de chaves de API (`roles/serviceusage.apiKeysViewer`)
+   - Administrador do Firebase Authentication (`roles/firebaseauth.admin`), usado pelas prévias dos PRs
+   - Leitor do Cloud Run (`roles/run.viewer`)
+   - Administrador de regras do Firebase (`roles/firebaserules.admin`), usado para publicar `firestore.rules`
+
+   Depois abra a conta, vá em *Chaves → Adicionar chave → JSON* e baixe o arquivo.
+4. **Segredo no GitHub**: em *Settings → Secrets and variables → Actions → New repository secret*, crie `FIREBASE_SERVICE_ACCOUNT_TAURUS_RACING` e cole o conteúdo inteiro do JSON. Depois apague o arquivo do computador.
+
+A partir daí:
+
+- Cada merge na `main` roda `.github/workflows/firebase-hosting-merge.yml`, que publica as regras do Firestore (`tools/deploy-rules.mjs`) e o site.
+- Cada PR ganha uma prévia com link próprio, comentado no PR, que expira em 7 dias (`.github/workflows/firebase-hosting-pull-request.yml`).
+- Enquanto o segredo não existir, os dois workflows só deixam um aviso e não falham.
+
+O que é publicado e os cabeçalhos de cache ficam em `firebase.json`. O site é a raiz do repositório; `README.md`, `tools/`, as regras e os arquivos ocultos ficam de fora.
+
+Para publicar do próprio computador (opcional): `npm install -g firebase-tools`, `firebase login` e `firebase deploy` na pasta do repositório.
+
+### Formulários no Firebase
+
+- "Faça parte" grava na coleção `inscricoes` e "Fale com a Taurus" na coleção `mensagens` do Firestore.
+- Para ver as respostas: console do Firebase → *Firestore Database → Dados*. Cada documento tem os campos do formulário, `criadoEm` (data e hora do servidor) e `origem` (endereço da página).
+- As regras (`firestore.rules`) só deixam o site **criar** documentos, com os campos certos e tamanho limitado. Ninguém lê, altera ou apaga pelo site. Os formulários também têm um campo escondido que pega robôs.
+- O pacote do Firebase (`vendor/firebase.bundle.min.js`, 128 KB) só é baixado quando alguém clica em enviar.
+- Para receber um e-mail a cada resposta dá para instalar a extensão "Trigger Email" do Firebase, mas ela exige o plano Blaze (pago por uso).
+
+### GitHub Pages (cópia)
 
 1. No GitHub, vá em **Settings → Pages** e em *Source* escolha **GitHub Actions**.
 2. Faça merge na branch `main`. O workflow `.github/workflows/pages.yml` publica o site sozinho a cada push.
-3. O endereço fica `https://<usuario>.github.io/<repositorio>/`. Dá para apontar um domínio próprio (ex.: `taurusracing.com.br`) na mesma tela.
+3. O endereço fica `https://<usuario>.github.io/<repositorio>/`.
+
+Na cópia do GitHub Pages os formulários só gravam no Firestore se a configuração do app da Web estiver preenchida em `js/config.js`. A página aponta o Firebase como endereço oficial (`<link rel="canonical">`), para o Google não tratar as duas como conteúdo duplicado.
 
 ### Netlify ou Vercel
 
@@ -75,7 +113,8 @@ Importe o repositório e deixe o comando de build vazio. A pasta publicada é a 
 index.html              página única
 css/style.css           estilos (cores e fontes no topo)
 js/config.js            conteúdo editável
-js/main.js              menu, formulário, galeria, patrocinadores, contato
+js/main.js              menu, formulários, galeria, patrocinadores, contato
+js/forms.js             envio dos formulários para o Firestore
 js/app.js               liga o 3D, o laboratório e a tela de carregamento
 js/3d/car.js            modelo 3D do carro (chassi, suspensão, motor, asas, pintura)
 js/3d/stage.js          cena, luzes, câmera guiada pela rolagem, garagem e prévia do patrocinador
@@ -88,13 +127,16 @@ js/lab/physics.js       modelo do carro, volta, aceleração e skidpad
 js/lab/track.js         traçado do autocross
 js/lab/suspension.js    cinemática da suspensão duplo A
 js/lab/lab.js           interface das simulações
-vendor/                 Three.js e three-gpu-pathtracer empacotados (licença MIT)
-tools/                  script para atualizar o Three.js e o path tracer
+vendor/                 Three.js e three-gpu-pathtracer (licença MIT) e Firebase (Apache 2.0) empacotados
+tools/                  script dos pacotes de vendor/ e publicação das regras do Firestore
+firebase.json           configuração do Firebase Hosting e do Firestore
+.firebaserc             projeto padrão do Firebase (taurus-racing)
+firestore.rules         regras de segurança do Firestore
 assets/fonts/           Barlow Condensed e Inter (licença OFL)
 assets/img/             logo, favicon, imagem de compartilhamento, fotos
 ```
 
-Para atualizar o Three.js e o path tracer: `bash tools/build-vendor.sh` (precisa de Node.js).
+Para atualizar o Three.js, o path tracer e o Firebase: `bash tools/build-vendor.sh` (precisa de Node.js).
 
 ## Gráficos
 

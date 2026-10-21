@@ -34,8 +34,8 @@ window.TAURUS = {
     instagramUser: "@taurusracingfsae",
     facebook: "https://www.facebook.com/taurusracingfsae/",
     linkedin: "https://www.linkedin.com/company/taurus-racing-formula-sae-uftm",
-    // Opcional: endpoint do Formspree (https://formspree.io) para receber
-    // o formulário "Faça parte" direto no e-mail, sem abrir o app de e-mail.
+    // Opcional: endpoint do Formspree (https://formspree.io). Só é usado se o
+    // Firebase (abaixo) não estiver configurado ou falhar.
     formEndpoint: "",
     // Link do media kit / proposta de patrocínio em PDF (ex: "assets/midia-kit.pdf").
     midiaKit: "",
@@ -129,5 +129,23 @@ window.TAURUS = {
     aberto: false,
     texto:
       "Todo semestre a equipe abre vagas para alunos da UFTM. Deixe seu contato e avisamos quando as inscrições começarem.",
+  },
+
+  /*
+   * Firebase (projeto taurus-racing). Os formulários "Faça parte" e "Fale com
+   * a Taurus" gravam no Firestore, nas coleções "inscricoes" e "mensagens".
+   * Cole aqui a configuração do app da Web (console do Firebase → Configurações
+   * do projeto → Geral → Seus apps → SDK setup and configuration → Config).
+   * Esses valores são públicos; quem protege os dados são as regras em firestore.rules.
+   * Com apiKey vazio, o site no Firebase Hosting pega a configuração sozinho, mas a
+   * cópia no GitHub Pages precisa dela preenchida para gravar no Firestore.
+   */
+  firebase: {
+    apiKey: "",
+    authDomain: "taurus-racing.firebaseapp.com",
+    projectId: "taurus-racing",
+    storageBucket: "",
+    messagingSenderId: "",
+    appId: "",
   },
 };

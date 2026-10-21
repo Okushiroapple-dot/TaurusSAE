@@ -1,0 +1,38 @@
+name: Prévia no Firebase
+
+# Em cada PR deste repositório: publica uma prévia temporária (7 dias) num
+# endereço próprio e comenta o link no PR. Não mexe no site oficial.
+on:
+  pull_request:
+
+permissions:
+  checks: write
+  contents: read
+  pull-requests: write
+
+jobs:
+  preview:
+    # PRs vindos de forks não têm acesso aos segredos
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    env:
+      SA: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_TAURUS_RACING }}
+    steps:
+      - name: Confere a chave do Firebase
+        id: chave
+        run: |
+          if [ -z "$SA" ]; then
+            echo "::warning::Falta o segredo FIREBASE_SERVICE_ACCOUNT_TAURUS_RACING (veja o README). Sem prévia no Firebase."
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/checkout@v4
+        if: steps.chave.outputs.ok == 'true'
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        if: steps.chave.outputs.ok == 'true'
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_TAURUS_RACING }}
+          projectId: taurus-racing
+          expires: 7d
