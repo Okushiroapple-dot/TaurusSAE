@@ -43,9 +43,14 @@ Quase tudo fica em **`js/config.js`**. Não precisa mexer no HTML.
 
 ### Logo e cores
 
-- O logo em `assets/img/logo.svg` é provisório. Troque pelo logo oficial mantendo o nome do arquivo (e copie também para `favicon.svg`).
+- O logo é o mascote (touro com o letreiro TAURUS RACING), tirado do case de marketing 2026/2027. Arquivos em `assets/img/`:
+  - `mascote.webp`: mascote completo com fundo transparente, usado na abertura da página inicial;
+  - `mascote-cabeca.webp`: só a cabeça, usada no menu e no rodapé;
+  - `favicon-32.png`, `favicon-192.png` e `apple-touch-icon.png`: ícones da aba do navegador e do celular.
+
+  As imagens vieram de uma ilustração com fundo escuro (não é vetor), recortada para o site. Quando a equipe tiver o arquivo vetorial ou um PNG transparente oficial, troque esses arquivos mantendo os nomes.
 - A paleta é preto, branco e laranja papaya (#FF8000), inspirada na McLaren. As cores ficam no topo de `css/style.css`. A pintura do carro 3D fica em `PAINTS`, em `js/3d/car.js` (`taurus` é a pintura real do TR-04; as outras são opções da garagem).
-- A imagem que aparece quando o link é compartilhado é `assets/img/og-image.png` (1200×630).
+- A imagem que aparece quando o link é compartilhado é `assets/img/og-image.jpg` (1200×630).
 
 ## Ver no computador
 

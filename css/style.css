@@ -585,6 +585,11 @@ a.story__hint:hover { color: var(--white); }
   text-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
 }
 .hero__title .line { display: block; }
+/* página inicial: o mascote com o letreiro faz o papel do título */
+.hero__logo { margin: 0 0 20px; line-height: 0; }
+.hero__logo img { display: block; width: min(380px, 44vh, 70vw); height: auto; filter: drop-shadow(0 18px 40px rgba(0, 0, 0, 0.55)); }
+.is-loaded .hero__logo img { animation: logo-in 0.9s var(--ease) both; }
+@keyframes logo-in { from { opacity: 0; transform: translateY(18px) scale(0.97); } to { opacity: 1; transform: none; } }
 .hero__title .line--accent { color: var(--orange); }
 .is-loaded .hero__title .line { animation: title-in 1s var(--ease) both; }
 .is-loaded .hero__title .line + .line { animation-delay: 0.12s; }
@@ -629,6 +634,8 @@ a.story__hint:hover { color: var(--white); }
   .story__h { font-size: 1.7rem; }
   .story__step p { font-size: 0.93rem; }
   .hero__title { font-size: clamp(3.4rem, 17vw, 5rem); margin-bottom: 14px; }
+  .hero__logo { margin-bottom: 10px; }
+  .hero__logo img { width: min(230px, 56vw, 30vh); }
   .hero__lead { font-size: 0.95rem; margin-bottom: 18px; }
     .story__nav { display: none; }
   .story__hint { display: none; }
