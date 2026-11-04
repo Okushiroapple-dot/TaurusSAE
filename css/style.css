@@ -194,14 +194,13 @@ main { display: block; }
 .poster--short .poster__field { min-height: 0; }
 .poster--short .poster__title { font-size: clamp(4rem, 1rem + 10vw, 11rem); max-width: none; }
 .poster--short .poster__cut { width: min(42vw, 640px); bottom: -10%; }
-.poster__cut--mascot { width: min(34vw, 520px); bottom: -14%; transform: rotate(4deg); }
+.poster__cut--mascot { width: min(34vw, 520px); bottom: -14%; right: 4vw; transform: rotate(4deg); }
 .poster--short .poster__cut--mascot { width: min(30vw, 430px); bottom: -16%; right: 4vw; }
 
 @media (max-width: 900px) {
   .poster__field { min-height: 0; }
   .poster__inner { padding-top: 28px; padding-bottom: 40vw; }
   .poster__title, .poster--short .poster__title { font-size: 16.5vw; max-width: none; }
-  .poster__field { background-size: auto 46%; }
   .poster__cut, .poster--short .poster__cut { width: 92vw; right: -10vw; bottom: -26vw; }
   .poster__cut--mascot { width: 62vw; right: 2vw; bottom: -20vw; }
   .poster--tall .poster__inner { padding-bottom: 58vw; }
@@ -413,8 +412,8 @@ main { display: block; }
 .why { list-style: none; margin: 0; padding: 0; }
 .why li { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 8px clamp(24px, 4vw, 64px); align-items: baseline; }
 .why li + li { margin-top: clamp(28px, 3vw, 44px); }
-.why h3 { font-family: var(--f-display); font-weight: 900; font-style: italic; font-stretch: 62%; text-transform: uppercase; font-size: var(--s-head); line-height: 0.88; margin: 0; }
-.why p { margin: 0; max-width: 52ch; }
+.why h3 { font-family: var(--f-display); font-weight: 900; font-style: italic; font-stretch: 62%; text-transform: uppercase; font-size: clamp(2.25rem, 1.2rem + 2.6vw, 3.75rem); line-height: 0.92; margin: 0; }
+.why p { margin: 0; max-width: 46ch; font-size: var(--s-lead); line-height: 1.35; }
 @media (max-width: 760px) { .why li { grid-template-columns: 1fr; } }
 
 /* cotas: colunas de alturas diferentes, como um pódio */
@@ -515,17 +514,19 @@ main { display: block; }
 @media (max-width: 600px) { .legacy { flex-direction: column; align-items: flex-start; } .legacy img { width: 100%; } }
 
 .reasons { list-style: none; margin: 0; padding: 0; }
-.reasons li { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: 8px clamp(24px, 4vw, 64px); align-items: baseline; }
+.reasons li { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 8px clamp(24px, 4vw, 64px); align-items: baseline; }
 .reasons li + li { margin-top: clamp(28px, 3vw, 44px); }
-.reasons h3 { font-family: var(--f-display); font-weight: 900; font-style: italic; font-stretch: 62%; text-transform: uppercase; font-size: var(--s-head); line-height: 0.88; margin: 0; }
-.reasons p { margin: 0; max-width: 54ch; }
+.reasons h3 { font-family: var(--f-display); font-weight: 900; font-style: italic; font-stretch: 62%; text-transform: uppercase; font-size: clamp(2.25rem, 1.2rem + 2.6vw, 3.75rem); line-height: 0.92; margin: 0; }
+.reasons p { margin: 0; max-width: 46ch; font-size: var(--s-lead); line-height: 1.35; }
+.reasons + .note { margin-top: clamp(40px, 5vw, 64px); }
 @media (max-width: 760px) { .reasons li { grid-template-columns: 1fr; } }
 
 .versions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
 .version { margin: 0; display: flex; flex-direction: column; }
 .version__art { padding: clamp(24px, 4vw, 56px); flex: 1; }
-.version:first-child .version__art { background: var(--orange); }
-.version:last-child .version__art { background: var(--paper); }
+/* fundo preto: o letreiro branco e as faixas laranja do desenho continuam visíveis */
+.version__art { background: var(--black); }
+.version:last-child .version__art { background: var(--black-3); }
 .version__art img { width: 100%; max-width: 420px; height: auto; margin: 0 auto; }
 .version figcaption { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 0 0; flex-wrap: wrap; }
 .version figcaption strong { display: block; font-weight: 700; font-size: var(--s-lead); line-height: 1.2; }
@@ -911,14 +912,9 @@ input[type="range"]:focus-visible::-webkit-slider-thumb { background: var(--oran
 @media (max-width: 860px) { .uniform { grid-template-columns: 1fr; } }
 
 /* =========================================================
-   GRAFISMOS DA PINTURA DO TR-04
-   As manchas vêm do camuflado da asa e do bico do carro; as duas barras
-   inclinadas vêm das costas da camiseta da equipe (o "//" ao lado do carro).
+   GRAFISMOS: as duas barras inclinadas vêm das costas da camiseta
+   da equipe (o "//" ao lado do carro); a placa é a do número 38.
    ========================================================= */
-.poster__field { background-image: url("../assets/img/grafismo/manchas-sobre-laranja.svg"); background-repeat: no-repeat; background-position: right bottom; background-size: auto 100%; }
-.mascot-band { background-image: url("../assets/img/grafismo/manchas-laranja-esquerda.svg"); background-repeat: no-repeat; background-position: left bottom; background-size: auto 100%; }
-.showcase { background-image: none; }
-.closing-wrap { background-image: url("../assets/img/grafismo/manchas-sobre-preto.svg"); background-repeat: no-repeat; background-position: right top; background-size: auto 70%; }
 
 /* "//" antes de cada título de seção */
 .h2::before, .closing__title::before {
@@ -939,8 +935,9 @@ input[type="range"]:focus-visible::-webkit-slider-thumb { background: var(--oran
 }
 
 /* rodapé: o letreiro de verdade, grande, e o lema */
-.footer { position: relative; overflow: hidden; background-image: url("../assets/img/grafismo/manchas-sobre-preto.svg"); background-repeat: no-repeat; background-position: right top; background-size: auto 340px; }
+.footer { position: relative; overflow: hidden; }
 .footer__head { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; margin-bottom: clamp(48px, 6vw, 88px); }
 .footer__mark { display: block; width: min(820px, 100%); }
 .footer__mark img { width: 100%; height: auto; }
 .footer__slogan { margin: 0; font-family: var(--f-display); font-weight: 900; font-style: italic; font-stretch: 62%; text-transform: uppercase; font-size: var(--s-lead); line-height: 1; color: var(--orange); }
+
