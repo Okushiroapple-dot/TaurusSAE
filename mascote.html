@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Mascote · Taurus Racing</title>
   <meta name="description" content="O touro da Taurus Racing: por que a equipe tem um touro como mascote, o que a pose e as cores querem dizer, as versões para baixar e como usar." />
-  <meta name="theme-color" content="#0b0b0d" />
+  <meta name="theme-color" content="#0d0d0f" />
   <meta name="color-scheme" content="dark" />
   <link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png" />
   <link rel="icon" href="assets/img/favicon-192.png" sizes="192x192" type="image/png" />
@@ -23,12 +23,12 @@
   <meta property="og:image:height" content="630" />
   <meta name="twitter:card" content="summary_large_image" />
 
-  <link rel="preload" href="assets/fonts/barlow-condensed-latin-800-italic.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="assets/fonts/bebas-neue-latin-400.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="assets/fonts/eb-garamond-latin-var.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
   <a class="skip" href="#conteudo">Pular para o conteúdo</a>
-  <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
 
   <!-- ===================== MENU (igual em todas as páginas) ===================== -->
   <header class="nav" id="nav">
@@ -38,7 +38,6 @@
         <img class="brand__word" src="assets/img/letreiro.webp" alt="" width="480" height="111" />
       </a>
       <nav class="nav__links" id="nav-links" aria-label="Páginas">
-        <a href="index.html">Início</a>
         <a href="oficina.html">Oficina 3D</a>
         <a href="laboratorio.html">Laboratório</a>
         <a href="competicao.html">Competição</a>
@@ -54,49 +53,33 @@
   </header>
 
   <main id="conteudo">
-    <!-- ===================== MASCOTE ===================== -->
-    <section class="section mascot-hero">
-      <div class="container mascot-hero__inner">
-        <div class="reveal">
-          <p class="kicker">Mascote</p>
-          <h1 class="h2">O touro da Taurus</h1>
-          <p class="section__sub">
-            Braços cruzados, camiseta laranja e cara de quem não sai do caminho. Ele aparece nas redes, nos eventos
-            e aqui no site, sempre que alguma coisa pede uma explicação com menos formalidade.
-          </p>
-          <div class="hero__cta">
-            <a class="btn btn--primary" href="#versoes">Baixar o mascote</a>
-            <a class="btn btn--ghost" href="#por-que">Por que um touro</a>
-          </div>
+    <section class="poster poster--short poster--tall" aria-labelledby="titulo">
+      <div class="poster__field">
+        <div class="container poster__inner">
+          <h1 class="poster__title" id="titulo"><span>O touro</span> <span>da Taurus</span></h1>
         </div>
-        <figure class="mascot-hero__art reveal">
-          <img src="assets/img/mascote.webp" alt="Mascote da Taurus Racing: um touro de braços cruzados, com camiseta laranja, acima do letreiro TAURUS RACING" width="900" height="890" fetchpriority="high" />
-        </figure>
+        <img class="poster__cut poster__cut--mascot" src="assets/img/mascote.webp" alt="Mascote da Taurus Racing: um touro de braços cruzados, com camiseta laranja, acima do letreiro TAURUS RACING" width="900" height="890" fetchpriority="high" />
+      </div>
+      <div class="poster__band">
+        <div class="container">
+          <p class="poster__lead">Braços cruzados, camiseta laranja e cara de quem não sai do caminho. Ele aparece nas redes, nos eventos e aqui no site.</p>
+          <div class="poster__actions"><a class="btn btn--primary" href="#versoes">Baixar o mascote</a></div>
+        </div>
       </div>
     </section>
 
     <!-- ===================== POR QUE UM TOURO ===================== -->
-    <section class="section section--alt" id="por-que">
+    <section class="section" id="por-que">
       <div class="container">
-        <div class="section__head reveal">
-          <p class="kicker">Origem</p>
-          <h2 class="h2">Por que um touro</h2>
+        <div class="section__head">
+          <h2 class="h2 reveal">Por que um touro</h2>
         </div>
-        <div class="aims">
-          <article class="aim reveal">
-            <h3>O nome</h3>
-            <p><i>Taurus</i> é a palavra latina para touro. O mascote dá rosto ao nome da equipe.</p>
-          </article>
-          <article class="aim reveal">
-            <h3>A história</h3>
-            <p>A marca que a equipe usava na campanha de financiamento coletivo, encerrada em 2021, já trazia a cabeça de um touro. O mascote mantém esse símbolo e ganha corpo.</p>
-          </article>
-          <article class="aim reveal">
-            <h3>A postura</h3>
-            <p>A pose em três quartos e os braços cruzados passam confiança e determinação. A camiseta tem o laranja da equipe, e o letreiro inclinado lembra as faixas de corrida.</p>
-          </article>
-        </div>
-        <figure class="legacy reveal">
+        <ul class="reasons">
+          <li class="reveal"><h3>O nome</h3><p><i>Taurus</i> é a palavra latina para touro. O mascote dá rosto ao nome da equipe.</p></li>
+          <li class="reveal"><h3>A história</h3><p>A marca que a equipe usava na campanha de financiamento coletivo, encerrada em 2021, já trazia a cabeça de um touro. O mascote mantém esse símbolo e ganha corpo.</p></li>
+          <li class="reveal"><h3>A postura</h3><p>A pose em três quartos e os braços cruzados passam confiança e determinação. A camiseta tem o laranja da equipe, e o letreiro inclinado lembra as faixas de corrida.</p></li>
+        </ul>
+        <figure class="legacy reveal" style="margin-top:clamp(56px,7vw,96px)">
           <img src="assets/img/marca-2021.jpg" alt="Marca antiga da Taurus Racing: letreiro TAURUS RACING com a cabeça de um touro e a frase Formula SAE Team" width="470" height="270" loading="lazy" />
           <figcaption>A marca antiga, publicada na campanha da Taurus no Benfeitoria (encerrada em 2021). O touro já estava lá.</figcaption>
         </figure>
@@ -104,12 +87,11 @@
     </section>
 
     <!-- ===================== VERSÕES ===================== -->
-    <section class="section" id="versoes">
+    <section class="section field--tone" id="versoes">
       <div class="container">
-        <div class="section__head reveal">
-          <p class="kicker">Versões</p>
-          <h2 class="h2">Colorido ou preto e branco</h2>
-          <p class="section__sub">
+        <div class="section__head">
+          <h2 class="h2 reveal">Colorido ou preto e branco</h2>
+          <p class="section__sub reveal">
             Use a versão colorida sempre que der para reproduzir o laranja. A preto e branco serve para materiais em
             tons de cinza. Os arquivos têm fundo transparente.
           </p>
@@ -117,19 +99,11 @@
         <div class="versions">
           <figure class="version reveal">
             <div class="version__art"><img src="assets/img/mascote.webp" alt="Mascote colorido" width="900" height="890" loading="lazy" /></div>
-            <figcaption>
-              <strong>Colorido</strong>
-              <span>Redes, campanhas, site e eventos</span>
-              <a class="btn btn--primary btn--sm" href="assets/img/mascote.png" download="taurus-racing-mascote.png">Baixar PNG</a>
-            </figcaption>
+            <figcaption><div><strong>Colorido</strong><span>Redes, campanhas, site e eventos</span></div><a class="btn btn--primary btn--sm" href="assets/img/mascote.png" download="taurus-racing-mascote.png">Baixar PNG</a></figcaption>
           </figure>
           <figure class="version reveal">
             <div class="version__art"><img src="assets/img/mascote-pb.webp" alt="Mascote em preto e branco" width="900" height="888" loading="lazy" /></div>
-            <figcaption>
-              <strong>Preto e branco</strong>
-              <span>Materiais em tons de cinza</span>
-              <a class="btn btn--ghost btn--sm" href="assets/img/mascote-pb.png" download="taurus-racing-mascote-pb.png">Baixar PNG</a>
-            </figcaption>
+            <figcaption><div><strong>Preto e branco</strong><span>Materiais em tons de cinza</span></div><a class="btn btn--primary btn--sm" href="assets/img/mascote-pb.png" download="taurus-racing-mascote-pb.png">Baixar PNG</a></figcaption>
           </figure>
         </div>
         <p class="note reveal">
@@ -140,46 +114,32 @@
     </section>
 
     <!-- ===================== COMO USAR ===================== -->
-    <section class="section section--alt" id="uso">
+    <section class="section field--paper" id="uso">
       <div class="container">
-        <div class="section__head reveal">
-          <p class="kicker">Guia de uso</p>
-          <h2 class="h2">Como usar o mascote</h2>
+        <div class="section__head">
+          <h2 class="h2 reveal">Como usar o mascote</h2>
         </div>
-        <dl class="rules">
-          <div class="reveal"><dt>Proporção</dt><dd>Aumente e diminua sem esticar. Chifres, rosto e braços precisam continuar inteiros.</dd></div>
-          <div class="reveal"><dt>Respiro</dt><dd>Deixe margem em volta, principalmente perto de textos e de logos de parceiros.</dd></div>
-          <div class="reveal"><dt>Fundo</dt><dd>Prefira fundo liso e escuro. Evite fotos movimentadas atrás do rosto.</dd></div>
-          <div class="reveal"><dt>Tamanho</dt><dd>Em tamanhos pequenos, como avatar e ícone, use só a cabeça. Os detalhes do corpo somem.</dd></div>
-        </dl>
+        <ul class="reasons">
+          <li class="reveal"><h3>Proporção</h3><p>Aumente e diminua sem esticar. Chifres, rosto e braços precisam continuar inteiros.</p></li>
+          <li class="reveal"><h3>Respiro</h3><p>Deixe margem em volta, principalmente perto de textos e de logos de parceiros.</p></li>
+          <li class="reveal"><h3>Fundo</h3><p>Prefira fundo liso e escuro. Evite fotos movimentadas atrás do rosto.</p></li>
+          <li class="reveal"><h3>Tamanho</h3><p>Em tamanhos pequenos, como avatar e ícone, use só a cabeça. Os detalhes do corpo somem.</p></li>
+        </ul>
       </div>
     </section>
 
     <!-- ===================== ONDE APARECE ===================== -->
-    <section class="section" id="onde">
+    <section class="section field--orange" id="onde">
       <div class="container">
-        <div class="section__head reveal">
-          <p class="kicker">Onde aparece</p>
-          <h2 class="h2">O papel dele na comunicação</h2>
+        <div class="section__head">
+          <h2 class="h2 reveal">Onde ele aparece</h2>
         </div>
-        <div class="aims aims--2">
-          <article class="aim reveal">
-            <h3>Redes e campanhas</h3>
-            <p>Capas, chamadas e o lançamento da coleção de camisetas.</p>
-          </article>
-          <article class="aim reveal">
-            <h3>Eventos</h3>
-            <p>Materiais de recepção, divulgação e adesivos.</p>
-          </article>
-          <article class="aim reveal">
-            <h3>No site</h3>
-            <p>Ele dá dicas na <a class="link" href="oficina.html#garagem">garagem 3D</a>, no <a class="link" href="laboratorio.html">laboratório</a>, no <a class="link" href="patrocinio.html">patrocínio</a> e no <a class="link" href="processo-seletivo.html">processo seletivo</a>.</p>
-          </article>
-          <article class="aim reveal">
-            <h3>Documentos</h3>
-            <p>Em propostas de parceria e documentos fica a assinatura simples. O mascote completa a identidade, sem precisar aparecer em toda peça.</p>
-          </article>
-        </div>
+        <ul class="reasons">
+          <li class="reveal"><h3>Redes e campanhas</h3><p>Capas, chamadas e o lançamento da coleção de camisetas.</p></li>
+          <li class="reveal"><h3>Eventos</h3><p>Materiais de recepção, divulgação e adesivos.</p></li>
+          <li class="reveal"><h3>No site</h3><p>Ele dá dicas na <a class="link" href="oficina.html#garagem">garagem 3D</a>, no <a class="link" href="laboratorio.html">laboratório</a>, no <a class="link" href="patrocinio.html">patrocínio</a> e no <a class="link" href="processo-seletivo.html">processo seletivo</a>.</p></li>
+          <li class="reveal"><h3>Documentos</h3><p>Em propostas de parceria e documentos fica a assinatura simples. O mascote completa a identidade, sem precisar aparecer em toda peça.</p></li>
+        </ul>
         <p class="note reveal">Ilustração e conceito do mascote: Bruno Okushiro, case de marketing da Taurus Racing 2026/2027.</p>
       </div>
     </section>
@@ -187,30 +147,49 @@
 
   <!-- ===================== RODAPÉ (igual em todas as páginas) ===================== -->
   <footer class="footer">
-    <div class="container footer__inner">
-      <div class="footer__brand">
-        <img src="assets/img/mascote-cabeca.webp" alt="" width="64" height="64" loading="lazy" />
-        <div>
-          <img class="footer__word" src="assets/img/letreiro.webp" alt="Taurus Racing" width="480" height="111" loading="lazy" />
-          <span>Fórmula SAE · Universidade Federal do Triângulo Mineiro</span>
+    <div class="container">
+      <a href="index.html" class="blocks" aria-label="Taurus Racing, página inicial">
+        <span style="--h:100%">T</span><span style="--h:80%;--c:var(--paper)">A</span><span style="--h:94%">U</span><span style="--h:70%;--c:var(--paper)">R</span><span style="--h:88%">U</span><span style="--h:76%;--c:var(--paper)">S</span>
+      </a>
+      <div class="footer__cols">
+        <nav class="footer__col" aria-labelledby="f-equipe">
+          <h2 id="f-equipe">Equipe</h2>
+          <ul>
+            <li><a href="index.html">Início</a></li>
+            <li><a href="integrantes.html">Integrantes</a></li>
+            <li><a href="competicao.html">Competição</a></li>
+            <li><a href="mascote.html">Mascote</a></li>
+          </ul>
+        </nav>
+        <nav class="footer__col" aria-labelledby="f-carro">
+          <h2 id="f-carro">O carro</h2>
+          <ul>
+            <li><a href="oficina.html">Oficina 3D</a></li>
+            <li><a href="laboratorio.html">Laboratório</a></li>
+          </ul>
+        </nav>
+        <nav class="footer__col" aria-labelledby="f-participe">
+          <h2 id="f-participe">Participe</h2>
+          <ul>
+            <li><a href="processo-seletivo.html">Faça parte</a></li>
+            <li><a href="patrocinio.html">Patrocínio</a></li>
+            <li><a href="contato.html">Contato</a></li>
+          </ul>
+        </nav>
+        <div class="footer__col">
+          <h2 id="f-redes">Redes</h2>
+          <ul id="footer-social" aria-labelledby="f-redes"></ul>
+        </div>
+        <div class="footer__col footer__contact">
+          <h2>Oficina</h2>
+          <p>ICTE/UFTM, Av. Dr. Randolfo Borges Júnior, 1400, Univerdecidade, Uberaba (MG)</p>
+          <p>Projeto de extensão da Universidade Federal do Triângulo Mineiro, desde 2015.</p>
         </div>
       </div>
-      <nav class="footer__nav" aria-label="Páginas do site">
-        <a href="index.html">Início</a>
-        <a href="oficina.html">Oficina 3D</a>
-        <a href="laboratorio.html">Laboratório</a>
-        <a href="competicao.html">Competição</a>
-        <a href="integrantes.html">Integrantes</a>
-        <a href="processo-seletivo.html">Faça parte</a>
-        <a href="contato.html">Contato</a>
-        <a href="patrocinio.html">Patrocínio</a>
-        <a href="mascote.html">Mascote</a>
-      </nav>
-      <nav class="footer__social" id="footer-social" aria-label="Redes sociais"></nav>
-    </div>
-    <div class="container footer__legal">
-      <p>© <span id="year"></span> Taurus Racing · Projeto de extensão da UFTM · Uberaba/MG</p>
-      <a href="#" class="link">Voltar ao topo ↑</a>
+      <div class="footer__legal">
+        <p>© <span id="year"></span> Taurus Racing · Fórmula SAE UFTM</p>
+        <a href="#" class="btn btn--ghost btn--sm">Voltar ao topo</a>
+      </div>
     </div>
   </footer>
 

@@ -49,7 +49,9 @@
   var nav = $("#nav");
   var toggle = $("#nav-toggle");
   var links = $("#nav-links");
-  var bar = $("#progress-bar");
+  // carro de lado da página inicial: anda devagar com a rolagem
+  var drift = $(".about__car img");
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   function closeMenu() {
     links.classList.remove("is-open");
@@ -71,8 +73,11 @@
   function onScroll() {
     var y = window.scrollY;
     nav.classList.toggle("is-scrolled", y > 20);
-    var h = document.documentElement.scrollHeight - window.innerHeight;
-    bar.style.width = (h > 0 ? (y / h) * 100 : 0) + "%";
+    if (drift && !reduceMotion) {
+      var r = drift.getBoundingClientRect();
+      var k = (r.top + r.height / 2 - window.innerHeight / 2) / window.innerHeight; // -1..1 perto da tela
+      if (k > -1.5 && k < 1.5) drift.style.setProperty("--drift", (k * 12).toFixed(2) + "vw");
+    }
     ticking = false;
   }
   window.addEventListener("scroll", function () {
@@ -190,15 +195,12 @@
     });
   }
   // atalho para o Instagram (sempre no fim da galeria)
-  var tiles = "";
-  ["T", "R", "38", "UF", "TM", "FSAE"].forEach(function (t) { tiles += "<span>" + t + "</span>"; });
   if (gal) gal.appendChild(el("div", { class: "insta reveal" }, [
     el("div", {}, [
-      el("h3", { text: "Os bastidores estão no Instagram" }),
+      el("h3", { text: "Bastidores no Instagram" }),
       el("p", { text: "Solda do chassi, testes, viagens para a competição e o dia a dia da oficina. Tudo sai primeiro no " + (ct.instagramUser || "Instagram") + "." }),
-      el("a", { class: "btn btn--primary", href: ct.instagram, target: "_blank", rel: "noopener", text: "Seguir " + (ct.instagramUser || "") }),
     ]),
-    el("div", { class: "insta__tiles", "aria-hidden": "true", html: tiles }),
+    el("a", { class: "btn btn--primary", href: ct.instagram, target: "_blank", rel: "noopener", text: "Seguir " + (ct.instagramUser || "") }),
   ]));
 
   /* ---------- processo seletivo ---------- */
@@ -333,7 +335,7 @@
   /* ---------- contato ---------- */
   var cards = $("#contact-cards");
   function ccard(icon, label, value, href) {
-    var a = el("a", { class: "ccard reveal", href: href, html: ICONS[icon] }, [
+    var a = el("a", { class: "ccard reveal", href: href }, [
       el("span", { text: label }), el("strong", { text: value }),
     ]);
     if (/^https?:/.test(href)) { a.target = "_blank"; a.rel = "noopener"; }
@@ -361,12 +363,13 @@
   }
 
   var social = $("#footer-social");
-  [["instagram", ct.instagram, "Instagram"], ["facebook", ct.facebook, "Facebook"], ["linkedin", ct.linkedin, "LinkedIn"]]
+  if (social) [["instagram", ct.instagram, "Instagram"], ["facebook", ct.facebook, "Facebook"], ["linkedin", ct.linkedin, "LinkedIn"]]
     .forEach(function (s) {
       if (!s[1]) return;
-      social.appendChild(el("a", { href: s[1], target: "_blank", rel: "noopener", "aria-label": s[2], html: ICONS[s[0]] }));
+      social.appendChild(el("li", {}, [el("a", { href: s[1], target: "_blank", rel: "noopener", text: s[2] })]));
     });
-  $("#year").textContent = new Date().getFullYear();
+  var year = $("#year");
+  if (year) year.textContent = new Date().getFullYear();
 
   /* ---------- reveal on scroll ---------- */
   var reveals = $$(".reveal");

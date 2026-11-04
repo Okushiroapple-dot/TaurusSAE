@@ -44,6 +44,13 @@ const storyHost = $("#stage-story"), garageHost = $("#stage-garage"), sponsorHos
 let stage = null;
 if (storyHost || garageHost || sponsorHost) {
   try {
+    // as decalques do carro são desenhadas em canvas com estas fontes: carrega antes
+    if (document.fonts && document.fonts.load) {
+      await Promise.all([
+        'italic 800 40px "Barlow Condensed"', '800 40px "Barlow Condensed"', '700 40px "Barlow Condensed"',
+        '600 40px "Inter"', '700 40px "Inter"',
+      ].map((f) => document.fonts.load(f))).catch(() => {});
+    }
     const { createStage } = await import("./3d/stage.js");
     stage = createStage({
       carNumber: (cfg.carro && cfg.carro.numero) || (cfg.equipe && cfg.equipe.numeroCarro) || 38,
@@ -68,6 +75,19 @@ if (storyHost || garageHost || sponsorHost) {
   if (!stage) document.documentElement.classList.add("no-webgl");
 }
 if (stage) window.taurus3d = stage;
+
+// pintura do carro (garagem da oficina e palco da página inicial)
+if (stage) {
+  $$("[data-paint]").forEach((b) =>
+    b.addEventListener("click", () => {
+      $$("[data-paint]").forEach((x) => {
+        x.classList.toggle("is-active", x === b);
+        if (x.hasAttribute("aria-pressed")) x.setAttribute("aria-pressed", String(x === b));
+      });
+      stage.paint(b.dataset.paint);
+    })
+  );
+}
 else ready = true;
 
 /* ---------- garagem: controles ---------- */
@@ -104,12 +124,6 @@ if (stage && garageHost) {
   range("#g-explode", "#o-explode", (v) => { stage.set("explode", v / 100); return v + "%"; });
   range("#g-steer", "#o-steer", (v) => { const r = (v / 100) * 0.35; stage.set("steer", r); return Math.round((r * 180) / Math.PI) + "°"; });
   range("#g-heave", "#o-heave", (v) => { const m = (v / 100) * 0.03; stage.set("heave", m); return Math.round(m * 1000) + " mm"; });
-  $$("[data-paint]").forEach((b) =>
-    b.addEventListener("click", () => {
-      $$("[data-paint]").forEach((x) => x.classList.toggle("is-active", x === b));
-      stage.paint(b.dataset.paint);
-    })
-  );
   $$("[data-view]").forEach((b) =>
     b.addEventListener("click", () => {
       $$("[data-view]").forEach((x) => x.classList.toggle("is-active", x === b));
@@ -181,8 +195,7 @@ if (stage && garageHost) {
   mute.addEventListener("click", () => {
     const m = mute.getAttribute("aria-pressed") !== "true";
     mute.setAttribute("aria-pressed", String(m));
-    mute.textContent = m ? "🔇" : "🔊";
-    mute.setAttribute("aria-label", m ? "Ligar som" : "Sem som");
+    mute.textContent = m ? "Ligar o som" : "Tirar o som";
     stage.engine.mute(m);
   });
 }

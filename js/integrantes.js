@@ -71,7 +71,7 @@
       top = '<path d="M38 54 C35 36 44 24 60 23 C74 22 87 30 83 53 C80 44 75 40 70 38 C64 41 52 41 44 44 C41 46 39 50 38 54 Z" fill="' + hair + '"/>';
     }
 
-    return '<svg viewBox="17 18 86 86" role="img" aria-hidden="true" focusable="false">' +
+    return '<svg viewBox="17 18 86 86" preserveAspectRatio="xMidYMax slice" role="img" aria-hidden="true" focusable="false">' +
       '<defs><clipPath id="' + id + '"><rect x="17" y="18" width="86" height="86"/></clipPath>' +
       '<radialGradient id="' + id + 'g" cx=".5" cy=".3" r=".8"><stop offset="0" stop-color="#3a3a44"/><stop offset="1" stop-color="#23232a"/></radialGradient></defs>' +
       '<g clip-path="url(#' + id + ')">' +
@@ -149,9 +149,9 @@
     lista.sort(function (a, b) { return (b.diretor ? 1 : 0) - (a.diretor ? 1 : 0); });
     var lead = d.id === "lideranca";
 
-    var sec = el("section", "dep reveal" + (lead ? " dep--lead" : ""));
+    var sec = el("section", "dep" + (lead ? " dep--lead" : ""));
     sec.id = "dep-" + d.id;
-    var head = el("header", "dep__head");
+    var head = el("header", "dep__head reveal");
     var h = text("h2", "dep__name", d.nome);
     head.appendChild(h);
     head.appendChild(text("span", "dep__count", lista.length + (lista.length === 1 ? " pessoa" : " pessoas")));
