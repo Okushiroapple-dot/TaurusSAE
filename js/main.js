@@ -123,30 +123,6 @@
     ]));
   });
 
-  /* ---------- membros ---------- */
-  var membros = C.membros || [];
-  var mWrap = $("#membros-wrap");
-  if (membros.length && mWrap) {
-    mWrap.hidden = false;
-    var mg = $("#membros");
-    membros.forEach(function (p) {
-      var initials = (p.nome || "?").split(/\s+/).map(function (w) { return w[0]; }).slice(0, 2).join("").toUpperCase();
-      var photo = p.foto
-        ? el("img", { src: p.foto, alt: "Foto de " + p.nome, loading: "lazy" })
-        : el("span", { class: "member__initials", text: initials });
-      var meta = [p.area, p.curso].filter(Boolean).join(" · ");
-      mg.appendChild(el("article", { class: "member reveal" }, [
-        el("div", { class: "member__photo" }, [photo]),
-        el("div", { class: "member__body" }, [
-          p.cargo ? el("div", { class: "member__role", text: p.cargo }) : null,
-          el("h4", { text: p.nome }),
-          meta ? el("p", { class: "member__meta", text: meta }) : null,
-          p.linkedin ? el("a", { href: p.linkedin, target: "_blank", rel: "noopener", text: "LinkedIn ↗" }) : null,
-        ]),
-      ]));
-    });
-  }
-
   /* ---------- patrocinadores ---------- */
   var sp = $("#sponsors");
   var tiersOrder = [
