@@ -48,6 +48,7 @@ Quase tudo fica em **`js/config.js`**. Não precisa mexer no HTML.
 - O logo é o mascote (touro com o letreiro TAURUS RACING), tirado do case de marketing 2026/2027. Arquivos em `assets/img/`:
   - `mascote.webp`: mascote completo com fundo transparente, usado na abertura da página inicial;
   - `mascote-cabeca.webp`: só a cabeça, usada no menu e no rodapé;
+  - `letreiro.webp`: o letreiro TAURUS RACING recortado do logo, usado ao lado da cabeça no menu, no rodapé e na tela de carregamento;
   - `favicon-32.png`, `favicon-192.png` e `apple-touch-icon.png`: ícones da aba do navegador e do celular.
   - `mascote-pb.webp`: versão preto e branco; `mascote.png` e `mascote-pb.png`: arquivos para baixar na página do mascote;
   - `mascote-cabeca-g.webp`: cabeça em tamanho maior, usada na página inicial;

@@ -141,8 +141,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .nav__inner { height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
 
 .brand { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
-.brand__text { font-family: var(--f-display); font-weight: 800; font-style: italic; font-size: 1.45rem; letter-spacing: 0.04em; line-height: 1; }
-.brand__text b { color: var(--orange); margin-left: 4px; }
+/* letreiro TAURUS RACING recortado do logo (mesma letra, com os cortes) */
+.brand__word { display: block; height: 30px; width: auto; }
 
 .nav__links { display: flex; align-items: center; gap: 26px; }
 .nav__links a:not(.btn) {
@@ -428,7 +428,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .footer { border-top: 1px solid var(--line); padding: 48px 0 32px; background: var(--bg-2); }
 .footer__inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
 .footer__brand { display: flex; align-items: center; gap: 16px; }
-.footer__brand strong { display: block; font-family: var(--f-display); font-weight: 800; font-style: italic; text-transform: uppercase; font-size: 1.5rem; line-height: 1; }
+.footer__word { display: block; height: 34px; width: auto; margin-bottom: 6px; }
 .footer__brand span { color: var(--muted); font-size: 0.9rem; }
 .footer__social { display: flex; gap: 10px; }
 .footer__social a { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: var(--surface); border: 1px solid var(--line); transition: background 0.25s, border-color 0.25s; }
@@ -610,8 +610,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .loader__hub { fill: var(--orange); }
 .loader__rpm { font-family: var(--f-display); color: var(--muted); text-transform: uppercase; letter-spacing: 0.14em; margin-top: 4px; }
 .loader__rpm span { font-size: 2.6rem; font-weight: 800; font-style: italic; color: #fff; letter-spacing: 0; font-variant-numeric: tabular-nums; }
-.loader__brand { margin-top: 14px; font-family: var(--f-display); font-weight: 800; font-style: italic; font-size: 1.4rem; letter-spacing: 0.08em; }
-.loader__brand b { color: var(--orange); margin-left: 6px; }
+.loader__brand { margin-top: 16px; }
+.loader__word { display: block; height: 44px; width: auto; margin: 0 auto; }
 
 /* =========================================================
    PALCO 3D (canvas compartilhado)
@@ -722,8 +722,13 @@ a.story__hint:hover { color: var(--white); }
   .story__h { font-size: 1.7rem; }
   .story__step p { font-size: 0.93rem; }
   .hero__title { font-size: clamp(3.4rem, 17vw, 5rem); margin-bottom: 14px; }
-  .hero__logo { margin-bottom: 10px; }
-  .hero__logo img { width: min(230px, 56vw, 30vh); }
+  .hero__logo { margin-bottom: 12px; }
+  .hero__logo img { width: min(170px, 44vw, 21vh); }
+  /* abertura no celular: texto em cima, carro embaixo, sem nada por cima dele */
+  .story--hero .eyebrow { display: none; }
+  .story--hero .hero__lead { margin-bottom: 16px; }
+  .story--hero .hero__cta { flex-wrap: nowrap; gap: 8px; }
+  .story--hero .hero__cta .btn { padding: 13px 16px; font-size: 0.82rem; }
   .hero__lead { font-size: 0.95rem; margin-bottom: 18px; }
     .story__nav { display: none; }
   .story__hint { display: none; }
