@@ -15,8 +15,9 @@ HTML, CSS e JavaScript puros, sem etapa de build. O 3D usa [Three.js](https://th
 | Patrocínio | `patrocinio.html` | Cotas, logos dos parceiros e uma prévia 3D: a empresa escolhe o logo e vê na lateral do carro (a imagem não sai do navegador) |
 | Faça parte | `processo-seletivo.html` | Situação do processo seletivo, requisitos, formulário da lista de interesse, o que o aluno ganha participando (extensão), as áreas da equipe e a grade de membros (se preenchida) |
 | Contato | `contato.html` | Redes, mapa e formulário de mensagem. `contato.html?assunto=Patrocínio` já abre com o assunto escolhido (é para onde vai o botão "Pedir proposta") |
+| Mascote | `mascote.html` | Por que um touro, a marca antiga de 2021, as versões colorida e preto e branco para baixar (PNG transparente), guia de uso e onde o mascote aparece. Fica no rodapé e na página inicial, fora do menu principal |
 
-O menu e o rodapé se repetem no topo e no fim de cada arquivo `.html`. Para mudar um link do menu, mude nos sete arquivos. O 3D só é baixado nas páginas que mostram o carro (início, oficina e patrocínio).
+O menu e o rodapé se repetem no topo e no fim de cada arquivo `.html`. Para mudar um link do menu, mude em todos os arquivos. O 3D só é baixado nas páginas que mostram o carro (início, oficina e patrocínio).
 
 O modelo 3D é o TR-04 redesenhado em código a partir de fotos do carro, então as medidas são aproximadas. Os números das simulações são típicos de um Fórmula SAE a combustão, não os do carro da equipe.
 
@@ -47,6 +48,11 @@ Quase tudo fica em **`js/config.js`**. Não precisa mexer no HTML.
   - `mascote.webp`: mascote completo com fundo transparente, usado na abertura da página inicial;
   - `mascote-cabeca.webp`: só a cabeça, usada no menu e no rodapé;
   - `favicon-32.png`, `favicon-192.png` e `apple-touch-icon.png`: ícones da aba do navegador e do celular.
+  - `mascote-pb.webp`: versão preto e branco; `mascote.png` e `mascote-pb.png`: arquivos para baixar na página do mascote;
+  - `mascote-cabeca-g.webp`: cabeça em tamanho maior, usada na página inicial;
+  - `marca-2021.jpg`: marca antiga, mostrada na página do mascote.
+
+  As dicas do mascote (balão com a cabeça do touro) ficam nas páginas da oficina, do laboratório, do patrocínio e do processo seletivo, no elemento `<aside class="tip">`.
 
   As imagens vieram de uma ilustração com fundo escuro (não é vetor), recortada para o site. Quando a equipe tiver o arquivo vetorial ou um PNG transparente oficial, troque esses arquivos mantendo os nomes.
 - A paleta é preto, branco e laranja papaya (#FF8000), inspirada na McLaren. As cores ficam no topo de `css/style.css`. A pintura do carro 3D fica em `PAINTS`, em `js/3d/car.js` (`taurus` é a pintura real do TR-04; as outras são opções da garagem).
@@ -123,6 +129,7 @@ competicao.html         competição, trajetória e galeria
 patrocinio.html         patrocínio
 processo-seletivo.html  faça parte
 contato.html            contato
+mascote.html            mascote
 css/style.css           estilos (cores e fontes no topo)
 js/config.js            conteúdo editável
 js/main.js              menu, formulários, galeria, patrocinadores, contato
