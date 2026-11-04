@@ -1,0 +1,28 @@
+<!doctype html>
+<!--
+  Gera as imagens recortadas do TR-04 (assets/img/carro/) a partir do modelo 3D do site.
+  Sirva a raiz do repositório (python3 -m http.server) e abra tools/render-carro.html.
+  No console: window.shot([x, y, z] da câmera, [x, y, z] do alvo, fov, { explode, xray, driver, highlight })
+  devolve um PNG transparente (data URL). Depois corte as bordas e converta para WebP.
+-->
+<html><body style="margin:0;background:transparent">
+<script type="module">
+import * as THREE from "../vendor/three.bundle.min.js";
+import { buildCar } from "../js/3d/car.js";
+import { studioEnvironment } from "../js/3d/textures.js";
+const W = 2000, H = 1400;
+const canvas = document.createElement("canvas"); canvas.width = W; canvas.height = H; document.body.appendChild(canvas);
+const r = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, preserveDrawingBuffer: true });
+r.setSize(W, H, false); r.setClearColor(0x000000, 0);
+r.outputColorSpace = THREE.SRGBColorSpace; r.toneMapping = THREE.ACESFilmicToneMapping; r.toneMappingExposure = 1.05;
+const scene = new THREE.Scene(); scene.environment = studioEnvironment(r);
+const key = new THREE.DirectionalLight("#fff", 1.8); key.position.set(2.5, 7, 3); scene.add(key);
+const car = buildCar({ carNumber: "38", carName: "TR-04" }); scene.add(car.root);
+car.apply(0);
+const cam = new THREE.PerspectiveCamera(28, W / H, 0.05, 60);
+window.shot = (pos, tgt, fov = 28, st = {}) => { Object.assign(car.state, { explode: 0, xray: 0, driver: 1, highlight: {} }, st);
+  cam.fov = fov; cam.position.set(...pos); cam.lookAt(new THREE.Vector3(...tgt)); cam.updateProjectionMatrix();
+  car.apply(1); r.render(scene, cam); return canvas.toDataURL("image/png");
+};
+window.ready = true;
+</script></body></html>

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Patrocínio · Taurus Racing</title>
   <meta name="description" content="Cotas de patrocínio da Taurus Racing, equipe de Fórmula SAE da UFTM. Veja a sua marca na lateral do TR-04 em 3D e peça a proposta completa." />
-  <meta name="theme-color" content="#0b0b0d" />
+  <meta name="theme-color" content="#0d0d0f" />
   <meta name="color-scheme" content="dark" />
   <link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png" />
   <link rel="icon" href="assets/img/favicon-192.png" sizes="192x192" type="image/png" />
@@ -23,13 +23,13 @@
   <meta property="og:image:height" content="630" />
   <meta name="twitter:card" content="summary_large_image" />
 
-  <link rel="preload" href="assets/fonts/barlow-condensed-latin-800-italic.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="assets/fonts/bebas-neue-latin-400.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="assets/fonts/eb-garamond-latin-var.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="modulepreload" href="vendor/three.bundle.min.js" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
   <a class="skip" href="#conteudo">Pular para o conteúdo</a>
-  <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
 
   <!-- ===================== MENU (igual em todas as páginas) ===================== -->
   <header class="nav" id="nav">
@@ -39,7 +39,6 @@
         <img class="brand__word" src="assets/img/letreiro.webp" alt="" width="480" height="111" />
       </a>
       <nav class="nav__links" id="nav-links" aria-label="Páginas">
-        <a href="index.html">Início</a>
         <a href="oficina.html">Oficina 3D</a>
         <a href="laboratorio.html">Laboratório</a>
         <a href="competicao.html">Competição</a>
@@ -55,37 +54,51 @@
   </header>
 
   <main id="conteudo">
-    <!-- ===================== PATROCÍNIO ===================== -->
-    <section class="section section--sponsor" id="patrocinio">
+    <section class="poster poster--short" aria-labelledby="titulo">
+      <div class="poster__field">
+        <div class="container poster__inner">
+          <h1 class="poster__title" id="titulo"><span>Sua marca</span> <span>no TR-04</span></h1>
+        </div>
+        <img class="poster__cut" src="assets/img/carro/tr04-frente.webp" alt="O TR-04 de frente, com logos de patrocinadores na asa dianteira" width="1030" height="749" fetchpriority="high" />
+      </div>
+      <div class="poster__band">
+        <div class="container">
+          <p class="poster__lead">Tubo de aço, motor, pneu, usinagem, viagem e inscrição: todo real que entra vira peça, teste ou quilômetro de pista, e a sua empresa aparece em cada um.</p>
+          <div class="poster__actions"><a href="contato.html?assunto=Patroc%C3%ADnio#mensagem" class="btn btn--primary">Pedir proposta</a></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== POR QUE ===================== -->
+    <section class="section" id="patrocinio">
       <div class="container">
-        <div class="section__head reveal">
-          <p class="kicker">Patrocínio</p>
-          <h1 class="h2">Coloque sua marca num carro de corrida</h1>
-          <p class="section__sub">
-            Um carro de Fórmula SAE sai caro: tubos de aço, motor, pneus, eletrônica, usinagem,
-            viagem e inscrição. Todo real que entra vira peça, teste ou quilômetro de pista,
-            e a sua empresa aparece em cada um deles.
-          </p>
+        <div class="section__head">
+          <h2 class="h2 reveal">O que a empresa ganha</h2>
         </div>
-
-        <div class="why">
-          <div class="why__item reveal">
-            <h3>Visibilidade</h3>
-            <p>Logo no carro, no macacão, no uniforme da equipe, no site e nas redes sociais, na oficina e na competição nacional.</p>
-          </div>
-          <div class="why__item reveal">
-            <h3>Talentos</h3>
-            <p>Contato direto com estudantes de engenharia que já sabem trabalhar em equipe e com prazo. Boa fonte de estagiários.</p>
-          </div>
-          <div class="why__item reveal">
-            <h3>Qualquer formato</h3>
-            <p>Dinheiro, material, usinagem, corte a laser, pintura, transporte ou licença de software. Tudo ajuda a pôr o carro na pista.</p>
-          </div>
+        <div class="why-wrap">
+        <ul class="why">
+          <li class="reveal"><h3>Visibilidade</h3><p>Logo no carro, no macacão, no uniforme da equipe, no site e nas redes sociais, na oficina e na competição nacional.</p></li>
+          <li class="reveal"><h3>Talentos</h3><p>Contato direto com estudantes de engenharia que já sabem trabalhar em equipe e com prazo. Boa fonte de estagiários.</p></li>
+          <li class="reveal"><h3>Qualquer formato</h3><p>Dinheiro, material, usinagem, corte a laser, pintura, transporte ou licença de software. Tudo ajuda a pôr o carro na pista.</p></li>
+        </ul>
+        <figure class="side-pic reveal">
+          <img src="assets/img/carro/tr04-lado.webp" alt="Lateral do TR-04, onde ficam o nome da equipe e o logo do patrocinador principal" width="1400" height="625" loading="lazy" />
+          <figcaption>A lateral do carro, onde entra o logo da cota Diamante.</figcaption>
+        </figure>
         </div>
+      </div>
+    </section>
 
+    <!-- ===================== COTAS ===================== -->
+    <section class="section field--tone" id="cotas">
+      <div class="container">
+        <div class="section__head">
+          <h2 class="h2 reveal">Quatro cotas</h2>
+          <p class="section__sub reveal">Quanto maior a cota, maior o logo e mais perto do bico ele fica. Os valores vêm na proposta.</p>
+        </div>
         <div class="tiers">
           <article class="tier tier--diamante reveal">
-            <header><span class="tier__gem"></span><h3>Diamante</h3></header>
+            <h3>Diamante</h3>
             <ul>
               <li>Maior logo no carro, na lateral e no bico</li>
               <li>Logo em destaque no macacão e no uniforme</li>
@@ -96,7 +109,7 @@
             </ul>
           </article>
           <article class="tier tier--ouro reveal">
-            <header><span class="tier__gem"></span><h3>Ouro</h3></header>
+            <h3>Ouro</h3>
             <ul>
               <li>Logo médio no carro</li>
               <li>Logo no uniforme da equipe</li>
@@ -106,7 +119,7 @@
             </ul>
           </article>
           <article class="tier tier--prata reveal">
-            <header><span class="tier__gem"></span><h3>Prata</h3></header>
+            <h3>Prata</h3>
             <ul>
               <li>Logo pequeno no carro</li>
               <li>Logo no site com link</li>
@@ -114,7 +127,7 @@
             </ul>
           </article>
           <article class="tier tier--apoio reveal">
-            <header><span class="tier__gem"></span><h3>Apoiador</h3></header>
+            <h3>Apoiador</h3>
             <ul>
               <li>Logo no site</li>
               <li>Agradecimento nas redes sociais</li>
@@ -122,38 +135,60 @@
             </ul>
           </article>
         </div>
+        <figure class="side-pic reveal">
+          <img src="assets/img/carro/tr04-tras.webp" alt="Traseira do TR-04, com logos de patrocinadores na asa" width="1400" height="789" loading="lazy" style="max-width:640px;margin-left:auto" />
+          <figcaption style="text-align:right">A asa traseira também leva logos, bem à vista de quem vem atrás.</figcaption>
+        </figure>
+      </div>
+    </section>
 
-
-        <aside class="tip reveal" aria-label="Dica do mascote">
-          <img src="assets/img/mascote-cabeca.webp" alt="" width="64" height="64" loading="lazy" />
-          <p>Quer ver como fica? Escolha o logo da sua empresa aqui embaixo e eu mostro na lateral do TR-04.</p>
-        </aside>
-
-        <div class="sp3d reveal">
+    <!-- ===================== PRÉVIA 3D ===================== -->
+    <section class="section" id="previa">
+      <div class="container">
+        <div class="sp3d">
           <div class="sp3d__stage stage" id="stage-sponsor">
             <div class="stage__fallback stage__fallback--msg"><p>A prévia 3D precisa de WebGL.</p></div>
           </div>
           <div class="sp3d__side">
-            <p class="kicker">Prévia ao vivo</p>
-            <h3>Veja sua marca no TR-04</h3>
+            <h2 class="h2 reveal">Veja sua marca no TR-04</h2>
             <p>Escolha o logo da sua empresa (PNG, JPG ou SVG) e ele aparece na lateral do carro em 3D. A imagem fica só no seu navegador, nada é enviado.</p>
             <div class="sp3d__btns">
               <label class="btn btn--primary file-btn">Escolher logo<input type="file" id="sp-file" accept="image/png,image/jpeg,image/svg+xml,image/webp" /></label>
               <button type="button" class="btn btn--ghost" id="sp-reset" hidden>Remover</button>
             </div>
             <p class="sp3d__status" id="sp-status" role="status"></p>
+            <aside class="tip" aria-label="Dica do mascote" style="margin-top:28px">
+              <img src="assets/img/mascote-cabeca.webp" alt="" width="64" height="64" loading="lazy" />
+              <p>Escolha o logo da sua empresa e eu mostro na lateral do TR-04.</p>
+            </aside>
           </div>
         </div>
+      </div>
+    </section>
 
-        <div class="sponsors reveal" id="sponsors"></div>
+    <!-- ===================== UNIFORME E PARCEIROS ===================== -->
+    <section class="section field--paper" id="parceiros">
+      <div class="container grid">
+        <div class="sponsors-intro">
+          <h2 class="h2 reveal">Parceiros da temporada</h2>
+          <p class="reveal">A camisa oficial 26/27 tem espaços reservados para as marcas parceiras, na frente e nas costas.</p>
+          <div class="sponsors reveal" id="sponsors"></div>
+        </div>
+        <figure class="sponsors-pic reveal">
+          <img src="assets/img/camisetas-oficiais.webp" alt="Camisa oficial da Taurus Racing, preta com laranja, com espaços marcados para Patrocinador 01, 02 e 03 nas costas" width="1400" height="933" loading="lazy" />
+          <figcaption>Camisa oficial 26/27, com os espaços dos patrocinadores.</figcaption>
+        </figure>
+      </div>
+    </section>
 
-        <div class="sponsor-cta reveal">
-          <div>
-            <h3>Quer ver sua marca no TR-04?</h3>
-            <p>Mandamos a proposta completa com cotas, espaços no carro e contrapartidas.</p>
-          </div>
-          <div class="sponsor-cta__btns">
-            <a class="btn btn--primary" id="cta-sponsor" href="contato.html?assunto=Patroc%C3%ADnio#mensagem">Pedir proposta</a>
+    <!-- ===================== PROPOSTA ===================== -->
+    <section class="field--orange" id="proposta">
+      <div class="container closing">
+        <h2 class="display closing__title reveal">Vamos conversar</h2>
+        <div class="closing__foot">
+          <p class="reveal">Mandamos a proposta completa com cotas, espaços no carro e contrapartidas.</p>
+          <div class="sponsor-cta__btns reveal">
+            <a class="btn btn--dark" id="cta-sponsor" href="contato.html?assunto=Patroc%C3%ADnio#mensagem">Pedir proposta</a>
             <a class="btn btn--ghost" id="cta-kit" href="#" hidden download>Baixar mídia kit</a>
           </div>
         </div>
@@ -163,30 +198,49 @@
 
   <!-- ===================== RODAPÉ (igual em todas as páginas) ===================== -->
   <footer class="footer">
-    <div class="container footer__inner">
-      <div class="footer__brand">
-        <img src="assets/img/mascote-cabeca.webp" alt="" width="64" height="64" loading="lazy" />
-        <div>
-          <img class="footer__word" src="assets/img/letreiro.webp" alt="Taurus Racing" width="480" height="111" loading="lazy" />
-          <span>Fórmula SAE · Universidade Federal do Triângulo Mineiro</span>
+    <div class="container">
+      <a href="index.html" class="blocks" aria-label="Taurus Racing, página inicial">
+        <span style="--h:100%">T</span><span style="--h:80%;--c:var(--paper)">A</span><span style="--h:94%">U</span><span style="--h:70%;--c:var(--paper)">R</span><span style="--h:88%">U</span><span style="--h:76%;--c:var(--paper)">S</span>
+      </a>
+      <div class="footer__cols">
+        <nav class="footer__col" aria-labelledby="f-equipe">
+          <h2 id="f-equipe">Equipe</h2>
+          <ul>
+            <li><a href="index.html">Início</a></li>
+            <li><a href="integrantes.html">Integrantes</a></li>
+            <li><a href="competicao.html">Competição</a></li>
+            <li><a href="mascote.html">Mascote</a></li>
+          </ul>
+        </nav>
+        <nav class="footer__col" aria-labelledby="f-carro">
+          <h2 id="f-carro">O carro</h2>
+          <ul>
+            <li><a href="oficina.html">Oficina 3D</a></li>
+            <li><a href="laboratorio.html">Laboratório</a></li>
+          </ul>
+        </nav>
+        <nav class="footer__col" aria-labelledby="f-participe">
+          <h2 id="f-participe">Participe</h2>
+          <ul>
+            <li><a href="processo-seletivo.html">Faça parte</a></li>
+            <li><a href="patrocinio.html">Patrocínio</a></li>
+            <li><a href="contato.html">Contato</a></li>
+          </ul>
+        </nav>
+        <div class="footer__col">
+          <h2 id="f-redes">Redes</h2>
+          <ul id="footer-social" aria-labelledby="f-redes"></ul>
+        </div>
+        <div class="footer__col footer__contact">
+          <h2>Oficina</h2>
+          <p>ICTE/UFTM, Av. Dr. Randolfo Borges Júnior, 1400, Univerdecidade, Uberaba (MG)</p>
+          <p>Projeto de extensão da Universidade Federal do Triângulo Mineiro, desde 2015.</p>
         </div>
       </div>
-      <nav class="footer__nav" aria-label="Páginas do site">
-        <a href="index.html">Início</a>
-        <a href="oficina.html">Oficina 3D</a>
-        <a href="laboratorio.html">Laboratório</a>
-        <a href="competicao.html">Competição</a>
-        <a href="integrantes.html">Integrantes</a>
-        <a href="processo-seletivo.html">Faça parte</a>
-        <a href="contato.html">Contato</a>
-        <a href="patrocinio.html">Patrocínio</a>
-        <a href="mascote.html">Mascote</a>
-      </nav>
-      <nav class="footer__social" id="footer-social" aria-label="Redes sociais"></nav>
-    </div>
-    <div class="container footer__legal">
-      <p>© <span id="year"></span> Taurus Racing · Projeto de extensão da UFTM · Uberaba/MG</p>
-      <a href="#" class="link">Voltar ao topo ↑</a>
+      <div class="footer__legal">
+        <p>© <span id="year"></span> Taurus Racing · Fórmula SAE UFTM</p>
+        <a href="#" class="btn btn--ghost btn--sm">Voltar ao topo</a>
+      </div>
     </div>
   </footer>
 

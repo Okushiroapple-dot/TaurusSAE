@@ -46,18 +46,20 @@ Quase tudo fica em **`js/config.js`**. Não precisa mexer no HTML.
 ### Logo e cores
 
 - O logo é o mascote (touro com o letreiro TAURUS RACING), tirado do case de marketing 2026/2027. Arquivos em `assets/img/`:
-  - `mascote.webp`: mascote completo com fundo transparente, usado na abertura da página inicial;
+  - `mascote.webp`: mascote completo com fundo transparente, usado na página inicial, no contato e na página do mascote;
   - `mascote-cabeca.webp`: só a cabeça, usada no menu e no rodapé;
-  - `letreiro.webp`: o letreiro TAURUS RACING recortado do logo, usado ao lado da cabeça no menu, no rodapé e na tela de carregamento;
+  - `letreiro.webp`: o letreiro TAURUS RACING recortado do logo, usado ao lado da cabeça no menu;
   - `favicon-32.png`, `favicon-192.png` e `apple-touch-icon.png`: ícones da aba do navegador e do celular.
   - `mascote-pb.webp`: versão preto e branco; `mascote.png` e `mascote-pb.png`: arquivos para baixar na página do mascote;
-  - `mascote-cabeca-g.webp`: cabeça em tamanho maior, usada na página inicial;
+  - `mascote-cabeca-g.webp`: cabeça em tamanho maior;
+  - `camisetas-pretas.webp` e `camisetas-oficiais.webp`: as camisetas da temporada 26/27, tiradas do case de marketing;
+  - `carro/tr04-*.webp`: o TR-04 recortado, em várias vistas (três quartos, lado, frente, trás, de cima, explodido e raio-X do chassi). São renderizações do modelo 3D do site, feitas com `tools/render-carro.html`. Quando houver fotos reais do carro, troque mantendo os nomes ou ajuste os `src`.
   - `marca-2021.jpg`: marca antiga, mostrada na página do mascote.
 
   As dicas do mascote (balão com a cabeça do touro) ficam nas páginas da oficina, do laboratório, do patrocínio e do processo seletivo, no elemento `<aside class="tip">`.
 
   As imagens vieram de uma ilustração com fundo escuro (não é vetor), recortada para o site. Quando a equipe tiver o arquivo vetorial ou um PNG transparente oficial, troque esses arquivos mantendo os nomes.
-- A paleta é preto, branco e laranja papaya (#FF8000), inspirada na McLaren. As cores ficam no topo de `css/style.css`. A pintura do carro 3D fica em `PAINTS`, em `js/3d/car.js` (`taurus` é a pintura real do TR-04; as outras são opções da garagem).
+- O visual segue a linguagem de cartaz de corrida: campos de cor chapados (preto `#0d0d0f`, o laranja do logo `#ff701f` e branco papel `#efeeea`), títulos em Bebas Neue bem grandes, texto em EB Garamond e o carro recortado por cima. Sem degradês, sombras, bordas finas ou etiquetas em caixa alta. As cores, as fontes e os cinco tamanhos de letra ficam no topo de `css/style.css`. A pintura do carro 3D fica em `PAINTS`, em `js/3d/car.js` (`taurus` é a pintura real do TR-04; as outras são opções da garagem).
 - A imagem que aparece quando o link é compartilhado é `assets/img/og-image.jpg` (1200×630).
 
 ## Ver no computador
@@ -138,7 +140,7 @@ js/config.js            conteúdo editável
 js/main.js              menu, formulários, galeria, patrocinadores, contato
 js/forms.js             envio dos formulários para o Firestore
 js/integrantes.js       página de integrantes e avatares ilustrados
-js/app.js               liga o 3D, o laboratório e a tela de carregamento
+js/app.js               liga o 3D e o laboratório
 js/3d/car.js            modelo 3D do carro (chassi, suspensão, motor, asas, pintura)
 js/3d/stage.js          cena, luzes, câmera guiada pela rolagem, garagem e prévia do patrocinador
 js/3d/airflow.js        visualização do fluxo de ar
@@ -151,12 +153,13 @@ js/lab/track.js         traçado do autocross
 js/lab/suspension.js    cinemática da suspensão duplo A
 js/lab/lab.js           interface das simulações
 vendor/                 Three.js e three-gpu-pathtracer (licença MIT) e Firebase (Apache 2.0) empacotados
-tools/                  script dos pacotes de vendor/ e publicação das regras do Firestore
+tools/                  script dos pacotes de vendor/, publicação das regras do Firestore e render-carro.html (gera as imagens do carro)
 firebase.json           configuração do Firebase Hosting e do Firestore
 .firebaserc             projeto padrão do Firebase (taurus-racing)
 firestore.rules         regras de segurança do Firestore
-assets/fonts/           Barlow Condensed e Inter (licença OFL)
-assets/img/             logo, favicon, imagem de compartilhamento, fotos
+assets/fonts/           Bebas Neue e EB Garamond (texto do site); Barlow Condensed e Inter (só nas decalques do carro 3D). Licença OFL
+assets/img/             logo, favicon, imagem de compartilhamento, camisetas
+assets/img/carro/       o TR-04 recortado em várias vistas
 ```
 
 Para atualizar o Three.js, o path tracer e o Firebase: `bash tools/build-vendor.sh` (precisa de Node.js).

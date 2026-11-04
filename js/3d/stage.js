@@ -148,11 +148,11 @@ export function createStage(opts = {}) {
   renderer.toneMappingExposure = 0.95;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFShadowMap;
-  renderer.setClearColor("#0b0b0d", 1);
+  renderer.setClearColor("#0d0d0f", 1);
 
   /* ---------- cena: estúdio fotográfico ---------- */
   const scene = new THREE.Scene();
-  scene.fog = new THREE.Fog("#0b0b0d", 7, 17);
+  scene.fog = new THREE.Fog("#0d0d0f", 7, 17);
   scene.environment = studioEnvironment(renderer);
   scene.environmentIntensity = 1.0;
 
@@ -188,7 +188,7 @@ export function createStage(opts = {}) {
     reflector.onBeforeRender = function (r, s, c) { if (!s.overrideMaterial) reflect.call(this, r, s, c); };
     scene.add(reflector);
   }
-  const glow = new THREE.Mesh(new THREE.RingGeometry(1.95, 2.0, 128), new THREE.MeshBasicMaterial({ color: "#ff8000", transparent: true, opacity: 0.2, blending: THREE.AdditiveBlending, depthWrite: false }));
+  const glow = new THREE.Mesh(new THREE.RingGeometry(1.95, 2.0, 128), new THREE.MeshBasicMaterial({ color: "#ff701f", transparent: true, opacity: 0.2, blending: THREE.AdditiveBlending, depthWrite: false }));
   glow.rotation.x = -Math.PI / 2;
   glow.scale.set(1.2, 0.72, 1);
   glow.position.y = 0.004;
@@ -297,9 +297,12 @@ export function createStage(opts = {}) {
   const navBtns = story.section ? Array.from(story.section.querySelectorAll("[data-go]")) : [];
   const tags = story.section ? Array.from(story.section.querySelectorAll("[data-tag-step]")) : [];
   let storyF = 0;
+  // data-sy na seção troca o deslocamento vertical do primeiro quadro em telas em pé
+  const sy0 = story.section && story.section.dataset.sy != null ? +story.section.dataset.sy : null;
   function storyProgress() {
     const s = story.section;
-    if (!s) return 0;
+    // data-still: palco parado no primeiro quadro (página inicial), sem rolagem guiada
+    if (!s || s.dataset.still != null) return 0;
     const r = s.getBoundingClientRect();
     const span = r.height - innerHeight;
     return span > 0 ? clamp(-r.top / span, 0, 1) : 0;
@@ -342,7 +345,7 @@ export function createStage(opts = {}) {
     camera.lookAt(_t);
     const portrait = camera.aspect < 1;
     const sh = portrait ? 0 : lerp(A.shift || 0, B.shift || 0, t);
-    const sv = portrait ? lerp(A.sy || 0, B.sy || 0, t) : 0;
+    const sv = portrait ? lerp(i === 0 && sy0 != null ? sy0 : A.sy || 0, B.sy || 0, t) : 0;
     setOffset(sh, sv);
 
     const sa = { ...DEF, ...A.st }, sb = { ...DEF, ...B.st };

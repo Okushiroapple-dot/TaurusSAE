@@ -208,7 +208,15 @@ window.TAURUS = {
    * Exemplo:
    *   { src: "assets/img/galeria/chassi.jpg", legenda: "Soldagem do chassi" },
    */
-  galeria: [],
+  galeria: [
+    // imagens do TR-04 geradas a partir do modelo 3D da equipe; troque por fotos reais quando houver
+    { src: "assets/img/carro/tr04-xray.webp", legenda: "TR-04 em 3D: o chassi tubular, em laranja, por dentro da carenagem" },
+    { src: "assets/img/carro/tr04-explodido.webp", legenda: "TR-04 em 3D: vista explodida" },
+    { src: "assets/img/carro/tr04-lado.webp", legenda: "TR-04 em 3D: vista lateral" },
+    { src: "assets/img/carro/tr04-frente.webp", legenda: "TR-04 em 3D: de frente, com a asa dianteira" },
+    { src: "assets/img/camisetas-oficiais.webp", legenda: "Camisa oficial da temporada 26/27" },
+    { src: "assets/img/camisetas-pretas.webp", legenda: "Camiseta da temporada 26/27" },
+  ],
 
   // Processo seletivo: aberto = true mostra o formulário como "inscrições abertas".
   processoSeletivo: {

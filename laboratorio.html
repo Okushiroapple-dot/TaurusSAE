@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Laboratório · Taurus Racing</title>
   <meta name="description" content="Simulações de Fórmula SAE no navegador: volta de autocross com diagrama g-g, aceleração de 75 m, skidpad e geometria de suspensão duplo A." />
-  <meta name="theme-color" content="#0b0b0d" />
+  <meta name="theme-color" content="#0d0d0f" />
   <meta name="color-scheme" content="dark" />
   <link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png" />
   <link rel="icon" href="assets/img/favicon-192.png" sizes="192x192" type="image/png" />
@@ -23,12 +23,12 @@
   <meta property="og:image:height" content="630" />
   <meta name="twitter:card" content="summary_large_image" />
 
-  <link rel="preload" href="assets/fonts/barlow-condensed-latin-800-italic.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="assets/fonts/bebas-neue-latin-400.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="assets/fonts/eb-garamond-latin-var.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
   <a class="skip" href="#conteudo">Pular para o conteúdo</a>
-  <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
 
   <!-- ===================== MENU (igual em todas as páginas) ===================== -->
   <header class="nav" id="nav">
@@ -38,7 +38,6 @@
         <img class="brand__word" src="assets/img/letreiro.webp" alt="" width="480" height="111" />
       </a>
       <nav class="nav__links" id="nav-links" aria-label="Páginas">
-        <a href="index.html">Início</a>
         <a href="oficina.html">Oficina 3D</a>
         <a href="laboratorio.html" class="is-active" aria-current="page">Laboratório</a>
         <a href="competicao.html">Competição</a>
@@ -54,23 +53,34 @@
   </header>
 
   <main id="conteudo">
-    <!-- ===================== LABORATÓRIO ===================== -->
+    <section class="poster poster--short" aria-labelledby="titulo">
+      <div class="poster__field">
+        <div class="container poster__inner">
+          <h1 class="poster__title" id="titulo"><span>Laboratório</span></h1>
+        </div>
+        <img class="poster__cut" src="assets/img/carro/tr04-lado.webp" alt="O TR-04 visto de lado" width="1400" height="625" fetchpriority="high" />
+      </div>
+      <div class="poster__band">
+        <div class="container">
+          <p class="poster__lead">Mude peso, potência, pneu e asas e veja o tempo de volta mudar. São as contas que a equipe faz para decidir onde gastar cada quilo e cada real.</p>
+          <div class="poster__actions"><a href="#laboratorio" class="btn btn--primary">Abrir as simulações</a></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== SIMULAÇÕES ===================== -->
     <section class="section lab" id="laboratorio">
       <div class="container">
-        <div class="section__head reveal">
-          <p class="kicker">Laboratório</p>
-          <h1 class="h2">Simule como engenheiro da equipe</h1>
-          <p class="section__sub">
-            Mude peso, potência, pneu e asas e veja o tempo de volta mudar. São as contas que uma equipe faz
-            para decidir onde gastar cada quilo e cada real, numa versão simplificada.
-          </p>
+        <div class="section__head">
+          <h2 class="h2 reveal">Simule como engenheiro</h2>
+          <p class="section__sub reveal">Quatro simulações: volta de autocross, aceleração em 75 metros, skidpad e geometria de suspensão. Os valores são típicos de um Fórmula SAE a combustão.</p>
           <aside class="tip reveal" aria-label="Dica do mascote">
             <img src="assets/img/mascote-cabeca.webp" alt="" width="64" height="64" loading="lazy" />
             <p>Comece pela volta de autocross. Tire peso ou ponha mais asa e compare com a marca branca de cada barra, que é o carro de referência.</p>
           </aside>
         </div>
 
-        <div class="lab__tabs" role="tablist" aria-label="Simulações">
+        <div class="lab__tabs reveal" role="tablist" aria-label="Simulações">
           <button type="button" role="tab" data-lab-tab="volta" class="is-active" aria-selected="true">Volta de autocross</button>
           <button type="button" role="tab" data-lab-tab="aceleracao" aria-selected="false" tabindex="-1">Aceleração 75 m</button>
           <button type="button" role="tab" data-lab-tab="skidpad" aria-selected="false" tabindex="-1">Skidpad</button>
@@ -78,7 +88,7 @@
         </div>
 
         <div class="lab__grid">
-          <aside class="lab__setup">
+          <aside class="lab__setup reveal">
             <h3>Acerto do carro</h3>
             <p class="lab__hint">A marca branca em cada barra é o carro de referência.</p>
             <label class="ctrl range"><span class="range__head"><span>Massa (carro + piloto)</span><output data-out="mass"></output></span><span class="range__wrap"><input type="range" data-param="mass" min="220" max="340" step="5" /></span></label>
@@ -96,10 +106,10 @@
             <p class="lab__disclaimer">Modelo de massa pontual, sem transferência lateral de carga. Os valores iniciais são típicos de um Fórmula SAE a combustão, não os do carro da equipe.</p>
           </aside>
 
-          <div class="lab__main">
+          <div class="lab__main reveal">
             <!-- volta -->
             <div data-lab-panel="volta">
-              <div class="lab__map">
+              <div class="lab__map" data-ui>
                 <canvas id="lab-track" aria-label="Mapa do traçado com o carro simulado"></canvas>
                 <div class="hud">
                   <div><span>Tempo</span><strong id="hud-t">0,00 s</strong></div>
@@ -115,13 +125,13 @@
                   <button type="button" data-lap-speed="4">4×</button>
                 </div>
               </div>
-              <div class="results">
+              <div class="results" data-ui>
                 <div class="result result--main"><span>Tempo de volta</span><strong id="r-lap">—</strong><em id="r-lap-d" class="delta"></em></div>
                 <div class="result"><span>Velocidade máxima</span><strong id="r-vmax">—</strong></div>
                 <div class="result"><span>Velocidade média</span><strong id="r-vavg">—</strong></div>
                 <div class="result"><span>G lateral máximo</span><strong id="r-gy">—</strong></div>
               </div>
-              <div class="charts">
+              <div class="charts" data-ui>
                 <figure><figcaption>Velocidade ao longo da volta</figcaption><canvas id="lab-speed"></canvas></figure>
                 <figure class="charts__gg"><figcaption>Diagrama g-g</figcaption><canvas id="lab-gg"></canvas></figure>
               </div>
@@ -129,36 +139,36 @@
 
             <!-- aceleração -->
             <div data-lab-panel="aceleracao" hidden>
-              <div class="lab__map lab__map--accel">
+              <div class="lab__map lab__map--accel" data-ui>
                 <div class="lights" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
                 <canvas id="lab-accel" aria-label="Pista de aceleração com dois carros"></canvas>
                 <button type="button" class="btn btn--primary accel__go" id="acc-go">Largar</button>
               </div>
-              <div class="results">
+              <div class="results" data-ui>
                 <div class="result result--main"><span>Tempo nos 75 m</span><strong id="r-acc">—</strong><em id="r-acc-d" class="delta"></em></div>
                 <div class="result"><span>Velocidade na chegada</span><strong id="r-acc-v">—</strong></div>
                 <div class="result"><span>0 a 100 km/h</span><strong id="r-acc-100">—</strong></div>
               </div>
-              <p class="lab__explain">Na largada o limite é a aderência dos pneus traseiros (parte do peso vai para trás quando o carro acelera). Depois de uns 70 km/h quem manda é a potência. Por isso tirar peso ajuda nas duas fases.</p>
+              <p class="lab__explain reveal">Na largada o limite é a aderência dos pneus traseiros (parte do peso vai para trás quando o carro acelera). Depois de uns 70 km/h quem manda é a potência. Por isso tirar peso ajuda nas duas fases.</p>
             </div>
 
             <!-- skidpad -->
             <div data-lab-panel="skidpad" hidden>
-              <div class="lab__map">
+              <div class="lab__map" data-ui>
                 <canvas id="lab-skid" aria-label="Pista em forma de oito do skidpad"></canvas>
               </div>
-              <div class="results">
+              <div class="results" data-ui>
                 <div class="result result--main"><span>Tempo por volta</span><strong id="r-skid">—</strong><em id="r-skid-d" class="delta"></em></div>
                 <div class="result"><span>Velocidade</span><strong id="r-skid-v">—</strong></div>
                 <div class="result"><span>Aceleração lateral</span><strong id="r-skid-g">—</strong></div>
               </div>
-              <p class="lab__explain">O carro dá duas voltas em cada círculo do oito e só a segunda é cronometrada. Tudo depende de quanta força lateral os pneus aguentam: pneu melhor e mais downforce deixam o carro fazer a curva mais rápido.</p>
+              <p class="lab__explain reveal">O carro dá duas voltas em cada círculo do oito e só a segunda é cronometrada. Tudo depende de quanta força lateral os pneus aguentam: pneu melhor e mais downforce deixam o carro fazer a curva mais rápido.</p>
             </div>
 
             <!-- suspensão -->
             <div data-lab-panel="suspensao" hidden>
               <div class="susp">
-                <div class="lab__map lab__map--susp">
+                <div class="lab__map lab__map--susp" data-ui>
                   <canvas id="lab-susp" aria-label="Vista frontal da suspensão duplo A"></canvas>
                   <p class="susp__hint">Arraste os pontos laranja para mudar a geometria</p>
                 </div>
@@ -173,7 +183,7 @@
                     <button type="button" data-susp="paralelas">Paralelos e iguais</button>
                     <button type="button" data-susp="agressiva">Ganho alto</button>
                   </div>
-                  <div class="results results--susp">
+                  <div class="results results--susp" data-ui>
                     <div class="result"><span>Cambagem</span><strong id="s-cam">—</strong></div>
                     <div class="result"><span>Ganho de cambagem</span><strong id="s-gain">—</strong></div>
                     <div class="result"><span>Centro de rolagem</span><strong id="s-rc">—</strong></div>
@@ -182,7 +192,7 @@
                   <canvas id="lab-camber" class="susp__chart" aria-label="Gráfico de cambagem por curso"></canvas>
                 </div>
               </div>
-              <p class="lab__explain">Numa curva o carro inclina e a roda de fora sobe. Se ela ganhar cambagem negativa ao subir, o pneu fica mais apoiado no chão e segura mais. Braços paralelos e iguais não dão esse ganho. O centro de rolagem define quanto o carro inclina.</p>
+              <p class="lab__explain reveal">Numa curva o carro inclina e a roda de fora sobe. Se ela ganhar cambagem negativa ao subir, o pneu fica mais apoiado no chão e segura mais. Braços paralelos e iguais não dão esse ganho. O centro de rolagem define quanto o carro inclina.</p>
             </div>
           </div>
         </div>
@@ -192,30 +202,49 @@
 
   <!-- ===================== RODAPÉ (igual em todas as páginas) ===================== -->
   <footer class="footer">
-    <div class="container footer__inner">
-      <div class="footer__brand">
-        <img src="assets/img/mascote-cabeca.webp" alt="" width="64" height="64" loading="lazy" />
-        <div>
-          <img class="footer__word" src="assets/img/letreiro.webp" alt="Taurus Racing" width="480" height="111" loading="lazy" />
-          <span>Fórmula SAE · Universidade Federal do Triângulo Mineiro</span>
+    <div class="container">
+      <a href="index.html" class="blocks" aria-label="Taurus Racing, página inicial">
+        <span style="--h:100%">T</span><span style="--h:80%;--c:var(--paper)">A</span><span style="--h:94%">U</span><span style="--h:70%;--c:var(--paper)">R</span><span style="--h:88%">U</span><span style="--h:76%;--c:var(--paper)">S</span>
+      </a>
+      <div class="footer__cols">
+        <nav class="footer__col" aria-labelledby="f-equipe">
+          <h2 id="f-equipe">Equipe</h2>
+          <ul>
+            <li><a href="index.html">Início</a></li>
+            <li><a href="integrantes.html">Integrantes</a></li>
+            <li><a href="competicao.html">Competição</a></li>
+            <li><a href="mascote.html">Mascote</a></li>
+          </ul>
+        </nav>
+        <nav class="footer__col" aria-labelledby="f-carro">
+          <h2 id="f-carro">O carro</h2>
+          <ul>
+            <li><a href="oficina.html">Oficina 3D</a></li>
+            <li><a href="laboratorio.html">Laboratório</a></li>
+          </ul>
+        </nav>
+        <nav class="footer__col" aria-labelledby="f-participe">
+          <h2 id="f-participe">Participe</h2>
+          <ul>
+            <li><a href="processo-seletivo.html">Faça parte</a></li>
+            <li><a href="patrocinio.html">Patrocínio</a></li>
+            <li><a href="contato.html">Contato</a></li>
+          </ul>
+        </nav>
+        <div class="footer__col">
+          <h2 id="f-redes">Redes</h2>
+          <ul id="footer-social" aria-labelledby="f-redes"></ul>
+        </div>
+        <div class="footer__col footer__contact">
+          <h2>Oficina</h2>
+          <p>ICTE/UFTM, Av. Dr. Randolfo Borges Júnior, 1400, Univerdecidade, Uberaba (MG)</p>
+          <p>Projeto de extensão da Universidade Federal do Triângulo Mineiro, desde 2015.</p>
         </div>
       </div>
-      <nav class="footer__nav" aria-label="Páginas do site">
-        <a href="index.html">Início</a>
-        <a href="oficina.html">Oficina 3D</a>
-        <a href="laboratorio.html">Laboratório</a>
-        <a href="competicao.html">Competição</a>
-        <a href="integrantes.html">Integrantes</a>
-        <a href="processo-seletivo.html">Faça parte</a>
-        <a href="contato.html">Contato</a>
-        <a href="patrocinio.html">Patrocínio</a>
-        <a href="mascote.html">Mascote</a>
-      </nav>
-      <nav class="footer__social" id="footer-social" aria-label="Redes sociais"></nav>
-    </div>
-    <div class="container footer__legal">
-      <p>© <span id="year"></span> Taurus Racing · Projeto de extensão da UFTM · Uberaba/MG</p>
-      <a href="#" class="link">Voltar ao topo ↑</a>
+      <div class="footer__legal">
+        <p>© <span id="year"></span> Taurus Racing · Fórmula SAE UFTM</p>
+        <a href="#" class="btn btn--ghost btn--sm">Voltar ao topo</a>
+      </div>
     </div>
   </footer>
 

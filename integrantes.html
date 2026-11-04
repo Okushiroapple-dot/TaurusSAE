@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Integrantes · Taurus Racing</title>
   <meta name="description" content="Quem faz a Taurus Racing: a liderança da equipe e os departamentos de chassi, suspensão, powertrain, freios, eletrônica, aerodinâmica, gestão e marketing." />
-  <meta name="theme-color" content="#0b0b0d" />
+  <meta name="theme-color" content="#0d0d0f" />
   <meta name="color-scheme" content="dark" />
   <link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png" />
   <link rel="icon" href="assets/img/favicon-192.png" sizes="192x192" type="image/png" />
@@ -23,12 +23,12 @@
   <meta property="og:image:height" content="630" />
   <meta name="twitter:card" content="summary_large_image" />
 
-  <link rel="preload" href="assets/fonts/barlow-condensed-latin-800-italic.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="assets/fonts/bebas-neue-latin-400.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="assets/fonts/eb-garamond-latin-var.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
   <a class="skip" href="#conteudo">Pular para o conteúdo</a>
-  <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
 
   <!-- ===================== MENU (igual em todas as páginas) ===================== -->
   <header class="nav" id="nav">
@@ -38,7 +38,6 @@
         <img class="brand__word" src="assets/img/letreiro.webp" alt="" width="480" height="111" />
       </a>
       <nav class="nav__links" id="nav-links" aria-label="Páginas">
-        <a href="index.html">Início</a>
         <a href="oficina.html">Oficina 3D</a>
         <a href="laboratorio.html">Laboratório</a>
         <a href="competicao.html">Competição</a>
@@ -54,23 +53,40 @@
   </header>
 
   <main id="conteudo">
-    <!-- ===================== INTEGRANTES ===================== -->
-    <section class="section team">
-      <div class="container">
-        <div class="section__head reveal">
-          <p class="kicker">Equipe</p>
-          <h1 class="h2">Integrantes</h1>
-          <p class="section__sub">
-            A Taurus se organiza em departamentos. Cada um cuida de um conjunto do carro ou da operação, e a
-            liderança junta tudo no mesmo cronograma.
-          </p>
+    <section class="poster poster--short poster--tall" aria-labelledby="titulo">
+      <div class="poster__field">
+        <div class="container poster__inner">
+          <h1 class="poster__title" id="titulo"><span>Quem faz</span> <span>o TR-04</span></h1>
         </div>
+        <img class="poster__cut" src="assets/img/carro/tr04-explodido.webp" alt="O TR-04 em vista explodida: carenagem, chassi, rodas, asas e motor separados" width="1306" height="1002" fetchpriority="high" />
+      </div>
+      <div class="poster__band">
+        <div class="container">
+          <p class="poster__lead">A Taurus se organiza em departamentos. Cada um cuida de um conjunto do carro ou da operação, e a liderança junta tudo no mesmo cronograma.</p>
+          <div class="poster__actions"><a href="#integrantes" class="btn btn--primary">Ver os departamentos</a></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== DEPARTAMENTOS ===================== -->
+    <section class="section team" aria-labelledby="deps-t">
+      <div class="container">
+        <h2 class="sr-only" id="deps-t">Departamentos</h2>
         <p class="demo-note" id="demo-aviso" hidden>
           <strong>Página de demonstração.</strong> Os nomes e os avatares abaixo são fictícios e servem só para
           mostrar como a página fica. A lista com os integrantes reais entra em breve.
         </p>
         <nav class="dep-chips" id="dep-chips" aria-label="Departamentos"></nav>
         <div id="integrantes"></div>
+        <div class="uniform" style="margin:clamp(56px,7vw,112px) 0">
+          <div>
+            <h2 class="h2 reveal">O uniforme</h2>
+            <p class="reveal">Na oficina e na competição a equipe usa a camisa oficial preta e laranja, com os patrocinadores nas costas e o nome da área de cada um.</p>
+          </div>
+          <figure class="side-pic reveal" style="margin:0">
+            <img src="assets/img/camisetas-oficiais.webp" alt="Camisa oficial da Taurus Racing, preta com laranja, frente e costas" width="1400" height="933" loading="lazy" />
+          </figure>
+        </div>
         <aside class="tip reveal" aria-label="Dica do mascote">
           <img src="assets/img/mascote-cabeca.webp" alt="" width="64" height="64" loading="lazy" />
           <p>Quer aparecer aqui? Entre na <a class="link" href="processo-seletivo.html">lista do processo seletivo</a> e escolha o departamento que mais combina com você.</p>
@@ -81,30 +97,49 @@
 
   <!-- ===================== RODAPÉ (igual em todas as páginas) ===================== -->
   <footer class="footer">
-    <div class="container footer__inner">
-      <div class="footer__brand">
-        <img src="assets/img/mascote-cabeca.webp" alt="" width="64" height="64" loading="lazy" />
-        <div>
-          <img class="footer__word" src="assets/img/letreiro.webp" alt="Taurus Racing" width="480" height="111" loading="lazy" />
-          <span>Fórmula SAE · Universidade Federal do Triângulo Mineiro</span>
+    <div class="container">
+      <a href="index.html" class="blocks" aria-label="Taurus Racing, página inicial">
+        <span style="--h:100%">T</span><span style="--h:80%;--c:var(--paper)">A</span><span style="--h:94%">U</span><span style="--h:70%;--c:var(--paper)">R</span><span style="--h:88%">U</span><span style="--h:76%;--c:var(--paper)">S</span>
+      </a>
+      <div class="footer__cols">
+        <nav class="footer__col" aria-labelledby="f-equipe">
+          <h2 id="f-equipe">Equipe</h2>
+          <ul>
+            <li><a href="index.html">Início</a></li>
+            <li><a href="integrantes.html">Integrantes</a></li>
+            <li><a href="competicao.html">Competição</a></li>
+            <li><a href="mascote.html">Mascote</a></li>
+          </ul>
+        </nav>
+        <nav class="footer__col" aria-labelledby="f-carro">
+          <h2 id="f-carro">O carro</h2>
+          <ul>
+            <li><a href="oficina.html">Oficina 3D</a></li>
+            <li><a href="laboratorio.html">Laboratório</a></li>
+          </ul>
+        </nav>
+        <nav class="footer__col" aria-labelledby="f-participe">
+          <h2 id="f-participe">Participe</h2>
+          <ul>
+            <li><a href="processo-seletivo.html">Faça parte</a></li>
+            <li><a href="patrocinio.html">Patrocínio</a></li>
+            <li><a href="contato.html">Contato</a></li>
+          </ul>
+        </nav>
+        <div class="footer__col">
+          <h2 id="f-redes">Redes</h2>
+          <ul id="footer-social" aria-labelledby="f-redes"></ul>
+        </div>
+        <div class="footer__col footer__contact">
+          <h2>Oficina</h2>
+          <p>ICTE/UFTM, Av. Dr. Randolfo Borges Júnior, 1400, Univerdecidade, Uberaba (MG)</p>
+          <p>Projeto de extensão da Universidade Federal do Triângulo Mineiro, desde 2015.</p>
         </div>
       </div>
-      <nav class="footer__nav" aria-label="Páginas do site">
-        <a href="index.html">Início</a>
-        <a href="oficina.html">Oficina 3D</a>
-        <a href="laboratorio.html">Laboratório</a>
-        <a href="competicao.html">Competição</a>
-        <a href="integrantes.html">Integrantes</a>
-        <a href="processo-seletivo.html">Faça parte</a>
-        <a href="contato.html">Contato</a>
-        <a href="patrocinio.html">Patrocínio</a>
-        <a href="mascote.html">Mascote</a>
-      </nav>
-      <nav class="footer__social" id="footer-social" aria-label="Redes sociais"></nav>
-    </div>
-    <div class="container footer__legal">
-      <p>© <span id="year"></span> Taurus Racing · Projeto de extensão da UFTM · Uberaba/MG</p>
-      <a href="#" class="link">Voltar ao topo ↑</a>
+      <div class="footer__legal">
+        <p>© <span id="year"></span> Taurus Racing · Fórmula SAE UFTM</p>
+        <a href="#" class="btn btn--ghost btn--sm">Voltar ao topo</a>
+      </div>
     </div>
   </footer>
 
