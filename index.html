@@ -23,8 +23,8 @@
   <meta property="og:image:height" content="630" />
   <meta name="twitter:card" content="summary_large_image" />
 
-  <link rel="preload" href="assets/fonts/bebas-neue-latin-400.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="preload" href="assets/fonts/eb-garamond-latin-var.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="assets/fonts/archivo-latin-italic-var.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="assets/fonts/archivo-latin-var.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="css/style.css" />
 
   <script type="application/ld+json">
@@ -94,7 +94,7 @@
     <section class="section about" id="projeto">
       <div class="container grid">
         <div class="about__text">
-          <h2 class="h2 reveal">Feito por alunos desde 2015</h2>
+          <h2 class="h2 reveal">Feito por alunos</h2>
           <div class="prose reveal">
             <p>
               A Taurus Racing é um projeto de extensão da Universidade Federal do Triângulo Mineiro. A cada
@@ -110,7 +110,7 @@
         </div>
         <ul class="tally">
           <li class="reveal"><strong id="fato-membros">32</strong><span>integrantes em nove departamentos</span></li>
-          <li class="reveal"><strong>38</strong><span>é o número do TR-04, o carro atual</span></li>
+          <li class="reveal"><strong class="plate">38</strong><span>é o número do TR-04, o carro atual</span></li>
           <li class="reveal"><strong>2015</strong><span>foi o ano da fundação, no ICTE da UFTM</span></li>
         </ul>
         <figure class="about__car reveal">
@@ -204,7 +204,7 @@
     </section>
 
     <!-- ===================== FECHAMENTO ===================== -->
-    <section class="field--paper" id="participe">
+    <section class="field--paper closing-wrap" id="participe">
       <div class="container closing">
         <h2 class="display closing__title reveal">Sua vaga na oficina</h2>
         <div class="closing__foot">
@@ -218,9 +218,12 @@
   <!-- ===================== RODAPÉ (igual em todas as páginas) ===================== -->
   <footer class="footer">
     <div class="container">
-      <a href="index.html" class="blocks" aria-label="Taurus Racing, página inicial">
-        <span style="--h:100%">T</span><span style="--h:80%;--c:var(--paper)">A</span><span style="--h:94%">U</span><span style="--h:70%;--c:var(--paper)">R</span><span style="--h:88%">U</span><span style="--h:76%;--c:var(--paper)">S</span>
-      </a>
+      <div class="footer__head">
+        <a href="index.html" class="footer__mark" aria-label="Taurus Racing, página inicial">
+          <img src="assets/img/letreiro-g.webp" alt="" width="1115" height="259" loading="lazy" />
+        </a>
+        <p class="footer__slogan">Da oficina para a pista</p>
+      </div>
       <div class="footer__cols">
         <nav class="footer__col" aria-labelledby="f-equipe">
           <h2 id="f-equipe">Equipe</h2>
