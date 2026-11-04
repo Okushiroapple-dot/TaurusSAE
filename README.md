@@ -13,7 +13,7 @@ HTML, CSS e JavaScript puros, sem etapa de build. O 3D usa [Three.js](https://th
 | Laboratório | `laboratorio.html` | Volta de autocross com mapa animado e diagrama g-g, aceleração de 75 m, skidpad e geometria de suspensão duplo A com pontos arrastáveis. `laboratorio.html#suspensao` (ou `#aceleracao`, `#skidpad`) abre direto na aba |
 | Competição | `competicao.html` | Provas estáticas e dinâmicas da Fórmula SAE Brasil, linha do tempo desde 2015 e galeria |
 | Patrocínio | `patrocinio.html` | Cotas, logos dos parceiros e uma prévia 3D: a empresa escolhe o logo e vê na lateral do carro (a imagem não sai do navegador) |
-| Faça parte | `processo-seletivo.html` | Situação do processo seletivo, requisitos, formulário da lista de interesse, o que o aluno ganha participando (extensão), as áreas da equipe e a grade de membros (se preenchida) |
+| Faça parte | `processo-seletivo.html` | Situação do processo seletivo, requisitos, formulário da lista de interesse, o que o aluno ganha participando, as áreas da equipe e a grade de membros (se preenchida) |
 | Contato | `contato.html` | Redes, mapa e formulário de mensagem. `contato.html?assunto=Patrocínio` já abre com o assunto escolhido (é para onde vai o botão "Pedir proposta") |
 | Mascote | `mascote.html` | Por que um touro, a marca antiga de 2021, as versões colorida e preto e branco para baixar (PNG transparente), guia de uso e onde o mascote aparece. Fica no rodapé e na página inicial, fora do menu principal |
 
