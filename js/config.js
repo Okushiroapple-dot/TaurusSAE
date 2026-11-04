@@ -101,12 +101,98 @@ window.TAURUS = {
   },
 
   /*
-   * Membros. Deixe a lista vazia para esconder a grade.
-   * foto: caminho dentro de assets/img/equipe/ (opcional).
-   * Exemplo:
-   *   { nome: "Fulana de Tal", cargo: "Capitã", area: "Gestão", curso: "Eng. Mecânica", foto: "assets/img/equipe/fulana.jpg", linkedin: "https://..." },
+   * Integrantes (página integrantes.html).
+   * departamentos: a ordem aqui é a ordem na página. "lideranca" aparece com cartões maiores.
+   * membros: uma linha por pessoa. departamento = id de um dos departamentos acima;
+   *   diretor: true coloca a pessoa em destaque no começo do departamento;
+   *   foto: caminho dentro de assets/img/equipe/ (formato quadrado). Sem foto, o site
+   *   desenha um avatar a partir do nome; linkedin é opcional.
+   * integrantesDemo: true mostra o aviso de que os nomes são de exemplo. Quando a
+   *   lista tiver as pessoas reais, troque para false.
    */
-  membros: [],
+  integrantesDemo: true,
+  departamentos: [
+    { id: "lideranca", nome: "Liderança", descricao: "Coordena a equipe inteira: cronograma da temporada, decisões técnicas, relação com a universidade e com os patrocinadores." },
+    { id: "chassi", nome: "Chassi e ergonomia", descricao: "Estrutura tubular, arcos de proteção, atenuador de impacto, banco e posição do piloto." },
+    { id: "suspensao", nome: "Suspensão e direção", descricao: "Geometria, cinemática, amortecedores, cubos, mangas de eixo e caixa de direção." },
+    { id: "powertrain", nome: "Powertrain", descricao: "Motor, admissão com restritor, escape, arrefecimento, combustível e transmissão." },
+    { id: "freios", nome: "Freios", descricao: "Discos, pinças, cilindros mestres e o balanço de frenagem que o piloto ajusta." },
+    { id: "eletronica", nome: "Eletrônica e dados", descricao: "Chicote, painel, sensores e aquisição de dados para entender o carro em pista." },
+    { id: "aerodinamica", nome: "Aerodinâmica e carenagem", descricao: "Formas da carroceria e das asas, estudadas em CFD e fabricadas em compósito." },
+    { id: "gestao", nome: "Gestão e custos", descricao: "Cronograma, compras, relatório de custos e o plano de negócios apresentado na competição." },
+    { id: "marketing", nome: "Marketing e patrocínio", descricao: "Redes sociais, identidade visual, relacionamento com empresas e captação de recursos." },
+  ],
+  membros: [
+    // Liderança
+    { nome: "Ana Carolina Ribeiro", cargo: "Capitã", departamento: "lideranca", curso: "Engenharia Mecânica", periodo: "9º", foto: "", linkedin: "" },
+    { nome: "Lucas Ferreira Lima", cargo: "Vice-capitão", departamento: "lideranca", curso: "Engenharia Mecânica", periodo: "8º", foto: "", linkedin: "" },
+    { nome: "Rafael Moreira Santos", cargo: "Diretor técnico", departamento: "lideranca", curso: "Engenharia Mecânica", periodo: "9º", foto: "", linkedin: "" },
+    { nome: "Juliana Costa Almeida", cargo: "Diretora administrativa", departamento: "lideranca", curso: "Engenharia de Produção", periodo: "8º", foto: "", linkedin: "" },
+    // Chassi e ergonomia
+    { nome: "Bruna Oliveira Prado", cargo: "Diretora de Chassi", departamento: "chassi", curso: "Engenharia Mecânica", periodo: "7º", diretor: true, foto: "", linkedin: "" },
+    { nome: "Gabriel Souza Martins", cargo: "Membro", departamento: "chassi", curso: "Engenharia Mecânica", periodo: "6º", foto: "", linkedin: "" },
+    { nome: "Isabela Rocha Nunes", cargo: "Membro", departamento: "chassi", curso: "Engenharia Civil", periodo: "5º", foto: "", linkedin: "" },
+    { nome: "Pedro Henrique Alves", cargo: "Membro", departamento: "chassi", curso: "Engenharia Mecânica", periodo: "4º", foto: "", linkedin: "" },
+    { nome: "Thiago Carvalho Reis", cargo: "Membro", departamento: "chassi", curso: "Engenharia Mecânica", periodo: "5º", foto: "", linkedin: "" },
+    { nome: "Larissa Mendes Faria", cargo: "Trainee", departamento: "chassi", curso: "Engenharia Mecânica", periodo: "2º", foto: "", linkedin: "" },
+    { nome: "Vinícius Barbosa Teixeira", cargo: "Trainee", departamento: "chassi", curso: "Engenharia Civil", periodo: "3º", foto: "", linkedin: "" },
+    // Suspensão e direção
+    { nome: "Matheus Gomes Pereira", cargo: "Diretor de Suspensão", departamento: "suspensao", curso: "Engenharia Mecânica", periodo: "8º", diretor: true, foto: "", linkedin: "" },
+    { nome: "Camila Duarte Freitas", cargo: "Membro", departamento: "suspensao", curso: "Engenharia Mecânica", periodo: "6º", foto: "", linkedin: "" },
+    { nome: "Felipe Araújo Castro", cargo: "Membro", departamento: "suspensao", curso: "Engenharia Mecânica", periodo: "7º", foto: "", linkedin: "" },
+    { nome: "Letícia Cardoso Ramos", cargo: "Membro", departamento: "suspensao", curso: "Engenharia Mecânica", periodo: "5º", foto: "", linkedin: "" },
+    { nome: "João Victor Pinto", cargo: "Membro", departamento: "suspensao", curso: "Engenharia de Produção", periodo: "4º", foto: "", linkedin: "" },
+    { nome: "Gustavo Monteiro Dias", cargo: "Trainee", departamento: "suspensao", curso: "Engenharia Mecânica", periodo: "2º", foto: "", linkedin: "" },
+    { nome: "Amanda Correia Vieira", cargo: "Trainee", departamento: "suspensao", curso: "Engenharia Mecânica", periodo: "3º", foto: "", linkedin: "" },
+    // Powertrain
+    { nome: "Leonardo Batista Rocha", cargo: "Diretor de Powertrain", departamento: "powertrain", curso: "Engenharia Mecânica", periodo: "8º", diretor: true, foto: "", linkedin: "" },
+    { nome: "Beatriz Lopes Moraes", cargo: "Membro", departamento: "powertrain", curso: "Engenharia Mecânica", periodo: "7º", foto: "", linkedin: "" },
+    { nome: "Henrique Fonseca Melo", cargo: "Membro", departamento: "powertrain", curso: "Engenharia Mecânica", periodo: "6º", foto: "", linkedin: "" },
+    { nome: "Caio Rezende Borges", cargo: "Membro", departamento: "powertrain", curso: "Engenharia Química", periodo: "5º", foto: "", linkedin: "" },
+    { nome: "Mariana Azevedo Lima", cargo: "Membro", departamento: "powertrain", curso: "Engenharia Mecânica", periodo: "5º", foto: "", linkedin: "" },
+    { nome: "Diego Nascimento Cruz", cargo: "Trainee", departamento: "powertrain", curso: "Engenharia Mecânica", periodo: "2º", foto: "", linkedin: "" },
+    { nome: "Sofia Tavares Campos", cargo: "Trainee", departamento: "powertrain", curso: "Engenharia Mecânica", periodo: "3º", foto: "", linkedin: "" },
+    // Freios
+    { nome: "Fernanda Machado Silva", cargo: "Diretora de Freios", departamento: "freios", curso: "Engenharia Mecânica", periodo: "7º", diretor: true, foto: "", linkedin: "" },
+    { nome: "Eduardo Pires Andrade", cargo: "Membro", departamento: "freios", curso: "Engenharia Mecânica", periodo: "6º", foto: "", linkedin: "" },
+    { nome: "Natália Ramos Coelho", cargo: "Membro", departamento: "freios", curso: "Engenharia Mecânica", periodo: "5º", foto: "", linkedin: "" },
+    { nome: "Arthur Bezerra Lacerda", cargo: "Membro", departamento: "freios", curso: "Engenharia de Produção", periodo: "6º", foto: "", linkedin: "" },
+    { nome: "Igor Vasconcelos Paiva", cargo: "Membro", departamento: "freios", curso: "Engenharia Mecânica", periodo: "4º", foto: "", linkedin: "" },
+    { nome: "Yasmin Furtado Leal", cargo: "Trainee", departamento: "freios", curso: "Engenharia Mecânica", periodo: "2º", foto: "", linkedin: "" },
+    { nome: "Otávio Brandão Sales", cargo: "Trainee", departamento: "freios", curso: "Engenharia Mecânica", periodo: "3º", foto: "", linkedin: "" },
+    // Eletrônica e dados
+    { nome: "Daniel Siqueira Prates", cargo: "Diretor de Eletrônica", departamento: "eletronica", curso: "Engenharia Elétrica", periodo: "8º", diretor: true, foto: "", linkedin: "" },
+    { nome: "Carolina Bastos Dutra", cargo: "Membro", departamento: "eletronica", curso: "Engenharia Elétrica", periodo: "7º", foto: "", linkedin: "" },
+    { nome: "Murilo Antunes Lobo", cargo: "Membro", departamento: "eletronica", curso: "Engenharia Elétrica", periodo: "6º", foto: "", linkedin: "" },
+    { nome: "Gabriela Fagundes Torres", cargo: "Membro", departamento: "eletronica", curso: "Engenharia Elétrica", periodo: "5º", foto: "", linkedin: "" },
+    { nome: "Renan Albuquerque Mota", cargo: "Membro", departamento: "eletronica", curso: "Engenharia Elétrica", periodo: "5º", foto: "", linkedin: "" },
+    { nome: "Lívia Peixoto Guerra", cargo: "Trainee", departamento: "eletronica", curso: "Engenharia Elétrica", periodo: "2º", foto: "", linkedin: "" },
+    { nome: "Samuel Couto Damasceno", cargo: "Trainee", departamento: "eletronica", curso: "Engenharia Elétrica", periodo: "3º", foto: "", linkedin: "" },
+    // Aerodinâmica e carenagem
+    { nome: "Marina Esteves Gouveia", cargo: "Diretora de Aerodinâmica", departamento: "aerodinamica", curso: "Engenharia Mecânica", periodo: "8º", diretor: true, foto: "", linkedin: "" },
+    { nome: "André Queiroz Lemos", cargo: "Membro", departamento: "aerodinamica", curso: "Engenharia Mecânica", periodo: "7º", foto: "", linkedin: "" },
+    { nome: "Vitória Sampaio Rangel", cargo: "Membro", departamento: "aerodinamica", curso: "Engenharia Química", periodo: "6º", foto: "", linkedin: "" },
+    { nome: "Bruno Xavier Cunha", cargo: "Membro", departamento: "aerodinamica", curso: "Engenharia Mecânica", periodo: "5º", foto: "", linkedin: "" },
+    { nome: "Rodrigo Medeiros Falcão", cargo: "Membro", departamento: "aerodinamica", curso: "Engenharia Civil", periodo: "6º", foto: "", linkedin: "" },
+    { nome: "Clara Viana Bittencourt", cargo: "Trainee", departamento: "aerodinamica", curso: "Engenharia Mecânica", periodo: "2º", foto: "", linkedin: "" },
+    { nome: "Enzo Magalhães Toledo", cargo: "Trainee", departamento: "aerodinamica", curso: "Engenharia Mecânica", periodo: "3º", foto: "", linkedin: "" },
+    // Gestão e custos
+    { nome: "Patrícia Barros Figueiredo", cargo: "Diretora de Gestão", departamento: "gestao", curso: "Engenharia de Produção", periodo: "8º", diretor: true, foto: "", linkedin: "" },
+    { nome: "Ricardo Neves Moura", cargo: "Membro", departamento: "gestao", curso: "Engenharia de Produção", periodo: "7º", foto: "", linkedin: "" },
+    { nome: "Júlia Andrade Sardinha", cargo: "Membro", departamento: "gestao", curso: "Engenharia de Produção", periodo: "6º", foto: "", linkedin: "" },
+    { nome: "Fábio Lins Carneiro", cargo: "Membro", departamento: "gestao", curso: "Engenharia de Produção", periodo: "5º", foto: "", linkedin: "" },
+    { nome: "Helena Cavalcanti Pinho", cargo: "Membro", departamento: "gestao", curso: "Engenharia Civil", periodo: "4º", foto: "", linkedin: "" },
+    { nome: "Marcelo Aguiar Pacheco", cargo: "Trainee", departamento: "gestao", curso: "Engenharia de Produção", periodo: "2º", foto: "", linkedin: "" },
+    { nome: "Alice Rios Domingues", cargo: "Trainee", departamento: "gestao", curso: "Engenharia de Produção", periodo: "3º", foto: "", linkedin: "" },
+    // Marketing e patrocínio
+    { nome: "Laura Teles Montenegro", cargo: "Diretora de Marketing", departamento: "marketing", curso: "Engenharia de Produção", periodo: "7º", diretor: true, foto: "", linkedin: "" },
+    { nome: "Gustavo Prado Valente", cargo: "Membro", departamento: "marketing", curso: "Engenharia de Produção", periodo: "6º", foto: "", linkedin: "" },
+    { nome: "Manuela Freire Assunção", cargo: "Membro", departamento: "marketing", curso: "Engenharia de Produção", periodo: "5º", foto: "", linkedin: "" },
+    { nome: "Davi Holanda Quintela", cargo: "Membro", departamento: "marketing", curso: "Engenharia Elétrica", periodo: "5º", foto: "", linkedin: "" },
+    { nome: "Bianca Seixas Lourenço", cargo: "Membro", departamento: "marketing", curso: "Engenharia Civil", periodo: "4º", foto: "", linkedin: "" },
+    { nome: "Heitor Bragança Fontes", cargo: "Trainee", departamento: "marketing", curso: "Engenharia de Produção", periodo: "2º", foto: "", linkedin: "" },
+    { nome: "Lara Coutinho Amaral", cargo: "Trainee", departamento: "marketing", curso: "Engenharia de Produção", periodo: "3º", foto: "", linkedin: "" },
+  ],
 
   /*
    * Patrocinadores e apoiadores atuais.

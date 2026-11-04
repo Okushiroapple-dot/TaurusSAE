@@ -13,7 +13,8 @@ HTML, CSS e JavaScript puros, sem etapa de build. O 3D usa [Three.js](https://th
 | Laboratório | `laboratorio.html` | Volta de autocross com mapa animado e diagrama g-g, aceleração de 75 m, skidpad e geometria de suspensão duplo A com pontos arrastáveis. `laboratorio.html#suspensao` (ou `#aceleracao`, `#skidpad`) abre direto na aba |
 | Competição | `competicao.html` | Provas estáticas e dinâmicas da Fórmula SAE Brasil, linha do tempo desde 2015 e galeria |
 | Patrocínio | `patrocinio.html` | Cotas, logos dos parceiros e uma prévia 3D: a empresa escolhe o logo e vê na lateral do carro (a imagem não sai do navegador) |
-| Faça parte | `processo-seletivo.html` | Situação do processo seletivo, requisitos, formulário da lista de interesse, o que o aluno ganha participando, as áreas da equipe e a grade de membros (se preenchida) |
+| Integrantes | `integrantes.html` | Liderança (capitã, vice e diretores) e os departamentos, cada um com diretor em destaque e os membros. Atalhos para cada departamento no topo. Quem não tem foto ganha um avatar ilustrado gerado a partir do nome |
+| Faça parte | `processo-seletivo.html` | Situação do processo seletivo, requisitos, formulário da lista de interesse, o que o aluno ganha participando, e as áreas da equipe |
 | Contato | `contato.html` | Redes, mapa e formulário de mensagem. `contato.html?assunto=Patrocínio` já abre com o assunto escolhido (é para onde vai o botão "Pedir proposta") |
 | Mascote | `mascote.html` | Por que um touro, a marca antiga de 2021, as versões colorida e preto e branco para baixar (PNG transparente), guia de uso e onde o mascote aparece. Fica no rodapé e na página inicial, fora do menu principal |
 
@@ -26,7 +27,7 @@ O modelo 3D é o TR-04 redesenhado em código a partir de fotos do carro, então
 Quase tudo fica em **`js/config.js`**. Não precisa mexer no HTML.
 
 - **E-mail e WhatsApp**: preencha `contato.email` e `contato.whatsapp`. Enquanto estiverem vazios, os botões de contato levam para o Instagram.
-- **Membros**: adicione objetos em `membros`. Fotos vão em `assets/img/equipe/` (formato retrato, 4:5).
+- **Integrantes**: em `departamentos` fica a lista de departamentos (na ordem da página) e em `membros` uma linha por pessoa, com `departamento`, `cargo`, `curso`, `periodo`, `foto` e `linkedin`. `diretor: true` destaca a pessoa no começo do departamento. Fotos vão em `assets/img/equipe/` (quadradas); sem foto, o site desenha um avatar. Hoje a lista é de exemplo: quando entrarem os integrantes reais, troque `integrantesDemo` para `false` para tirar o aviso.
 - **Patrocinadores**: adicione em `patrocinadores` com a `cota` (`diamante`, `ouro`, `prata` ou `apoio`). Logos em `assets/img/patrocinadores/` (SVG ou PNG com fundo transparente).
 - **Galeria**: coloque as fotos em `assets/img/galeria/` e liste em `galeria`.
 - **Ficha técnica**: preencha `valor` em `carro.ficha` (ex.: `"Aço SAE 4130"`). Na garagem 3D, o valor aparece no painel quando alguém clica no sistema correspondente.
@@ -47,6 +48,7 @@ Quase tudo fica em **`js/config.js`**. Não precisa mexer no HTML.
 - O logo é o mascote (touro com o letreiro TAURUS RACING), tirado do case de marketing 2026/2027. Arquivos em `assets/img/`:
   - `mascote.webp`: mascote completo com fundo transparente, usado na abertura da página inicial;
   - `mascote-cabeca.webp`: só a cabeça, usada no menu e no rodapé;
+  - `letreiro.webp`: o letreiro TAURUS RACING recortado do logo, usado ao lado da cabeça no menu, no rodapé e na tela de carregamento;
   - `favicon-32.png`, `favicon-192.png` e `apple-touch-icon.png`: ícones da aba do navegador e do celular.
   - `mascote-pb.webp`: versão preto e branco; `mascote.png` e `mascote-pb.png`: arquivos para baixar na página do mascote;
   - `mascote-cabeca-g.webp`: cabeça em tamanho maior, usada na página inicial;
@@ -129,11 +131,13 @@ competicao.html         competição, trajetória e galeria
 patrocinio.html         patrocínio
 processo-seletivo.html  faça parte
 contato.html            contato
+integrantes.html        integrantes (liderança e departamentos)
 mascote.html            mascote
 css/style.css           estilos (cores e fontes no topo)
 js/config.js            conteúdo editável
 js/main.js              menu, formulários, galeria, patrocinadores, contato
 js/forms.js             envio dos formulários para o Firestore
+js/integrantes.js       página de integrantes e avatares ilustrados
 js/app.js               liga o 3D, o laboratório e a tela de carregamento
 js/3d/car.js            modelo 3D do carro (chassi, suspensão, motor, asas, pintura)
 js/3d/stage.js          cena, luzes, câmera guiada pela rolagem, garagem e prévia do patrocinador
