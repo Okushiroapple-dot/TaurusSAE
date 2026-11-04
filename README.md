@@ -48,7 +48,7 @@ Quase tudo fica em **`js/config.js`**. Não precisa mexer no HTML.
 - O logo é o mascote (touro com o letreiro TAURUS RACING), tirado do case de marketing 2026/2027. Arquivos em `assets/img/`:
   - `mascote.webp`: mascote completo com fundo transparente, usado na página inicial, no contato e na página do mascote;
   - `mascote-cabeca.webp`: só a cabeça, usada no menu e no rodapé;
-  - `letreiro.webp`: o letreiro TAURUS RACING recortado do logo, usado ao lado da cabeça no menu;
+  - `letreiro.webp`: o letreiro TAURUS RACING recortado do logo, usado ao lado da cabeça no menu; `letreiro-g.webp` é a versão grande, no rodapé;
   - `favicon-32.png`, `favicon-192.png` e `apple-touch-icon.png`: ícones da aba do navegador e do celular.
   - `mascote-pb.webp`: versão preto e branco; `mascote.png` e `mascote-pb.png`: arquivos para baixar na página do mascote;
   - `mascote-cabeca-g.webp`: cabeça em tamanho maior;
@@ -59,7 +59,7 @@ Quase tudo fica em **`js/config.js`**. Não precisa mexer no HTML.
   As dicas do mascote (balão com a cabeça do touro) ficam nas páginas da oficina, do laboratório, do patrocínio e do processo seletivo, no elemento `<aside class="tip">`.
 
   As imagens vieram de uma ilustração com fundo escuro (não é vetor), recortada para o site. Quando a equipe tiver o arquivo vetorial ou um PNG transparente oficial, troque esses arquivos mantendo os nomes.
-- O visual segue a linguagem de cartaz de corrida: campos de cor chapados (preto `#0d0d0f`, o laranja do logo `#ff701f` e branco papel `#efeeea`), títulos em Bebas Neue bem grandes, texto em EB Garamond e o carro recortado por cima. Sem degradês, sombras, bordas finas ou etiquetas em caixa alta. As cores, as fontes e os cinco tamanhos de letra ficam no topo de `css/style.css`. A pintura do carro 3D fica em `PAINTS`, em `js/3d/car.js` (`taurus` é a pintura real do TR-04; as outras são opções da garagem).
+- O visual segue a linguagem de cartaz de corrida: campos de cor chapados (preto `#0d0d0f`, o laranja do logo `#ff701f` e branco papel `#efeeea`), títulos em Archivo estreita, preta e itálica (como o letreiro do logo), texto na mesma Archivo, o carro recortado por cima e os grafismos da pintura do TR-04: as manchas do camuflado (`assets/img/grafismo/`) e as duas barras inclinadas da camiseta antes de cada título. Sem degradês, sombras, bordas finas ou etiquetas em caixa alta. As cores, as fontes e os cinco tamanhos de letra ficam no topo de `css/style.css`. A pintura do carro 3D fica em `PAINTS`, em `js/3d/car.js` (`taurus` é a pintura real do TR-04; as outras são opções da garagem).
 - A imagem que aparece quando o link é compartilhado é `assets/img/og-image.jpg` (1200×630).
 
 ## Ver no computador
@@ -157,7 +157,7 @@ tools/                  script dos pacotes de vendor/, publicação das regras d
 firebase.json           configuração do Firebase Hosting e do Firestore
 .firebaserc             projeto padrão do Firebase (taurus-racing)
 firestore.rules         regras de segurança do Firestore
-assets/fonts/           Bebas Neue e EB Garamond (texto do site); Barlow Condensed e Inter (só nas decalques do carro 3D). Licença OFL
+assets/fonts/           Archivo (texto do site); Barlow Condensed e Inter (só nas decalques do carro 3D). Licença OFL
 assets/img/             logo, favicon, imagem de compartilhamento, camisetas
 assets/img/carro/       o TR-04 recortado em várias vistas
 ```
